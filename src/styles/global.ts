@@ -39,12 +39,12 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #888; 
+    background: ${(props) => props.theme.colors.neutral700}; 
     border-radius: ${(props) => props.theme.radii.full};
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #555; 
+    background: ${(props) => props.theme.colors.blue440}; 
   }
 
 
