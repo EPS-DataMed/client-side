@@ -1,0 +1,6 @@
+{
+  "extends": "@rocketseat/eslint-config/react",
+  "rules": {
+    "react-hooks/rules-of-hooks": "off"
+  }
+}
