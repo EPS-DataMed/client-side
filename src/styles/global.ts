@@ -34,7 +34,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   ::-webkit-scrollbar-track {
-    background: #D9D9D9; 
+    background: ${(props) => props.theme.colors.neutral400}; 
     border-radius: ${(props) => props.theme.radii.full};
   }
 
