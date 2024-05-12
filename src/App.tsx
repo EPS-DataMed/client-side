@@ -6,6 +6,8 @@ import { GlobalStyle } from './styles/global'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/ReactToastify.min.css'
 import { HomePage } from './pages/HomePage'
+import { Submission } from './pages/Submission'
+import { SubmissionTestProvider } from './contexts/SubmissionTestContext'
 
 export const queryClient = new QueryClient()
 
@@ -27,9 +29,12 @@ export function App() {
           theme="colored"
         />
         <Router>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-          </Routes>
+          <SubmissionTestProvider>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/submission" element={<Submission />} />
+            </Routes>
+          </SubmissionTestProvider>
         </Router>
       </ThemeProvider>
     </QueryClientProvider>

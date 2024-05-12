@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Skeleton renders correctly 1`] = `
+.c0 {
+  animation: gulyfb 1s linear infinite alternate;
+}
+
+<div
+  class="c0"
+/>
+`;

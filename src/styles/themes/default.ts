@@ -3,7 +3,10 @@ export const defaultTheme = {
     neutral: '#FFFFFF',
     neutral50: '#F0F0F0',
     neutral100: '#F9F9F9',
+    neutral200: '#E5E5E5',
+    neutral300: '#CCCCCC',
     neutral400: '#A5A5A5',
+    neutral500: '#7F7F7F',
     neutral600: '#42424A',
     neutral700: '#36363B',
     neutral900: '#181818',
@@ -34,6 +37,7 @@ export const defaultTheme = {
   },
   fonts: {
     primary: 'Open Sans, sans-serif',
+    secondary: 'Poppins, sans-serif',
   },
   lineHeights: {
     shorter: '125%',
@@ -62,7 +66,9 @@ export const defaultTheme = {
     10: '2.5rem',
     12: '3rem',
     16: '4rem',
+    19: '4.75rem',
     20: '5rem',
+    27: '6.75rem',
     40: '10rem',
     64: '16rem',
     80: '20rem',
