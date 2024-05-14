@@ -15,7 +15,7 @@ export interface ButtonProps {
 
 export type DialogItemToRender = {
   title?: string | JSX.Element
-  component: string | JSX.Element
+  component?: string | JSX.Element
   description?: string | JSX.Element
   buttonConfig?: ButtonProps[]
   hideCloseButton?: boolean

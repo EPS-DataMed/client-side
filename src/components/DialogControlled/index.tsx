@@ -38,8 +38,8 @@ export function DialogControlled({
     dialogItemToRender.marginTopWrapperButton || '32px'
 
   function handleOutsideClick() {
-    if (onClose && !isLoadingRequisition) onClose()
     if (!isLoadingRequisition) {
+      if (onClose) onClose()
       handleUpdateDialogControlled(false)
     }
   }
@@ -47,7 +47,11 @@ export function DialogControlled({
   const renderCloseIcon = () => {
     if (!dialogItemToRender.hideCloseButton) {
       return (
-        <Dialog.CloseIconButton asChild onClick={handleOutsideClick}>
+        <Dialog.CloseIconButton
+          asChild
+          onClick={isLoadingRequisition ? undefined : handleOutsideClick}
+          data-testid="close-icon-button"
+        >
           <Dialog.CloseIconButton asChild>
             <CloseIcon />
           </Dialog.CloseIconButton>
@@ -62,7 +66,10 @@ export function DialogControlled({
     if (!dialogItemToRender.title) return null
 
     return (
-      <S.WrapperTitle style={{ marginBottom: spaceAfterTitle }}>
+      <S.WrapperTitle
+        style={{ marginBottom: spaceAfterTitle }}
+        data-testid="dialog-title-wrapper"
+      >
         <Dialog.Title>{dialogItemToRender.title}</Dialog.Title>
       </S.WrapperTitle>
     )
@@ -72,7 +79,9 @@ export function DialogControlled({
     if (!dialogItemToRender.description) return null
 
     return (
-      <Dialog.Description>{dialogItemToRender.description}</Dialog.Description>
+      <Dialog.Description data-testid="dialog-description">
+        {dialogItemToRender.description}
+      </Dialog.Description>
     )
   }
 
@@ -128,6 +137,7 @@ export function DialogControlled({
           style={Object.keys(buttonStyle).length > 0 ? buttonStyle : undefined}
           {...commonButtonProps}
           type={button.type}
+          data-testid={`button-${button.id}`}
         />
       )
     } else {
@@ -139,6 +149,7 @@ export function DialogControlled({
           onClick={
             button.action as unknown as React.MouseEventHandler<HTMLButtonElement>
           }
+          data-testid={`button-${button.id}`}
         />
       )
     }
@@ -153,6 +164,7 @@ export function DialogControlled({
         style={{
           width: dialogContentWidth,
         }}
+        data-testid="dialog-content"
       >
         {renderCloseIcon()}
         {renderTitle()}
@@ -163,6 +175,7 @@ export function DialogControlled({
             style={{
               marginTop: dialogItemToRendeMarginTopButton,
             }}
+            data-testid="dialog-buttons-wrapper"
           >
             {dialogItemToRender.buttonConfig.map((button) =>
               renderButton(button),
@@ -173,11 +186,15 @@ export function DialogControlled({
     )
   }
   return (
-    <Dialog.Root open={isDialogControlledOpen}>
+    <Dialog.Root open={isDialogControlledOpen} data-testid="dialog-root">
       <Dialog.Portal>
-        <Dialog.Overlay />
+        <Dialog.Overlay data-testid="dialog-overlay" />
         {buttonWithSubmit ? (
-          <form autoComplete="off" onSubmit={onSubmit}>
+          <form
+            autoComplete="off"
+            onSubmit={onSubmit}
+            data-testid="dialog-form"
+          >
             {renderContent()}
           </form>
         ) : (

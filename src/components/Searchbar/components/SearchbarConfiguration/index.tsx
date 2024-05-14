@@ -76,8 +76,8 @@ export function SearchbarConfiguration({
   }
 
   return (
-    <Searchbar.Root>
-      <Searchbar.SearchIconStyled />
+    <Searchbar.Root data-testid="searchbar-root">
+      <Searchbar.SearchIconStyled data-testid="search-icon" />
       <Input.Root>
         <Input.Input
           variant="searchbar"
@@ -87,13 +87,20 @@ export function SearchbarConfiguration({
           placeholder={placeholder}
           onFocus={handleFocus}
           onBlur={handleBlur}
+          data-testid="search-input"
         />
       </Input.Root>
       {hasQuery && !isRequisitionLoading && (
-        <Searchbar.RoundCloseIconStyled onClick={handleClearSearch} />
+        <Searchbar.RoundCloseIconStyled
+          onClick={handleClearSearch}
+          data-testid="clear-icon"
+        />
       )}
       {hasOptionsToShow && (
-        <Searchbar.ScrollContainer optionsCount={optionsCount}>
+        <Searchbar.ScrollContainer
+          optionsCount={optionsCount}
+          data-testid="options-container"
+        >
           <Searchbar.OptionsList optionsCount={optionsCount}>
             {filteredOptions.map((option) => (
               <Searchbar.OptionItem
@@ -102,6 +109,7 @@ export function SearchbarConfiguration({
                 onMouseLeave={() => setIsHovered(false)}
                 key={option.id}
                 onClick={() => handleChooseOption(option)}
+                data-testid={`option-item-${option.id}`}
               >
                 {isHovered ? (
                   truncateLabel(option.name, 28)
@@ -117,6 +125,7 @@ export function SearchbarConfiguration({
                     event.stopPropagation()
                     onDeleteItem(option)
                   }}
+                  data-testid={`delete-icon-${option.id}`}
                 >
                   <Searchbar.DeleteIconStyled />
                 </WrraperDelete>
