@@ -2,6 +2,8 @@ import type { Config } from '@jest/types'
 
 const config: Config.InitialOptions = {
   preset: 'ts-jest',
+  verbose: false,
+  silent: true,
   testEnvironment: 'jsdom',
   moduleNameMapper: {
     '\\.(css|less|sass|scss)$': 'identity-obj-proxy',
@@ -11,6 +13,8 @@ const config: Config.InitialOptions = {
     'src/**/*.{ts,tsx}',
     '!src/**/*.d.ts',
     '!src/**/*.styles.ts',
+    '!src/**/assets/**',
+    '!src/**/icons/**',
   ],
   roots: ['<rootDir>/src'],
   setupFilesAfterEnv: ['<rootDir>/setupTests.ts'],
