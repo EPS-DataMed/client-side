@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Input Component should render the error message root component 1`] = `
+.c0 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.c1 {
+  color: #FF0000;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+}
+
+<div
+  class="c0"
+>
+  <span>
+    Error Icon
+  </span>
+  <span
+    class="c1"
+  >
+    Error Message
+  </span>
+</div>
+`;
+
+exports[`Input Component should render the input component 1`] = `
+.c0 {
+  height: 35px;
+  background-color: inherit;
+  width: 100%;
+  border-radius: 8px;
+  color: #181818;
+  font-size: 0.875rem;
+  font-weight: 400;
+  box-sizing: border-box;
+  border: 1px solid #42424A;
+  padding: 0 1rem;
+  transition: all 0.3s;
+}
+
+.c0:focus {
+  border: 1px solid #2980B9;
+}
+
+.c0:hover {
+  border: 1px solid #2980B9;
+}
+
+.c0::placeholder {
+  color: #A5A5A5;
+}
+
+<input
+  class="c0"
+/>
+`;
