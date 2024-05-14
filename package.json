@@ -1,5 +1,5 @@
 {
-  "name": "03-dt-money",
+  "name": "dataMed",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,7 +10,7 @@
     "lint": "eslint ./src --ext .ts,.tsx",
     "lint:fix": "eslint ./src --ext .ts,.tsx --fix",
     "preview": "vite preview",
-    "test": "jest --silent",
+    "test": "jest",
     "test:coverage": "rimraf coverage && jest --coverage"
   },
   "dependencies": {
@@ -37,6 +37,7 @@
     "@rocketseat/eslint-config": "^1.2.0",
     "@testing-library/jest-dom": "^6.4.5",
     "@testing-library/react": "^15.0.7",
+    "@testing-library/react-hooks": "^8.0.1",
     "@types/jest": "^29.5.12",
     "@types/js-cookie": "^3.0.6",
     "@types/react": "^18.0.28",

@@ -21,7 +21,7 @@ describe('PrimaryButton Component', () => {
     const button = screen.getByText('Primary')
     expect(button).toHaveStyle(
       `background-color: ${defaultTheme.colors.blue500}`,
-    ) // Substitua pelo valor correto do tema
+    )
   })
 
   it('applies secondary styles when variant is secondary', () => {
@@ -30,7 +30,7 @@ describe('PrimaryButton Component', () => {
     )
     const button = screen.getByText('Secondary')
     expect(button).toHaveStyle('background-color: inherit')
-    expect(button).toHaveStyle(`color: ${defaultTheme.colors.neutral600}`) // Substitua pelo valor correto do tema
+    expect(button).toHaveStyle(`color: ${defaultTheme.colors.neutral600}`)
   })
 
   it('handles click events', () => {

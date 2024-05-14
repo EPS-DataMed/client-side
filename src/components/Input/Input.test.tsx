@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react'
 import 'jest-styled-components'
 import { ThemeProvider } from 'styled-components'
-import { Input } from './' // Ajuste o caminho conforme necessário
+import { Input } from './'
 import { defaultTheme } from '../../styles/themes/default'
 
 describe('Input Component', () => {
