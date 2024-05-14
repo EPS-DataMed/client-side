@@ -1,49 +1,114 @@
-import React from 'react'
-import { render, screen } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
+import '@testing-library/jest-dom'
 import { ThemeProvider } from 'styled-components'
 import { SearchbarConfiguration, SearchbarConfigurationProps } from './'
-import { OptionProps } from '../../hooks/useSearchbarQuery'
 import { defaultTheme } from '../../../../styles/themes/default'
 
-const options: OptionProps[] = [
-  { name: 'Option 1', id: '1' },
-  { name: 'Option 2', id: '2' },
-  { name: 'Option 3', id: '3' },
-  { name: 'Option 4', id: '4' },
+const mockOptions = [
+  { id: '1', name: 'Option 1' },
+  { id: '2', name: 'Option 2' },
+  { id: '3', name: 'Option 3' },
+  { id: '4', name: 'Option 4' },
 ]
 
-const mockSetQuery = jest.fn()
-const mockSetSelectedOption = jest.fn()
-const mockOnDeleteItem = jest.fn()
-
-const renderWithTheme = (component: React.ReactElement) => {
-  return render(<ThemeProvider theme={defaultTheme}>{component}</ThemeProvider>)
-}
-
-const setup = (props: Partial<SearchbarConfigurationProps> = {}) => {
+const renderComponent = (props: Partial<SearchbarConfigurationProps> = {}) => {
   const defaultProps: SearchbarConfigurationProps = {
-    options,
+    options: mockOptions,
     query: '',
-    setQuery: mockSetQuery,
-    setSelectedOption: mockSetSelectedOption,
-    onDeleteItem: mockOnDeleteItem,
-    selectedOption: {} as OptionProps,
+    placeholder: 'Digite para buscar...',
+    onDeleteItem: jest.fn(),
+    selectedOption: {} as any,
+    setQuery: jest.fn(),
+    setSelectedOption: jest.fn(),
     isRequisitionLoading: false,
+    ...props,
   }
-
-  return renderWithTheme(
-    <SearchbarConfiguration {...defaultProps} {...props} />,
+  return render(
+    <ThemeProvider theme={defaultTheme}>
+      <SearchbarConfiguration {...defaultProps} />
+    </ThemeProvider>,
   )
 }
 
-describe('SearchbarConfiguration Component', () => {
-  it('renders input with placeholder', () => {
-    setup({ placeholder: 'Search...' })
-    expect(screen.getByPlaceholderText('Search...')).toBeInTheDocument()
+describe('SearchbarConfiguration', () => {
+  it('renders correctly', () => {
+    renderComponent()
+    expect(screen.getByTestId('searchbar-root')).toBeInTheDocument()
   })
 
-  it('renders no options when query does not match', () => {
-    setup({ query: 'Non-existent' })
-    expect(screen.queryByText('Option 1')).not.toBeInTheDocument()
+  it('displays the search input', () => {
+    renderComponent()
+    expect(screen.getByTestId('search-input')).toBeInTheDocument()
+  })
+
+  it('updates query on input change', () => {
+    const setQuery = jest.fn()
+    renderComponent({ setQuery })
+
+    const input = screen.getByTestId('search-input')
+    fireEvent.change(input, { target: { value: 'Option 1' } })
+
+    expect(setQuery).toHaveBeenCalledWith('Option 1')
+  })
+
+  it('displays options when focused', () => {
+    renderComponent()
+
+    const input = screen.getByTestId('search-input')
+    fireEvent.focus(input)
+
+    expect(screen.getByTestId('options-container')).toBeInTheDocument()
+  })
+
+  it('filters options based on input value', () => {
+    const setQuery = jest.fn()
+    renderComponent({ setQuery })
+
+    const input = screen.getByTestId('search-input')
+    fireEvent.focus(input)
+    fireEvent.change(input, { target: { value: 'Option 1' } })
+
+    expect(screen.getByTestId('option-item-1')).toBeInTheDocument()
+    expect(screen.queryByTestId('option-item-2')).not.toBeInTheDocument()
+  })
+
+  it('clears query when clear icon is clicked', () => {
+    const setQuery = jest.fn()
+    const setSelectedOption = jest.fn()
+    renderComponent({ setQuery, setSelectedOption, query: 'Option 1' })
+
+    const clearIcon = screen.getByTestId('clear-icon')
+    fireEvent.click(clearIcon)
+
+    expect(setQuery).toHaveBeenCalledWith('')
+    expect(setSelectedOption).toHaveBeenCalledWith({})
+  })
+
+  it('calls onDeleteItem when delete icon is clicked', () => {
+    const onDeleteItem = jest.fn()
+    renderComponent({ onDeleteItem })
+
+    const input = screen.getByTestId('search-input')
+    fireEvent.focus(input)
+
+    const deleteIcon = screen.getByTestId('delete-icon-1')
+    fireEvent.click(deleteIcon)
+
+    expect(onDeleteItem).toHaveBeenCalledWith(mockOptions[0])
+  })
+
+  it('selects an option when it is clicked', () => {
+    const setQuery = jest.fn()
+    const setSelectedOption = jest.fn()
+    renderComponent({ setQuery, setSelectedOption })
+
+    const input = screen.getByTestId('search-input')
+    fireEvent.focus(input)
+
+    const optionItem = screen.getByTestId('option-item-1')
+    fireEvent.click(optionItem)
+
+    expect(setQuery).toHaveBeenCalledWith('Option 1')
+    expect(setSelectedOption).toHaveBeenCalledWith(mockOptions[0])
   })
 })
