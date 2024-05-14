@@ -13,8 +13,6 @@ export const AnimatedCheckIcon = () => {
       setAnimationData(json)
     }
 
-    console.log('entrou kraleo')
-
     fetchAnimationData()
   }, [])
 
