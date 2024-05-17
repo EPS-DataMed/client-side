@@ -37,6 +37,7 @@ export const StyledButton = styled.button<ButtonProps>`
   transition: background-color 300ms ease-in-out, color 300ms ease-in-out;
   text-decoration: none;
   align-items: center;
+  width: inherit;
 
   ${({ variant }) => variant === 'secondary' && secondaryButtonStyle}
 
