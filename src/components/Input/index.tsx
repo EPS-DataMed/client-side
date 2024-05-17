@@ -74,14 +74,14 @@ const InputComponent = styled.input<InputProps>`
 `
 
 const Label = styled.label`
-  color: ${({ theme }) => theme.colors.neutral};
+  color: ${({ theme }) => theme.colors.neutral900};
   font-size: ${({ theme }) => theme.fontSizes.md};
   font-style: normal;
   font-weight: ${({ theme }) => theme.fontWeights.bold};
 `
 
 const Description = styled.span`
-  color: ${({ theme }) => theme.colors.neutral};
+  color: ${({ theme }) => theme.colors.neutral600};
   font-size: ${({ theme }) => theme.fontSizes.sm};
   font-style: normal;
   font-weight: ${({ theme }) => theme.fontWeights.regular};
