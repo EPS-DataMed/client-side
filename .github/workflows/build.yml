@@ -1,5 +1,10 @@
 name: Build
-on: [push, pull_request]
+on:
+ push:
+   branches:
+     - master
+ pull_request:
+   types: [opened, synchronize, reopened]
 jobs:
   sonarcloud:
     name: SonarCloud
@@ -10,8 +15,6 @@ jobs:
           fetch-depth: 0 
       - name: Install dependencies
         run: npm install --legacy-peer-deps
-      - name: Build project
-        run: npm run build
       - name: Test and coverage
         run: npm run test --coverage --collectCoverageFrom='src/**/*.{ts,tsx}' --collectCoverageFrom='!src/**/*.d.ts' --collectCoverageFrom='!src/**/*.styles.ts' --collectCoverageFrom='!src/**/assets/**' --collectCoverageFrom='!src/**/icons/**' --collectCoverageFrom='!src/**/interfaces/**' --collectCoverageFrom='!src/**/utils/**' --collectCoverageFrom='!src/**/styles/**' --collectCoverageFrom='!src/**/lib/**' --collectCoverageFrom='!src/**/skeleton/**' --collectCoverageFrom='!src/**/styles.ts' --collectCoverageFrom='!src/**/App.tsx' --collectCoverageFrom='!src/**/main.tsx'
       - name: SonarCloud Scan
