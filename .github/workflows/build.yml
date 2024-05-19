@@ -20,5 +20,11 @@ jobs:
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
-          SONAR_TOKEN: ${{ secrets. SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_SCANNER_OPTS: >
+            -Dsonar.sources=src
+            -Dsonar.tests=src
+            -Dsonar.test.inclusions=src/**/*.test.ts,src/**/*.test.tsx
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+            -Dsonar.coverage.exclusions=src/**/*.d.ts,src/**/*.styles.ts,src/**/assets/**,src/**/icons/**,src/**/interfaces/**,src/**/utils/**,src/**/styles/**,src/**/lib/**,src/**/skeleton/**,src/**/styles.ts,src/**/App.tsx,src/**/main.tsx
