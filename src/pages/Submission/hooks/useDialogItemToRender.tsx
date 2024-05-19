@@ -12,12 +12,12 @@ export function useDialogItemToRender({
   handleUpdateDialogControlled,
   dialogSubmissionStep,
 }: DialogItemToRenderProps) {
-  const { handleDeleteFileUpload } = useSubmissionTestContext()
+  const { handleDeleteFileUpload, optionToDelete } = useSubmissionTestContext()
 
   const dialogConfig: DialogConfig = {
     delete_mark: {
       title: 'Apagar arquivo',
-      description: 'Deseja excluir o arquivo Exame_12_03/2021? ',
+      description: `Deseja excluir o arquivo ${optionToDelete.name}?`,
       width: '28rem',
       buttonConfig: [
         {

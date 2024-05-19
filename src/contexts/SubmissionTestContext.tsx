@@ -17,6 +17,7 @@ interface SubmissionTestContextType {
   setFilesUploaded: React.Dispatch<React.SetStateAction<Files>>
   setOptionToDelete: React.Dispatch<React.SetStateAction<OptionProps>>
   handleDeleteFileUpload: () => void
+  optionToDelete: OptionProps
   queryHook: SearchbarQueryHookReturnType
 }
 
@@ -56,6 +57,7 @@ export function SubmissionTestProvider({
         setOptionToDelete,
         handleDeleteFileUpload,
         queryHook,
+        optionToDelete,
       }}
     >
       {children}

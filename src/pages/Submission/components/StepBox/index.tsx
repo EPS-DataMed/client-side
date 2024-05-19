@@ -1,6 +1,6 @@
 import * as S from './styles'
 
-interface DisabledBoxProps {
+interface StepBoxProps extends React.HTMLAttributes<HTMLDivElement> {
   icon?: () => JSX.Element | null
   description?: string
   animation?: 'slide' | 'vertical' | 'rotate' | 'fadeIn'
@@ -18,11 +18,12 @@ export function StepBox({
   children,
   typeAnimation = 'infinite',
   timeAnimation = '2s',
-}: DisabledBoxProps) {
+  ...rest
+}: StepBoxProps) {
   const hasIcon = Icon && animation
 
   return (
-    <S.Container enabled={enabled}>
+    <S.Container enabled={enabled} {...rest}>
       {hasIcon ? (
         <S.AnimationDiv
           timeAnimation={timeAnimation}

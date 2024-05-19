@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Breadcrumb, BreadcrumbItem } from '../../components/Breadcrumb'
+import { Breadcrumb } from '../../components/Breadcrumb'
 import { GenericPage } from '../../components/GenericPage'
 import { useSubmissionTestContext } from '../../contexts/SubmissionTestContext'
 import {
@@ -10,9 +10,7 @@ import {
 import { FileUploader } from './components/FileUploader'
 import { useFileUpload } from './components/FileUploader/hooks/useFileUpload'
 import { StepBox } from './components/StepBox'
-import { CheckIcon } from './components/StepBox/icons/CheckIcon'
 import { GhostIcon } from './components/StepBox/icons/GhostIcon'
-import { LoadFileIcon } from './components/StepBox/icons/LoadFileIcon'
 import * as S from './styles'
 import { SearchbarConfiguration } from '../../components/Searchbar'
 import { ArrowRight } from '../../assets/icons'
@@ -23,17 +21,8 @@ import {
   useDialogControlled,
 } from '../../components/DialogControlled'
 import { DialogStep } from './interfaces'
-
-interface EnabledOptionProps {
-  [key: string]: {
-    message: string
-    icon: () => JSX.Element | null
-    animation: 'slide' | 'vertical' | 'rotate' | 'fadeIn'
-    typeAnimation: 'infinite' | 'linear' | 'ease-in-out'
-    enabled: boolean
-    timeAnimation: string
-  }
-}
+import { SUBMIT_EXAM_OPTIONS } from './constants'
+import { useBreadcrumbs } from './hooks/useBreadcrumbs'
 
 export function Submission() {
   const { getInputProps, getRootProps, loadingFiles } = useFileUpload()
@@ -41,10 +30,8 @@ export function Submission() {
     useSubmissionTestContext()
 
   const { selectedOption } = queryHook
-
   const { handleUpdateDialogControlled, isDialogControlledOpen } =
     useDialogControlled()
-
   const [dialogSubmissionStep, setDialogSubmissionStep] =
     useState<DialogStep>('')
 
@@ -53,16 +40,7 @@ export function Submission() {
     dialogSubmissionStep,
   })
 
-  const BREADCRUMBS: BreadcrumbItem[] = [
-    {
-      label: 'Pacientes',
-      action: () => console.log('Pacientes'),
-    },
-    {
-      label: 'Enviar exames',
-      activate: true,
-    },
-  ]
+  const BREADCRUMBS = useBreadcrumbs()
 
   const hasFiles = isArrayNotEmpty(filesUploaded)
   const hasNoFiles = isArrayEmpty(filesUploaded)
@@ -72,33 +50,6 @@ export function Submission() {
     if (hasNoFiles && !loadingFiles) return 'NO_FILE'
     return 'SUCCESS'
   }, [hasNoFiles, loadingFiles])
-
-  const SUBMIT_EXAM_OPTIONS: EnabledOptionProps = {
-    SUCCESS: {
-      message: `Exame(s) carregados com sucesso! Gerencie-os ao lado.`,
-      icon: CheckIcon,
-      animation: 'fadeIn',
-      typeAnimation: 'linear',
-      enabled: true,
-      timeAnimation: '2s',
-    },
-    NO_FILE: {
-      message: `Não existem exame(s) para serem carregados.`,
-      icon: LoadFileIcon,
-      animation: 'slide',
-      typeAnimation: 'infinite',
-      enabled: false,
-      timeAnimation: '2s',
-    },
-    PENDING: {
-      message: `Carregando arquivo(s)...`,
-      icon: LoadFileIcon,
-      animation: 'rotate',
-      typeAnimation: 'infinite',
-      enabled: true,
-      timeAnimation: '2s',
-    },
-  }
 
   const formattedFiles = filesUploaded.map((file) => {
     return {
@@ -120,7 +71,6 @@ export function Submission() {
     setOptionToDelete({} as OptionProps)
   }
 
-  console.log('selectedOption: ', selectedOption)
   return (
     <>
       <GenericPage.Root>
@@ -136,8 +86,10 @@ export function Submission() {
 
         <S.MainContent>
           <S.WrapperPageInformation>
-            <GenericPage.Title>Enviar exames</GenericPage.Title>
-            <GenericPage.Description>
+            <GenericPage.Title data-testid="page-title">
+              Enviar exames
+            </GenericPage.Title>
+            <GenericPage.Description data-testid="page-description">
               Faça o <b>upload</b> de <b>exames médicos</b> e gerencie-os. Esta
               etapa tem como objetivo selecionar um exame anexado para, em
               seguida, avançar para a próxima etapa, que consiste em gerenciar
@@ -146,7 +98,11 @@ export function Submission() {
           </S.WrapperPageInformation>
 
           <S.WrrapperBoxes>
-            <FileUploader.FileUploader {...getRootProps()} variant={'valid'}>
+            <FileUploader.FileUploader
+              {...getRootProps()}
+              variant={'valid'}
+              data-testid="file-uploader"
+            >
               <FileUploader.AnimationUploadIcon>
                 <FileUploader.UploadIcon />
               </FileUploader.AnimationUploadIcon>
@@ -166,7 +122,7 @@ export function Submission() {
               <input
                 name="dropzone-file"
                 {...getInputProps()}
-                data-testid="thumbnail-fille"
+                data-testid="thumbnail-file"
               />
             </FileUploader.FileUploader>
 
@@ -177,6 +133,7 @@ export function Submission() {
               description={selectedOptionEnabledFormatted.message}
               typeAnimation={selectedOptionEnabledFormatted.typeAnimation}
               timeAnimation={selectedOptionEnabledFormatted.timeAnimation}
+              data-testid="step-box"
             />
 
             {!hasFiles && (
@@ -187,6 +144,7 @@ export function Submission() {
                 timeAnimation="2s"
                 enabled={!loadingFiles && hasFiles}
                 description="Sua lista de exames está vazia. Adicione seu(s) exame(s) e visualize-os aqui."
+                data-testid="step-box-empty"
               />
             )}
 
@@ -195,8 +153,9 @@ export function Submission() {
                 animation="vertical"
                 typeAnimation="infinite"
                 enabled={true}
+                data-testid="step-box-filled"
               >
-                <S.UploadedDocumentsContainer>
+                <S.UploadedDocumentsContainer data-testid="uploaded-documents-container">
                   <S.WrapperInformations>
                     <S.Title>Exames carregados</S.Title>
                     <S.Description>
@@ -207,6 +166,7 @@ export function Submission() {
                       {...queryHook}
                       options={formattedFiles}
                       onDeleteItem={handleOpenDialog}
+                      data-testid="searchbar-configuration"
                     />
                   </S.WrapperInformations>
 
@@ -214,6 +174,7 @@ export function Submission() {
                     variant={'primary'}
                     onClick={() => console.log('avançou')}
                     disabled={!selectedOption?.name}
+                    data-testid="advance-button"
                   >
                     Avançar
                     <ArrowRight />

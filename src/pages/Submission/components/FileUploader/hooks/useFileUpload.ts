@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
-// import { deleteFileInCloud, uploadFile } from '../services'
 import { useSubmissionTestContext } from '../../../../../contexts/SubmissionTestContext'
 import { ErrorToast } from '../../../../../components/Toast'
 import { generateRandomId } from '../../../../../utils/mockFunctions'
@@ -12,20 +11,6 @@ export function useFileUpload() {
   const firstRender = useRef(true)
 
   const { setFilesUploaded, filesUploaded } = useSubmissionTestContext()
-
-  // const uploadImage = async (file: File[]) => {
-  //   try {
-  //     setLoadingFiles(true)
-  //     const response = await uploadFile(file)
-  //     return response
-  //   } catch (error) {
-  //     ErrorToast(
-  //       'Não foi possível enviar o arquivo. Tente novamente mais tarde',
-  //     )
-  //   } finally {
-  //     setLoadingFiles(false)
-  //   }
-  // }
 
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
