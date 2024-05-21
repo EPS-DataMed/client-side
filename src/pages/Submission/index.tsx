@@ -23,6 +23,7 @@ import {
 import { DialogStep } from './interfaces'
 import { SUBMIT_EXAM_OPTIONS } from './constants'
 import { useBreadcrumbs } from './hooks/useBreadcrumbs'
+import { ProcessDataLoading } from './components/ProcessDataLoading'
 
 export function Submission() {
   const { getInputProps, getRootProps, loadingFiles } = useFileUpload()
@@ -71,6 +72,8 @@ export function Submission() {
     setOptionToDelete({} as OptionProps)
   }
 
+  const isProcessingData = true
+
   return (
     <>
       <GenericPage.Root>
@@ -85,105 +88,112 @@ export function Submission() {
         <GenericPage.Divider />
 
         <S.MainContent>
-          <S.WrapperPageInformation>
-            <GenericPage.Title data-testid="page-title">
-              Enviar exames
-            </GenericPage.Title>
-            <GenericPage.Description data-testid="page-description">
-              Faça o <b>upload</b> de <b>exames médicos</b> e gerencie-os. Esta
-              etapa tem como objetivo selecionar um exame anexado para, em
-              seguida, avançar para a próxima etapa, que consiste em gerenciar
-              os campos que serão extraídos do exame.
-            </GenericPage.Description>
-          </S.WrapperPageInformation>
+          {isProcessingData ? (
+            <ProcessDataLoading />
+          ) : (
+            <>
+              <S.WrapperPageInformation>
+                <GenericPage.Title data-testid="page-title">
+                  Enviar exames
+                </GenericPage.Title>
+                <GenericPage.Description data-testid="page-description">
+                  Faça o <b>upload</b> de <b>exames médicos</b> e gerencie-os.
+                  Esta etapa tem como objetivo selecionar um exame anexado para,
+                  em seguida, avançar para a próxima etapa, que consiste em
+                  gerenciar os campos que serão extraídos do exame.
+                </GenericPage.Description>
+              </S.WrapperPageInformation>
 
-          <S.WrrapperBoxes>
-            <FileUploader.FileUploader
-              {...getRootProps()}
-              variant={'valid'}
-              data-testid="file-uploader"
-            >
-              <FileUploader.AnimationUploadIcon>
-                <FileUploader.UploadIcon />
-              </FileUploader.AnimationUploadIcon>
-              <FileUploader.WrapperIconAndMessageUpload>
-                <FileUploader.MessageUpload>
-                  Arraste seu(s) exame(s) aqui ou{' '}
-                  <FileUploader.MessageUploadBold>
-                    clique para buscar
-                  </FileUploader.MessageUploadBold>{' '}
-                  em seu computador.
-                </FileUploader.MessageUpload>
-              </FileUploader.WrapperIconAndMessageUpload>
+              <S.WrrapperBoxes>
+                <FileUploader.FileUploader
+                  {...getRootProps()}
+                  variant={'valid'}
+                  data-testid="file-uploader"
+                >
+                  <FileUploader.AnimationUploadIcon>
+                    <FileUploader.UploadIcon />
+                  </FileUploader.AnimationUploadIcon>
+                  <FileUploader.WrapperIconAndMessageUpload>
+                    <FileUploader.MessageUpload>
+                      Arraste seu(s) exame(s) aqui ou{' '}
+                      <FileUploader.MessageUploadBold>
+                        clique para buscar
+                      </FileUploader.MessageUploadBold>{' '}
+                      em seu computador.
+                    </FileUploader.MessageUpload>
+                  </FileUploader.WrapperIconAndMessageUpload>
 
-              <FileUploader.MessageUploadDescription>
-                Apenas arquivos no formato pdf são permitidos.
-              </FileUploader.MessageUploadDescription>
-              <input
-                name="dropzone-file"
-                {...getInputProps()}
-                data-testid="thumbnail-file"
-              />
-            </FileUploader.FileUploader>
+                  <FileUploader.MessageUploadDescription>
+                    Apenas arquivos no formato pdf são permitidos.
+                  </FileUploader.MessageUploadDescription>
+                  <input
+                    name="dropzone-file"
+                    {...getInputProps()}
+                    data-testid="thumbnail-file"
+                  />
+                </FileUploader.FileUploader>
 
-            <StepBox
-              icon={selectedOptionEnabledFormatted.icon}
-              animation={selectedOptionEnabledFormatted.animation}
-              enabled={selectedOptionEnabledFormatted.enabled}
-              description={selectedOptionEnabledFormatted.message}
-              typeAnimation={selectedOptionEnabledFormatted.typeAnimation}
-              timeAnimation={selectedOptionEnabledFormatted.timeAnimation}
-              data-testid="step-box"
-            />
+                <StepBox
+                  icon={selectedOptionEnabledFormatted.icon}
+                  animation={selectedOptionEnabledFormatted.animation}
+                  enabled={selectedOptionEnabledFormatted.enabled}
+                  description={selectedOptionEnabledFormatted.message}
+                  typeAnimation={selectedOptionEnabledFormatted.typeAnimation}
+                  timeAnimation={selectedOptionEnabledFormatted.timeAnimation}
+                  data-testid="step-box"
+                />
 
-            {!hasFiles && (
-              <StepBox
-                animation="vertical"
-                typeAnimation="infinite"
-                icon={GhostIcon}
-                timeAnimation="2s"
-                enabled={!loadingFiles && hasFiles}
-                description="Sua lista de exames está vazia. Adicione seu(s) exame(s) e visualize-os aqui."
-                data-testid="step-box-empty"
-              />
-            )}
+                {!hasFiles && (
+                  <StepBox
+                    animation="vertical"
+                    typeAnimation="infinite"
+                    icon={GhostIcon}
+                    timeAnimation="2s"
+                    enabled={!loadingFiles && hasFiles}
+                    description="Sua lista de exames está vazia. Adicione seu(s) exame(s) e visualize-os aqui."
+                    data-testid="step-box-empty"
+                  />
+                )}
 
-            {hasFiles && (
-              <StepBox
-                animation="vertical"
-                typeAnimation="infinite"
-                enabled={true}
-                data-testid="step-box-filled"
-              >
-                <S.UploadedDocumentsContainer data-testid="uploaded-documents-container">
-                  <S.WrapperInformations>
-                    <S.Title>Exames carregados</S.Title>
-                    <S.Description>
-                      Selecione um exame para avançar a próxima etapa e em
-                      seguida clique em avançar.
-                    </S.Description>
-                    <SearchbarConfiguration
-                      {...queryHook}
-                      options={formattedFiles}
-                      onDeleteItem={handleOpenDialog}
-                      data-testid="searchbar-configuration"
-                    />
-                  </S.WrapperInformations>
-
-                  <S.AdvanceButton
-                    variant={'primary'}
-                    onClick={() => console.log('avançou')}
-                    disabled={!selectedOption?.name}
-                    data-testid="advance-button"
+                {hasFiles && (
+                  <StepBox
+                    animation="vertical"
+                    typeAnimation="infinite"
+                    enabled={true}
+                    data-testid="step-box-filled"
                   >
-                    Avançar
-                    <ArrowRight />
-                  </S.AdvanceButton>
-                </S.UploadedDocumentsContainer>
-              </StepBox>
-            )}
-          </S.WrrapperBoxes>
+                    <S.UploadedDocumentsContainer data-testid="uploaded-documents-container">
+                      <S.WrapperInformations>
+                        <S.Title>Exames carregados</S.Title>
+                        <S.Description>
+                          Selecione um exame para avançar a próxima etapa e em
+                          seguida clique em avançar.
+                        </S.Description>
+                        <SearchbarConfiguration
+                          {...queryHook}
+                          options={formattedFiles}
+                          onDeleteItem={handleOpenDialog}
+                          data-testid="searchbar-configuration"
+                        />
+                      </S.WrapperInformations>
+
+                      <S.AdvanceButton
+                        variant={'primary'}
+                        onClick={() => console.log('avançou')}
+                        disabled={!selectedOption?.name}
+                        data-testid="advance-button"
+                      >
+                        Avançar
+                        <ArrowRight />
+                      </S.AdvanceButton>
+                    </S.UploadedDocumentsContainer>
+                  </StepBox>
+                )}
+              </S.WrrapperBoxes>
+            </>
+          )}
         </S.MainContent>
+
         <GenericPage.Divider />
       </GenericPage.Root>
 

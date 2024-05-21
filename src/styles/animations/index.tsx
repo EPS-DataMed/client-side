@@ -51,3 +51,12 @@ export const fadeInAnimation = keyframes`
     opacity: 1;
   }
 `
+
+export const fadeOutAnimation = keyframes`
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+`
