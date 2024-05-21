@@ -7,9 +7,9 @@ export const SignupForm = styled.form`
     flex-direction: column;
     width: 29vw;
     gap: ${({ theme }) => theme.space[4]};
-    heigth: 55vh;
-    overflow-y: scroll;
-    padding-right: ${({ theme }) => theme.space[2]};
+    heigth: 50vh;
+    
+    
     
 `
 
@@ -27,23 +27,20 @@ export const BlueProgressCircle = styled.div`
     background-color: ${({ theme }) => theme.colors.blue500};
 `
 
-export const GreyProgressCircle = styled.div`
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background-color: ${({ theme }) => theme.colors.neutral300};
-`
+
 export const SignupInstruction = styled.p`
     margin: 0;
     font-size: ${({ theme }) => theme.fontSizes.sm};
     font-weight: ${({ theme }) => theme.fontWeights.regular};
     color: ${({ theme }) => theme.colors.neutral600};
     width: 29vw;
+    
 `
 
-export const ForwardButtonWrapper = styled.div`
+export const FinishButtonWrapper = styled.div`
     width: 29vw;
     display: flex;
+    padding-top: ${({ theme }) => theme.space[4]};
+    gap: 0.5rem;
     justify-content: center;
-    
 `

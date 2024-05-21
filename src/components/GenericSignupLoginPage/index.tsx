@@ -20,18 +20,19 @@ export const Content = styled.div`
     justify-content: center;
     padding-bottom: ${({ theme }) => theme.space[4]};
     padding-top: ${({ theme }) => theme.space[4]};
-    gap: ${({ theme }) => theme.space[4]};
+    gap: ${({ theme }) => theme.space[2]};
+    
 `
 export const WrapperLogoAndText = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 40vh;
   gap: ${({ theme }) => theme.space[4]};
 `
 
 export const Slogan = styled.p`
+    margin: 0;
     font-size: ${({ theme }) => theme.fontSizes.sm};
     font-weight: ${({ theme }) => theme.fontWeights.regular};
 `

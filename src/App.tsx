@@ -10,6 +10,7 @@ import { Submission } from './pages/Submission'
 import { SubmissionTestProvider } from './contexts/SubmissionTestContext'
 import { Login } from './pages/Login'
 import { Signup } from './pages/Signup'
+import { SignupDoctor } from './pages/SignupDoctor'
 
 export const queryClient = new QueryClient()
 
@@ -37,6 +38,7 @@ export function App() {
               <Route path="/submission" element={<Submission />} />
               <Route path="/login" element={<Login/>}/>
               <Route path="/signup" element={<Signup/>} />
+              <Route path="/signupdoctor" element={<SignupDoctor/>} />
             </Routes>
           </SubmissionTestProvider>
         </Router>
