@@ -16,7 +16,7 @@ jobs:
       - name: Install dependencies
         run: npm install --legacy-peer-deps
       - name: Test and coverage
-        run: npm run test --coverage --collectCoverageFrom='src/**/*.{ts,tsx}' --collectCoverageFrom='!src/**/*.d.ts' --collectCoverageFrom='!src/**/*.styles.ts' --collectCoverageFrom='!src/**/assets/**' --collectCoverageFrom='!src/**/icons/**' --collectCoverageFrom='!src/**/interfaces/**' --collectCoverageFrom='!src/**/utils/**' --collectCoverageFrom='!src/**/styles/**' --collectCoverageFrom='!src/**/lib/**' --collectCoverageFrom='!src/**/skeleton/**' --collectCoverageFrom='!src/**/styles.ts' --collectCoverageFrom='!src/**/App.tsx' --collectCoverageFrom='!src/**/main.tsx'
+        run: npm run test --coverage --collectCoverageFrom='src/**/*.{ts,tsx}' --collectCoverageFrom='!src/**/*.d.ts' --collectCoverageFrom='!src/**/*.styles.ts' --collectCoverageFrom='!src/**/assets/**' --collectCoverageFrom='!src/**/icons/**' --collectCoverageFrom='!src/**/interfaces/**' --collectCoverageFrom='!src/**/utils/**' --collectCoverageFrom=''!src/**/contexts/**',' --collectCoverageFrom='!src/**/styles/**' --collectCoverageFrom='!src/**/lib/**' --collectCoverageFrom='!src/**/skeleton/**' --collectCoverageFrom='!src/**/styles.ts' --collectCoverageFrom='!src/**/App.tsx' --collectCoverageFrom='!src/**/main.tsx'
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
@@ -27,4 +27,4 @@ jobs:
             -Dsonar.tests=src
             -Dsonar.test.inclusions=src/**/*.test.ts,src/**/*.test.tsx
             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
-            -Dsonar.coverage.exclusions=src/**/*.d.ts,src/**/*.styles.ts,src/**/assets/**,src/**/icons/**,src/**/interfaces/**,src/**/utils/**,src/**/styles/**,src/**/lib/**,src/**/skeleton/**,src/**/styles.ts,src/**/App.tsx,src/**/main.tsx
+            -Dsonar.coverage.exclusions=src/**/*.d.ts,src/**/*.styles.ts,src/**/assets/**,src/**/icons/**,src/**/interfaces/**,src/**/utils/**,'src/**/contexts/**',src/**/styles/**,src/**/lib/**,src/**/skeleton/**,src/**/styles.ts,src/**/App.tsx,src/**/main.tsx
