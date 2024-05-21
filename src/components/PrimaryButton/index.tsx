@@ -10,10 +10,10 @@ interface CustomButtonProps
 export const PrimaryButton: React.FC<CustomButtonProps> = ({
   children,
   variant = 'primary',
-  ...props
+  ...rest
 }) => {
   return (
-    <S.StyledButton variant={variant} {...props}>
+    <S.StyledButton variant={variant} {...rest}>
       {children}
     </S.StyledButton>
   )
