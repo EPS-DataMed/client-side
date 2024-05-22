@@ -51,7 +51,11 @@ export function SignupDoctor() {
                 </S.SignupForm>
 
                 <S.FinishButtonWrapper>
-                    <PrimaryButton>{"< Voltar"}</PrimaryButton>
+                    <PrimaryButton
+                        variant="secondary"
+                    >
+                        {"< Voltar"}
+                    </PrimaryButton>
                     <PrimaryButton>{"Pular e Concluir >"}</PrimaryButton>
                 </S.FinishButtonWrapper>
                 
