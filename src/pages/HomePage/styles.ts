@@ -16,31 +16,9 @@ export const WrapperLogoAndLogoTitle = styled.div`
   gap: ${({ theme }) => theme.space[4]};
 `
 
-export const ButtonsAndProfile = styled.div`
-    display: flex;
-    height: 6vh;
-    gap: ${({ theme }) => theme.space[4]}; 
 
-`
 
-export const ProfileCircle = styled.div`
-    color: ${({ theme }) => theme.colors.neutral};
-    font-weight: bold;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-    height: 37px;
-    width: 37px;
-    background-color: ${({ theme }) => theme.colors.blue440};
-    transition: background-color 300ms ease-in-out, color 300ms ease-in-out;
 
-    &:hover{
-        cursor: pointer;
-        background-color: ${({ theme }) => darkenColor(theme.colors.blue440, 0.2)};
-    }
-
-`
 export const MainContent = styled.div`
     display: flex;
     flex-direction: column;
@@ -73,7 +51,6 @@ export const HomepageOption = styled.div`
     padding-left: ${({ theme }) => theme.space[6]};
     padding-top: ${({ theme }) => theme.space[6]};
     padding-right: ${({ theme }) => theme.space[6]};
-    transition: background-color 100ms ease-in-out, outline 100ms ease-in-out;
     width: 15vw;
     height: 100%;
     border-radius: 4px;

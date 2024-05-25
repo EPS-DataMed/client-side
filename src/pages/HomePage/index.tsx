@@ -1,7 +1,10 @@
 import { GenericPage } from '../../components/GenericPage'
 import * as S from './styles' 
 import { PrimaryButton } from '../../components/PrimaryButton'
-
+import { ButtonsAndProfile } from '../../components/ButtonsAndProfile'
+import { ProfileCircle } from '../../components/ProfileCircle'
+import { Pen } from '../../assets/icons/pen'
+import { Logout } from '../../assets/icons/logout'
 export function HomePage() {
   return (
     <>
@@ -13,17 +16,21 @@ export function HomePage() {
             <GenericPage.LogoTitle>DataMed</GenericPage.LogoTitle>
           </S.WrapperLogoAndLogoTitle>
 
-          <S.ButtonsAndProfile>
-            <S.ProfileCircle>
+          <ButtonsAndProfile>
+            <ProfileCircle>
               <p>A</p>
-            </S.ProfileCircle>
-            <PrimaryButton>Paciente</PrimaryButton>
-            <PrimaryButton
-              variant="secondary"
-            >
-              Sair
+            </ProfileCircle>
+            <PrimaryButton>
+              <Pen/>
+              <p>Paciente</p>
             </PrimaryButton>
-          </S.ButtonsAndProfile>
+            <PrimaryButton
+              variant="red"
+            >
+              <Logout/>
+              <p>Sair</p>
+            </PrimaryButton>
+          </ButtonsAndProfile>
         </S.Header>
 
         <GenericPage.Divider/>

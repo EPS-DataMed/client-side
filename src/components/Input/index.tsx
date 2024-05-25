@@ -32,7 +32,9 @@ const InputComponent = styled.input<InputProps>`
   &:hover {
     border: 1px solid ${({ theme }) => theme.colors.blue500};
   }
-
+  &:invalid {
+    border: 1px solid ${({ theme }) => theme.colors.red500};
+  }
   &::placeholder {
     color: ${({ theme }) => theme.colors.neutral400};
   }

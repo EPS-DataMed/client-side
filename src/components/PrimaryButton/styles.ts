@@ -2,7 +2,7 @@ import { css, styled } from 'styled-components'
 import { darkenColor, lightenColor } from '../../utils/colors'
 
 interface ButtonProps {
-  variant?: 'secondary' | 'primary'
+  variant?: 'secondary' | 'primary' | 'red'
 }
 
 const secondaryButtonStyle = css`
@@ -20,7 +20,18 @@ const secondaryButtonStyle = css`
       ${({ theme }) => lightenColor(theme.colors.neutral600, 0.2)} !important;
   }
 `
+const redButtonStyle = css`
+  background-color: ${({ theme }) => theme.colors.red500};
+  text-align: center !important;
+  color: ${({ theme }) => theme.colors.neutral} !important;
+  font-weight: ${({ theme }) => theme.fontWeights.medium} !important;
 
+  &:hover {
+    background-color: ${({ theme }) => darkenColor(theme.colors.red500, 0.2)} !important;
+    
+  }
+
+`
 export const StyledButton = styled.button<ButtonProps>`
   display: flex;
   align-items: center;
@@ -40,6 +51,8 @@ export const StyledButton = styled.button<ButtonProps>`
   width: inherit;
 
   ${({ variant }) => variant === 'secondary' && secondaryButtonStyle}
+
+  ${({ variant }) => variant === 'red' && redButtonStyle}
 
   &:hover {
     background-color: ${({ theme }) => darkenColor(theme.colors.blue500, 0.2)};
