@@ -1,4 +1,4 @@
-import { styled } from 'styled-components'
+import { styled, css } from 'styled-components'
 import { darkenColor } from '../../utils/colors'
 
 
@@ -43,4 +43,19 @@ export const FinishButtonWrapper = styled.div`
     padding-top: ${({ theme }) => theme.space[4]};
     gap: 0.5rem;
     justify-content: center;
+`
+interface SelectProps{
+    hasError?: boolean;
+}
+
+export const SpecialtyInput = styled.select<SelectProps>`
+    width: 29vw;
+    height: 35px;
+    border-radius: ${({ theme }) => theme.radii.md};
+    border: 1px solid ${({ theme }) => theme.colors.neutral600};
+    ${({ hasError, theme }) =>
+        hasError &&
+        css`
+          border: 1px solid ${theme.colors.red500};
+        `}
 `

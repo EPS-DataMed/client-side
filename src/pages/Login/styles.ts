@@ -10,7 +10,7 @@ export const LoginForm = styled.form`
 `
 
 export const RegisterArea = styled.div`
-    margin-top: ${({ theme }) => theme.space[16]};
+    margin-top: ${({ theme }) => theme.space[8]};
 
 `
 

@@ -22,13 +22,14 @@ export const Content = styled.div`
     padding-top: ${({ theme }) => theme.space[4]};
     gap: ${({ theme }) => theme.space[2]};
     
+    
 `
 export const WrapperLogoAndText = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: ${({ theme }) => theme.space[4]};
+  gap: ${({ theme }) => theme.space[2]};
 `
 
 export const Slogan = styled.p`

@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import * as Page from '../../components/GenericSignupLoginPage'
-import { GenericPage } from '../../components/GenericPage'
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Input } from '../../components/Input'
 import * as S from './styles'
 import { LoginImage } from '../../assets/loginImage'
@@ -9,12 +9,15 @@ import { LogoSVG } from '../../assets/logo'
 import { PrimaryButton } from '../../components/PrimaryButton'
 
 export function Signup() {
+    const location = useLocation();
+    const { user: userFromNavigation } = location.state || { user: {} };
+    const navigate = useNavigate();
 
     const [user, setUser] = useState({
-        name: "",
-        email: "",
-        password: "",
-        dateOfBirth: ""
+        name: userFromNavigation !== undefined ? userFromNavigation.name : "",
+        email: userFromNavigation !== undefined ? userFromNavigation.email : "",
+        password: userFromNavigation !== undefined ? userFromNavigation.password : "",
+        dateOfBirth: userFromNavigation !== undefined ? userFromNavigation.dateOfBirth : "",
         
     })
 
@@ -44,13 +47,21 @@ export function Signup() {
         errorMessage: ''
     })
 
+    function isPasswordValid(password: string) {
+        const hasLetter = /[a-zA-Z]/.test(password);
+        const hasNumber = /\d/.test(password);
+        const length = password.length >= 8
+        
+        return hasLetter && hasNumber && length;
+    }
 
     function validateUserData(e:any){
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if(!user.email){
             
-            e.preventDefault()
+            
             setEmail({...email , isValid: false ,errorMessage: "E-mail é obrigatório"})
+            e.preventDefault()
         }
         else if(!regex.test(user.email)){
             
@@ -91,6 +102,10 @@ export function Signup() {
             setPassword({...password, isValid: false, errorMessage: "Senha é obrigatória"})
             e.preventDefault()
         }
+        else if(!isPasswordValid(user.password)){
+            setPassword({...password, isValid: false, errorMessage: "Deve conter no mínimo 8 caracteres, com letras e números"})
+            e.preventDefault()
+        }
         else{
             
             setPassword({...password, isValid: true, errorMessage: ""})
@@ -103,6 +118,10 @@ export function Signup() {
             setConfirmPassword({ ...confirmPassword , isValid: false, errorMessage: "Este campo é obrigatório"})
             e.preventDefault()
  
+        }
+        else if(!isPasswordValid(confirmPassword.value)){
+            setConfirmPassword({...confirmPassword, isValid: false, errorMessage: "Deve conter no mínimo 8 caracteres, com letras e números"})
+            e.preventDefault()
         }
         else{
             
@@ -122,11 +141,14 @@ export function Signup() {
     }
     const handleSubmit = async (e:any) => {
         e.preventDefault()
+        console.log("usernavigation: " ,userFromNavigation)
         await validateUserData(e)
         
             
         
         if(name.isValid && email.isValid && dateOfBirth.isValid && password.isValid && confirmPassword.isValid){
+
+            navigate('/signupdoctor', { state: { user } });
             /*try {
             console.log(`user ${apiKey}`)
 
@@ -194,6 +216,7 @@ export function Signup() {
                             type="text"
                             hasError={!name.isValid}
                             onChange={(e) => setUser({...user, name: e.target.value})}
+                            value={user.name}
                         />
                     </Input.Root>
 
@@ -210,6 +233,7 @@ export function Signup() {
                             type="email"
                             onChange={(e) => setUser({...user, email: e.target.value})}
                             hasError={!email.isValid}
+                            value={user.email}
                         />
                     </Input.Root>
 
@@ -224,6 +248,7 @@ export function Signup() {
                             type="date"
                             onChange={(e) => setUser({...user, dateOfBirth: e.target.value})}
                             hasError={!dateOfBirth.isValid}
+                            value={user.dateOfBirth}
                         />
                     </Input.Root>
 
@@ -233,7 +258,7 @@ export function Signup() {
 
                     <Input.Root>
                         <Input.Label>Senha *</Input.Label>
-                        <Input.Description>Escolha uma senha, deve conter <b>letras</b> e <b>números</b>.</Input.Description>
+                        <Input.Description>Deve conter pelo menos <b>oito caracteres</b>, com <b>letras</b> e <b>números</b>.</Input.Description>
                         <Input.Input 
                             type="password"
                             onChange={(e) => setUser({...user, password: e.target.value})}
