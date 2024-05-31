@@ -31,7 +31,10 @@ export const WrapperPageInformation = styled.div`
 export const WrrapperBoxes = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 134px;
+  margin-top: 1%;
+
   animation: ${fadeInAnimation} 0.5s linear;
 `
 

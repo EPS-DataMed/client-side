@@ -3,8 +3,8 @@ import { scaleAnimation } from '../../../../styles/animations'
 
 export const Container = styled.div`
   box-shadow: rgba(0, 0, 0, 0.16) 0px 0px 3px 0px;
-  height: 44vh;
-  width: 23vw;
+  height: 360px;
+  width: 346px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 `
 
@@ -43,8 +43,8 @@ export const FileUploader = styled.div<FileUploaderProps>`
   padding: ${({ theme }) => theme.space[5]};
   background-image: url('data:image/svg+xml,%3csvg width="100%25" height="100%25" xmlns="http://www.w3.org/2000/svg"%3e%3crect width="100%25" height="100%25" fill="none" stroke="grey" stroke-width="4" stroke-dasharray="8" stroke-dashoffset="0" stroke-linecap="round"/%3e%3c/svg%3e');
   cursor: grab;
-  height: 44vh;
-  width: 23vw;
+  height: 360px;
+  width: 346px;
 
   ${({ variant }) =>
     variant === 'invalid' &&

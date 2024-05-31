@@ -1,5 +1,5 @@
-// src/hooks/useBreadcrumbs.ts
 import { useMemo } from 'react'
+import useNavigation from '../../../hooks/useNavigation'
 
 export interface BreadcrumbItem {
   label: string
@@ -8,11 +8,13 @@ export interface BreadcrumbItem {
 }
 
 export function useBreadcrumbs() {
+  const navigateTo = useNavigation()
+
   const BREADCRUMBS: BreadcrumbItem[] = useMemo(
     () => [
       {
-        label: 'Pacientes',
-        action: () => console.log('Pacientes'),
+        label: 'Home',
+        action: () => navigateTo('/'),
       },
       {
         label: 'Enviar exames',

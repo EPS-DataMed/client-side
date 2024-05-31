@@ -19,8 +19,8 @@ export const Container = styled.div<ContainerProps>`
   transition: background-color 1s ease-in-out;
   background-color: ${({ enabled, theme }) =>
     enabled ? theme.colors.neutral100 : theme.colors.neutral50};
-  height: 44vh;
-  width: 23vw;
+  height: 360px;
+  width: 346px;
   align-items: center;
   justify-content: center;
   gap: ${({ theme }) => theme.space[10]};
