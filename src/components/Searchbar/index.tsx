@@ -53,9 +53,9 @@ const OptionsList = styled.ul<OptionCountProps>`
   animation: ${fadeInAnimation} 0.3s linear forwards;
 
   &::-webkit-scrollbar-thumb:hover {
-    background: ${({ theme }) => theme.colors.blue500};
+    background: ${({ theme }) => theme.colors.green500};
     border-radius: ${({ theme }) => theme.radii.full};
-    border: 3px solid ${({ theme }) => darkenColor(theme.colors.blue500, 0.3)};
+    border: 3px solid ${({ theme }) => darkenColor(theme.colors.green500, 0.3)};
     background-clip: content-box;
   }
 
@@ -109,13 +109,13 @@ const OptionItem = styled.div<OptionCountProps>`
   }
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.blue500};
+    background-color: ${({ theme }) => theme.colors.green500};
     color: ${({ theme }) => theme.colors.neutral};
     padding-right: 0px;
 
     &::before {
       background-color: ${({ theme }) =>
-        darkenColor(theme.colors.blue500, 0.3)};
+        darkenColor(theme.colors.green500, 0.3)};
     }
   }
 

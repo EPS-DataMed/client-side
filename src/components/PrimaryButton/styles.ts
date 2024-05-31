@@ -2,7 +2,7 @@ import { css, styled } from 'styled-components'
 import { darkenColor, lightenColor } from '../../utils/colors'
 
 interface ButtonProps {
-  variant?: 'secondary' | 'primary' | 'red'
+  variant?: 'secondary' | 'primary' | 'red' | 'success'
 }
 
 const secondaryButtonStyle = css`
@@ -27,11 +27,22 @@ const redButtonStyle = css`
   font-weight: ${({ theme }) => theme.fontWeights.medium} !important;
 
   &:hover {
-    background-color: ${({ theme }) => darkenColor(theme.colors.red500, 0.2)} !important;
-    
+    background-color: ${({ theme }) =>
+      darkenColor(theme.colors.red500, 0.2)} !important;
   }
-
 `
+const successButtonStyle = css`
+  background-color: ${({ theme }) => theme.colors.green500};
+  text-align: center !important;
+  color: ${({ theme }) => theme.colors.neutral} !important;
+  font-weight: ${({ theme }) => theme.fontWeights.medium} !important;
+
+  &:hover {
+    background-color: ${({ theme }) =>
+      darkenColor(theme.colors.green500, 0.2)} !important;
+  }
+`
+
 export const StyledButton = styled.button<ButtonProps>`
   display: flex;
   align-items: center;
@@ -53,6 +64,9 @@ export const StyledButton = styled.button<ButtonProps>`
   ${({ variant }) => variant === 'secondary' && secondaryButtonStyle}
 
   ${({ variant }) => variant === 'red' && redButtonStyle}
+
+
+  ${({ variant }) => variant === 'success' && successButtonStyle}
 
   &:hover {
     background-color: ${({ theme }) => darkenColor(theme.colors.blue500, 0.2)};

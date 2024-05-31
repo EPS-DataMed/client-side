@@ -8,6 +8,7 @@ interface StepBoxProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode
   typeAnimation?: 'infinite' | 'linear' | 'ease-in-out'
   timeAnimation?: string
+  typeBox?: 'load_success' | 'list_tests'
 }
 
 export function StepBox({
@@ -18,12 +19,13 @@ export function StepBox({
   children,
   typeAnimation = 'infinite',
   timeAnimation = '2s',
+  typeBox,
   ...rest
 }: StepBoxProps) {
   const hasIcon = Icon && animation
 
   return (
-    <S.Container enabled={enabled} {...rest}>
+    <S.Container typeBox={typeBox} enabled={enabled} {...rest}>
       {hasIcon ? (
         <S.AnimationDiv
           timeAnimation={timeAnimation}
@@ -34,7 +36,9 @@ export function StepBox({
         </S.AnimationDiv>
       ) : null}
 
-      {description ? <S.Description>{description}</S.Description> : null}
+      {description ? (
+        <S.Description enabled={enabled}>{description}</S.Description>
+      ) : null}
 
       {children}
     </S.Container>

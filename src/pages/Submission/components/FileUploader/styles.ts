@@ -4,7 +4,7 @@ import { scaleAnimation } from '../../../../styles/animations'
 export const Container = styled.div`
   box-shadow: rgba(0, 0, 0, 0.16) 0px 0px 3px 0px;
   height: 360px;
-  width: 346px;
+  width: 355px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 `
 
@@ -32,19 +32,23 @@ export const ContentButtonExclude = styled.div`
 
 interface FileUploaderProps {
   variant: 'invalid' | 'valid'
+  success: boolean
 }
 
 export const FileUploader = styled.div<FileUploaderProps>`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  gap: ${({ theme }) => theme.space[7]};
   border-spacing: ${({ theme }) => theme.space[2]};
   padding: ${({ theme }) => theme.space[5]};
-  background-image: url('data:image/svg+xml,%3csvg width="100%25" height="100%25" xmlns="http://www.w3.org/2000/svg"%3e%3crect width="100%25" height="100%25" fill="none" stroke="grey" stroke-width="4" stroke-dasharray="8" stroke-dashoffset="0" stroke-linecap="round"/%3e%3c/svg%3e');
+  background-image: ${({ success }) =>
+    success
+      ? 'url(\'data:image/svg+xml,%3csvg width="100%25" height="100%25" xmlns="http://www.w3.org/2000/svg"%3e%3crect width="100%25" height="100%25" fill="none" stroke="%233fd255" stroke-width="4" stroke-dasharray="8" stroke-dashoffset="0" stroke-linecap="round"/%3e%3c/svg%3e\')'
+      : 'url(\'data:image/svg+xml,%3csvg width="100%25" height="100%25" xmlns="http://www.w3.org/2000/svg"%3e%3crect width="100%25" height="100%25" fill="none" stroke="%232980B9" stroke-width="4" stroke-dasharray="8" stroke-dashoffset="0" stroke-linecap="round"/%3e%3c/svg%3e\')'};
   cursor: grab;
   height: 360px;
-  width: 346px;
+  width: 355px;
 
   ${({ variant }) =>
     variant === 'invalid' &&
@@ -60,6 +64,7 @@ export const WrapperIconAndMessageUpload = styled.div`
 `
 
 export const AnimationUploadIcon = styled.div`
+  margin-top: 50px;
   animation: ${scaleAnimation} 2s ease infinite;
 `
 
@@ -80,6 +85,5 @@ export const MessageUploadError = styled.span`
 
 export const MessageUploadDescription = styled.span`
   font-size: ${({ theme }) => theme.fontSizes.xs};
-  font-weight: ${({ theme }) => theme.fontWeights.bold};
   margin-left: ${({ theme }) => theme.space[4]};
 `

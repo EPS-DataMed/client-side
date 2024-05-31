@@ -1,6 +1,6 @@
 import { styled } from 'styled-components'
 import { PrimaryButton } from '../../components/PrimaryButton'
-import { fadeInAnimation, scaleAnimation } from '../../styles/animations'
+import { fadeInAnimation } from '../../styles/animations'
 
 export const WrapperLogoAndLogoTitle = styled.div`
   display: flex;
@@ -68,6 +68,6 @@ export const WrapperInformations = styled.div`
 
 export const AdvanceButton = styled(PrimaryButton)`
   align-self: flex-end;
-  animation: ${scaleAnimation} 1s infinite;
   z-index: 2;
+  background-color: ${({ theme }) => theme.colors.green500};
 `

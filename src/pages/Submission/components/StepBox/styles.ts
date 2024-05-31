@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import {
   fadeInAnimation,
   rotateAnimation,
@@ -9,27 +9,63 @@ import {
 
 interface ContainerProps {
   enabled: boolean
+  typeBox?: 'load_success' | 'list_tests'
+}
+
+const loadSuccesStyle = css`
+  border: 2px solid ${({ theme }) => theme.colors.green500};
+
+  span {
+    position: relative;
+    bottom: 10px;
+  }
+
+`
+
+const listTestsStyle = css`
+  border: 2px solid ${({ theme }) => theme.colors.green500};
+`
+
+const BOX_OPTIONS = {
+  load_success: loadSuccesStyle,
+  list_tests: listTestsStyle,
+}
+
+function chooseOptionBox(option: 'load_success' | 'list_tests' ) {
+  return BOX_OPTIONS[option] || null
 }
 
 export const Container = styled.div<ContainerProps>`
   display: flex;
   flex-direction: column;
-
+  position: relative;
   border-radius: ${({ theme }) => theme.radii.xs};
   transition: background-color 1s ease-in-out;
+  transition: border-color 1s ease-in-out;
+
   background-color: ${({ enabled, theme }) =>
     enabled ? theme.colors.neutral100 : theme.colors.neutral50};
+
+  border: 2px solid ${({ enabled, theme }) =>
+    enabled ? theme.colors.blue500 : theme.colors.neutral400};
   height: 360px;
-  width: 346px;
+  width: 355px;
   align-items: center;
   justify-content: center;
   gap: ${({ theme }) => theme.space[10]};
 
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   animation: ${fadeInAnimation} 0.5s linear;
+
+  ${({typeBox}) => typeBox && chooseOptionBox(typeBox)}
 `
-export const Description = styled.div`
-  color: ${({ theme }) => theme.colors.neutral500};
+
+interface DescriptionProps {
+  enabled: boolean
+}
+
+export const Description = styled.span<DescriptionProps>`
+  color: ${({ theme, enabled }) => !enabled ? theme.colors.neutral500: theme.colors.neutral900};
   width: 80%;
   text-align: center;
   font-size: ${({ theme }) => theme.fontSizes.sm};

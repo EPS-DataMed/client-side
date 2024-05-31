@@ -108,26 +108,30 @@ export function Submission() {
 
               <S.WrrapperBoxes>
                 <FileUploader.FileUploader
+                  success={hasFiles}
                   {...getRootProps()}
                   variant={'valid'}
                   data-testid="file-uploader"
                 >
                   <FileUploader.AnimationUploadIcon>
-                    <FileUploader.UploadIcon />
+                    <FileUploader.UploadIcon success={hasFiles} />
                   </FileUploader.AnimationUploadIcon>
-                  <FileUploader.WrapperIconAndMessageUpload>
-                    <FileUploader.MessageUpload>
-                      Arraste seu(s) exame(s) aqui ou{' '}
-                      <FileUploader.MessageUploadBold>
-                        clique para buscar
-                      </FileUploader.MessageUploadBold>{' '}
-                      em seu computador.
-                    </FileUploader.MessageUpload>
-                  </FileUploader.WrapperIconAndMessageUpload>
+                  <div>
+                    <FileUploader.WrapperIconAndMessageUpload>
+                      <FileUploader.MessageUpload>
+                        Arraste seu(s) exame(s) aqui ou{' '}
+                        <FileUploader.MessageUploadBold>
+                          clique para buscar
+                        </FileUploader.MessageUploadBold>{' '}
+                        em seu computador.
+                      </FileUploader.MessageUpload>
+                    </FileUploader.WrapperIconAndMessageUpload>
 
-                  <FileUploader.MessageUploadDescription>
-                    Apenas arquivos no formato pdf são permitidos.
-                  </FileUploader.MessageUploadDescription>
+                    <FileUploader.MessageUploadDescription>
+                      Apenas arquivos no formato <b>pdf</b> são permitidos.
+                    </FileUploader.MessageUploadDescription>
+                  </div>
+
                   <input
                     name="dropzone-file"
                     {...getInputProps()}
@@ -143,6 +147,7 @@ export function Submission() {
                   typeAnimation={selectedOptionEnabledFormatted.typeAnimation}
                   timeAnimation={selectedOptionEnabledFormatted.timeAnimation}
                   data-testid="step-box"
+                  typeBox={hasFiles ? 'load_success' : undefined}
                 />
 
                 {!hasFiles && (
@@ -163,6 +168,7 @@ export function Submission() {
                     typeAnimation="infinite"
                     enabled={true}
                     data-testid="step-box-filled"
+                    typeBox="list_tests"
                   >
                     <S.UploadedDocumentsContainer data-testid="uploaded-documents-container">
                       <S.WrapperInformations>
@@ -180,9 +186,9 @@ export function Submission() {
                       </S.WrapperInformations>
 
                       <S.AdvanceButton
-                        variant={'primary'}
+                        variant={'success'}
                         onClick={handleSubmissionTest}
-                        disabled={isArrayEmpty(filesUploaded)}
+                        disabled={hasNoFiles}
                         data-testid="advance-button"
                       >
                         Avançar
