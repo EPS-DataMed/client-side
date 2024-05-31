@@ -5,7 +5,7 @@ import { darkenColor } from '../../utils/colors'
 export const SignupForm = styled.form`
     display: flex;
     flex-direction: column;
-    width: 29vw;
+    width: 365px;
     gap: ${({ theme }) => theme.space[4]};
     heigth: 50vh;
     
@@ -33,12 +33,12 @@ export const SignupInstruction = styled.p`
     font-size: ${({ theme }) => theme.fontSizes.sm};
     font-weight: ${({ theme }) => theme.fontWeights.regular};
     color: ${({ theme }) => theme.colors.neutral600};
-    width: 29vw;
+    width: 365px;
     
 `
 
 export const FinishButtonWrapper = styled.div`
-    width: 29vw;
+    width: 365px;
     display: flex;
     padding-top: ${({ theme }) => theme.space[4]};
     gap: 0.5rem;
@@ -49,7 +49,7 @@ interface SelectProps{
 }
 
 export const SpecialtyInput = styled.select<SelectProps>`
-    width: 29vw;
+    width: 365px;
     height: 35px;
     border-radius: ${({ theme }) => theme.radii.md};
     border: 1px solid ${({ theme }) => theme.colors.neutral600};

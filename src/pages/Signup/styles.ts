@@ -3,8 +3,8 @@ import { styled, css } from 'styled-components'
 export const SignupForm = styled.form`
   display: flex;
   flex-direction: column;
-  width: 29vw;
   height: 340px;
+  width: 365px;
   gap: ${({ theme }) => theme.space[4]};
   overflow-y: scroll;
   padding-right: ${({ theme }) => theme.space[2]};
@@ -34,11 +34,11 @@ export const SignupInstruction = styled.p`
   font-size: ${({ theme }) => theme.fontSizes.sm};
   font-weight: ${({ theme }) => theme.fontWeights.regular};
   color: ${({ theme }) => theme.colors.neutral600};
-  width: 29vw;
+  width: 365px;
 `
 
 export const ForwardButtonWrapper = styled.div`
-  width: 29vw;
+  width: 365px;
   display: flex;
   justify-content: center;
 `
