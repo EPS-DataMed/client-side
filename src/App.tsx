@@ -9,6 +9,9 @@ import { HomePage } from './pages/HomePage'
 import { Submission } from './pages/Submission'
 import { SubmissionTestProvider } from './contexts/SubmissionTestContext'
 import { UserForm } from './pages/UserForm'
+import { Login } from './pages/Login'
+import { Signup } from './pages/Signup'
+import { SignupDoctor } from './pages/SignupDoctor'
 
 export const queryClient = new QueryClient()
 
@@ -35,6 +38,9 @@ export function App() {
               <Route path="/" element={<HomePage />} />
               <Route path="/submission" element={<Submission />} />
               <Route path="/form" element={<UserForm />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/signupdoctor" element={<SignupDoctor />} />
             </Routes>
           </SubmissionTestProvider>
         </Router>
