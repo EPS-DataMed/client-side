@@ -1,4 +1,4 @@
-import { styled } from 'styled-components'
+import { styled, css } from 'styled-components'
 import { darkenColor } from '../../utils/colors'
 
 
@@ -46,4 +46,18 @@ export const ForwardButtonWrapper = styled.div`
     display: flex;
     justify-content: center;
     
+`
+interface SelectProps{
+    hasError?: boolean;
+}
+
+export const SexInput = styled.select<SelectProps>`
+    height: 35px;
+    border-radius: ${({ theme }) => theme.radii.md};
+    border: 1px solid ${({ theme }) => theme.colors.neutral600};
+    ${({ hasError, theme }) =>
+        hasError &&
+        css`
+          border: 1px solid ${theme.colors.red500};
+        `}
 `

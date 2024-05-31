@@ -4,7 +4,7 @@ import { GenericPage } from '../../components/GenericPage'
 import { Input } from '../../components/Input'
 import * as S from './styles'
 import { useNavigate, useLocation } from 'react-router-dom';
-
+import { axiosInstance } from '../../config/config';
 import { LoginImage } from '../../assets/loginImage'
 import { LogoSVG } from '../../assets/logo'
 
@@ -19,7 +19,7 @@ export function SignupDoctor() {
         email: userFromNavigation !== undefined ? userFromNavigation.email : "",
         password: userFromNavigation !== undefined ? userFromNavigation.password : "",
         dateOfBirth: userFromNavigation !== undefined ? userFromNavigation.dateOfBirth : "",
-        
+        sex: userFromNavigation !== undefined ? userFromNavigation.sex : ""
     })
     const medicalSpecialties = [
         'Alergia e Imunologia',
@@ -125,39 +125,76 @@ export function SignupDoctor() {
         e.preventDefault()
         await validateDoctorData(e)
         
-        
+
         
         if(crmInput.isValid && specialtyInput.isValid){
-            /*try {
-            console.log(`user ${apiKey}`)
 
-            const response = await axiosInstance.post(
-                '/users', 
-                user,
-                {
-                    headers: {
-                        'x-api-key': `${apiKey}`
+            if(doctor.crm !== "" && doctor.specialty !== ""){
+                try {
+                
+
+                    const response = await axiosInstance.post(
+                        '/usuarios', 
+                        {
+                            "nome_completo": user.name,
+                            "email": user.email,
+                            "data_nascimento": user.dateOfBirth,
+                            "sexo_biologico": user.sex,
+                            "formulario": {},
+                            "status_formulario": "Não iniciado",
+                            "senha": user.password
+                        },
+                        
+                    )
+                    
+                
+                    if (response.status === 201) {
+                        // Cadastro bem-sucedido
+                        console.log('Usuário cadastrado:', response.data);
+                       
+                    } else {
+                        // Tratar erros de requisição
+                        console.error('Erro ao cadastrar usuário:', response);
                     }
+                } catch (error: any) {
+                    // Tratar erros de rede
+                    console.error('Erro de rede:', error.response);
+                    
                 }
-                
-            )
-            
-        
-            if (response.status === 201) {
-                // Cadastro bem-sucedido
-                console.log('Usuário cadastrado:', response.data);
-                setErrorText('')
-                setModalOpen(true)
-                
-            } else {
-                // Tratar erros de requisição
-                console.error('Erro ao cadastrar usuário:', response.statusText);
             }
-            } catch (error) {
+            try {
+                
+
+                const response = await axiosInstance.post(
+                    '/usuarios', 
+                    {
+                        "nome_completo": user.name,
+                        "email": user.email,
+                        "data_nascimento": user.dateOfBirth,
+                        "sexo_biologico": user.sex,
+                        "formulario": {},
+                        "status_formulario": "Não iniciado",
+                        "senha": user.password
+                    },
+                    
+                )
+                
+            
+                if (response.status === 201) {
+                    // Cadastro bem-sucedido
+                    console.log('Usuário cadastrado:', response.data);
+                   
+                } else {
+                    // Tratar erros de requisição
+                    console.error('Erro ao cadastrar usuário:', response);
+                }
+            } catch (error: any) {
                 // Tratar erros de rede
                 console.error('Erro de rede:', error.response);
-                setErrorText(error.response.data.message)
-            }*/
+                
+            }
+
+            
             console.log(doctor)
         }
         

@@ -12,14 +12,16 @@ export function Signup() {
     const location = useLocation();
     const { user: userFromNavigation } = location.state || { user: {} };
     const navigate = useNavigate();
-
+    const sexList = ["Masculino", "Feminino"]
     const [user, setUser] = useState({
         name: userFromNavigation !== undefined ? userFromNavigation.name : "",
         email: userFromNavigation !== undefined ? userFromNavigation.email : "",
         password: userFromNavigation !== undefined ? userFromNavigation.password : "",
         dateOfBirth: userFromNavigation !== undefined ? userFromNavigation.dateOfBirth : "",
+        sex: userFromNavigation !== undefined ? userFromNavigation.sex : "",
         
     })
+
 
     const [confirmPassword, setConfirmPassword] = useState({
         value: '',
@@ -42,10 +44,16 @@ export function Signup() {
         errorMessage: ''
     })
 
+    const [sex, setSex] = useState({
+        isValid: true,
+        errorMessage: ''
+
+    })
     const [password, setPassword] = useState({
         isValid: true,
         errorMessage: ''
     })
+
 
     function isPasswordValid(password: string) {
         const hasLetter = /[a-zA-Z]/.test(password);
@@ -55,130 +63,149 @@ export function Signup() {
         return hasLetter && hasNumber && length;
     }
 
-    function validateUserData(e:any){
+    const validateUserData = async(e:any) =>{
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if(!user.email){
+        let isValid = true
+        const newNameState = { isValid: true, errorMessage: "" };
+        if(user.name === undefined){
             
+            newNameState.isValid = false
+            newNameState.errorMessage = "Nome é obrigatório"
             
-            setEmail({...email , isValid: false ,errorMessage: "E-mail é obrigatório"})
+            e.preventDefault()
+        }
+        
+        else{
+            newNameState.isValid = true
+            newNameState.errorMessage = ""
+            e.preventDefault()
+        }
+
+        setName(newNameState)
+
+        const newEmailState = { isValid: true, errorMessage: "" };
+        if(user.email === undefined){
+            newEmailState.isValid = false;
+            newEmailState.errorMessage = "E-mail é obrigatório";
+            isValid = false
             e.preventDefault()
         }
         else if(!regex.test(user.email)){
-            
-            setEmail({...email , isValid: false, errorMessage: "E-mail em formato inválido"})
+            newEmailState.isValid = false;
+            newEmailState.errorMessage = "E-mail em formato inválido";
+            isValid = false
             e.preventDefault()
     
         }
         else{
+            newEmailState.isValid = true;
+            newEmailState.errorMessage = "";
             
-            setEmail({...email , isValid: true, errorMessage: ""})
             e.preventDefault()
         }
 
-        if(!user.name){
-            
-            setName({...email, isValid: false , errorMessage: "Nome é obrigatório"})
+        setEmail(newEmailState)
+
+        const newDateOfBirthState = { isValid: true, errorMessage: "" };
+        if(user.dateOfBirth === undefined){
+            newDateOfBirthState.isValid = false;
+            newDateOfBirthState.errorMessage = "Data de nascimento é obrigatória";
+            isValid = false
             e.preventDefault()
         }
         else{
+            newDateOfBirthState.isValid = true;
+            newDateOfBirthState.errorMessage = "";
             
-            setName({...email, isValid: true , errorMessage: ""})
             e.preventDefault()
         }
 
-        if(!user.dateOfBirth){
-            
-            setDateOfBirth({...dateOfBirth, isValid: false , errorMessage: "Data de nascimento é obrigatória"})
+        setDateOfBirth(newDateOfBirthState)
+
+        const newSexState = { isValid: true, errorMessage: "" };
+        if(user.sex === undefined){
+            newSexState.isValid = false;
+            newSexState.errorMessage = "Sexo é obrigatório";
+            isValid = false
             e.preventDefault()
         }
         else{
-            
-            setDateOfBirth({...dateOfBirth, isValid: true , errorMessage: ""})
+            newSexState.isValid = true;
+            newSexState.errorMessage = "";
+           
             e.preventDefault()
         }
 
-        if(!user.password){
+        setSex(newSexState)
+        
+        const newPasswordState = { isValid: true, errorMessage: "" };
+        if(user.password === undefined){
             
-            setPassword({...password, isValid: false, errorMessage: "Senha é obrigatória"})
+            newPasswordState.isValid = false;
+            newPasswordState.errorMessage = "Senha é obrigatória";
+            isValid = false
             e.preventDefault()
         }
         else if(!isPasswordValid(user.password)){
-            setPassword({...password, isValid: false, errorMessage: "Deve conter no mínimo 8 caracteres, com letras e números"})
+            newPasswordState.isValid = false;
+            newPasswordState.errorMessage = "Deve conter no mínimo 8 caracteres, com letras e números";
+            isValid = false
             e.preventDefault()
         }
         else{
+            newPasswordState.isValid = true;
+            newPasswordState.errorMessage = "";
             
-            setPassword({...password, isValid: true, errorMessage: ""})
             e.preventDefault()
         }
 
+        setPassword(newPasswordState)
 
-        if(!confirmPassword.value){
-            
-            setConfirmPassword({ ...confirmPassword , isValid: false, errorMessage: "Este campo é obrigatório"})
+        const newConfirmPasswordState = { value: confirmPassword.value, isValid: true, errorMessage: "" };
+        if(confirmPassword.value === undefined){
+            newConfirmPasswordState.isValid = false;
+            newConfirmPasswordState.errorMessage = "Este campo é obrigatório";
+            isValid = false
             e.preventDefault()
  
         }
         else if(!isPasswordValid(confirmPassword.value)){
-            setConfirmPassword({...confirmPassword, isValid: false, errorMessage: "Deve conter no mínimo 8 caracteres, com letras e números"})
+            newConfirmPasswordState.isValid = false;
+            newConfirmPasswordState.errorMessage = "Deve conter no mínimo 8 caracteres, com letras e números";
+            isValid = false
             e.preventDefault()
         }
         else{
-            
-            setConfirmPassword({ ...confirmPassword , isValid: true, errorMessage: ""})
+            newConfirmPasswordState.isValid = true;
+            newConfirmPasswordState.errorMessage = "";
             e.preventDefault()
         }
         if(user.password !== confirmPassword.value){
-            console.log(`Senha são diferentes ${user.password} | ${confirmPassword}`)
-            setPassword({...password, isValid: false, errorMessage: "As senhas estão diferentes"})
-            setConfirmPassword({...confirmPassword, isValid: false, errorMessage: "As senhas estão diferentes"})
+            newPasswordState.isValid = false;
+            newPasswordState.errorMessage = "As senhas estão diferentes";
+            newConfirmPasswordState.isValid = false;
+            newConfirmPasswordState.errorMessage = "As senhas estão diferentes";
+            isValid = false
             e.preventDefault()
             
         }
-        
-        
+        setConfirmPassword(newConfirmPasswordState);
+        setPassword(newPasswordState);
+        return isValid
         
     }
     const handleSubmit = async (e:any) => {
         e.preventDefault()
         console.log("usernavigation: " ,userFromNavigation)
-        await validateUserData(e)
+        const validation = await validateUserData(e)
         
+        console.log(name, email, password)
+        
+        if(validation){
             
-        
-        if(name.isValid && email.isValid && dateOfBirth.isValid && password.isValid && confirmPassword.isValid){
 
             navigate('/signupdoctor', { state: { user } });
-            /*try {
-            console.log(`user ${apiKey}`)
-
-            const response = await axiosInstance.post(
-                '/users', 
-                user,
-                {
-                    headers: {
-                        'x-api-key': `${apiKey}`
-                    }
-                }
-                
-            )
             
-        
-            if (response.status === 201) {
-                // Cadastro bem-sucedido
-                console.log('Usuário cadastrado:', response.data);
-                setErrorText('')
-                setModalOpen(true)
-                
-            } else {
-                // Tratar erros de requisição
-                console.error('Erro ao cadastrar usuário:', response.statusText);
-            }
-            } catch (error) {
-                // Tratar erros de rede
-                console.error('Erro de rede:', error.response);
-                setErrorText(error.response.data.message)
-            }*/
             console.log(user)
         }
         
@@ -255,6 +282,28 @@ export function Signup() {
                     <Input.ErrorMessageRoot>
                         <Input.ErrorMessage>{dateOfBirth.errorMessage}</Input.ErrorMessage>
                     </Input.ErrorMessageRoot>
+
+                    <Input.Root>
+                        <Input.Label>Sexo *</Input.Label>
+                        <Input.Description>Informe seu sexo.</Input.Description>
+                        <S.SexInput
+                            hasError={!sex.isValid} 
+                            onChange={(e) => setUser({...user, sex: e.target.value === "Masculino" ? "M" : "F"})}
+                        >
+                            <option>{''}</option>
+                            {sexList.map((sex, index) => (
+                                <option key={index} value={sex}>
+                                    {sex}
+                                </option>
+                            ))}
+
+                        </S.SexInput>
+                    </Input.Root>
+
+                    <Input.ErrorMessageRoot>
+                        <Input.ErrorMessage>{sex.errorMessage}</Input.ErrorMessage>
+                    </Input.ErrorMessageRoot>
+                    
 
                     <Input.Root>
                         <Input.Label>Senha *</Input.Label>
