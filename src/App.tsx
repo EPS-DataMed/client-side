@@ -8,6 +8,7 @@ import 'react-toastify/ReactToastify.min.css'
 import { HomePage } from './pages/HomePage'
 import { Submission } from './pages/Submission'
 import { SubmissionTestProvider } from './contexts/SubmissionTestContext'
+import { UserForm } from './pages/UserForm'
 
 export const queryClient = new QueryClient()
 
@@ -33,6 +34,7 @@ export function App() {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/submission" element={<Submission />} />
+              <Route path="/form" element={<UserForm />} />
             </Routes>
           </SubmissionTestProvider>
         </Router>

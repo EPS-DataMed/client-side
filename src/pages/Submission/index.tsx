@@ -26,11 +26,11 @@ import { useBreadcrumbs } from './hooks/useBreadcrumbs'
 import { ProcessDataLoading } from './components/ProcessDataLoading'
 
 export function Submission() {
+  const [isLoadingSubmissionTest, setIsLoadingSubmissionTest] = useState(false)
   const { getInputProps, getRootProps, loadingFiles } = useFileUpload()
   const { filesUploaded, setOptionToDelete, queryHook } =
     useSubmissionTestContext()
 
-  const { selectedOption } = queryHook
   const { handleUpdateDialogControlled, isDialogControlledOpen } =
     useDialogControlled()
   const [dialogSubmissionStep, setDialogSubmissionStep] =
@@ -42,6 +42,10 @@ export function Submission() {
   })
 
   const BREADCRUMBS = useBreadcrumbs()
+
+  function handleSubmissionTest() {
+    setIsLoadingSubmissionTest(true)
+  }
 
   const hasFiles = isArrayNotEmpty(filesUploaded)
   const hasNoFiles = isArrayEmpty(filesUploaded)
@@ -72,11 +76,9 @@ export function Submission() {
     setOptionToDelete({} as OptionProps)
   }
 
-  const isProcessingData = true
-
   return (
     <>
-      <GenericPage.Root>
+      <GenericPage.Root hasNoScrollbar>
         <S.Header>
           <S.WrapperLogoAndLogoTitle>
             <GenericPage.Logo />
@@ -88,7 +90,7 @@ export function Submission() {
         <GenericPage.Divider />
 
         <S.MainContent>
-          {isProcessingData ? (
+          {isLoadingSubmissionTest ? (
             <ProcessDataLoading />
           ) : (
             <>
@@ -166,8 +168,8 @@ export function Submission() {
                       <S.WrapperInformations>
                         <S.Title>Exames carregados</S.Title>
                         <S.Description>
-                          Selecione um exame para avançar a próxima etapa e em
-                          seguida clique em avançar.
+                          Abaixo estão seus exames carregados. Você pode
+                          excluí-los ou avançar a proxima etapa.
                         </S.Description>
                         <SearchbarConfiguration
                           {...queryHook}
@@ -179,8 +181,8 @@ export function Submission() {
 
                       <S.AdvanceButton
                         variant={'primary'}
-                        onClick={() => console.log('avançou')}
-                        disabled={!selectedOption?.name}
+                        onClick={handleSubmissionTest}
+                        disabled={isArrayEmpty(filesUploaded)}
                         data-testid="advance-button"
                       >
                         Avançar

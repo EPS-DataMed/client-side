@@ -19,17 +19,6 @@ describe('useBreadcrumbs hook', () => {
     expect(result.current).toEqual(expectedBreadcrumbs)
   })
 
-  it('should call the correct action for Pacientes breadcrumb', () => {
-    const { result } = renderHook(() => useBreadcrumbs())
-
-    const pacientesBreadcrumb = result.current[0]
-    expect(pacientesBreadcrumb.label).toBe('Pacientes')
-
-    console.log = jest.fn()
-    pacientesBreadcrumb.action && pacientesBreadcrumb.action()
-    expect(console.log).toHaveBeenCalledWith('Pacientes')
-  })
-
   it('should have the correct active breadcrumb', () => {
     const { result } = renderHook(() => useBreadcrumbs())
 

@@ -1,12 +1,20 @@
-import { styled } from 'styled-components'
+import { css, styled } from 'styled-components'
 import { LogoSVG } from '../../assets/logo'
 
-export const Root = styled.div`
+interface RootProps {
+  hasNoScrollbar?: boolean
+}
+
+const hasNoScrollbarStyle = css`
+  height: 100vh;
+`
+
+export const Root = styled.div<RootProps>`
   display: flex;
   flex-direction: column;
   flex: 1;
   padding: ${({ theme }) => theme.space[19]} ${({ theme }) => theme.space[27]};
-  height: 100vh;
+  ${({ hasNoScrollbar }) => hasNoScrollbar && hasNoScrollbarStyle}
 `
 
 export const Divider = styled.div`
