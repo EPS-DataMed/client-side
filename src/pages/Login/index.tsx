@@ -3,29 +3,25 @@ import * as Page from '../../components/GenericSignupLoginPage'
 import { GenericPage } from '../../components/GenericPage'
 import { Input } from '../../components/Input'
 import * as S from './styles'
-import { LoginImage } from '../../assets/loginImage'
+import LoginImage from '../../assets/login.png'
 import { LogoSVG } from '../../assets/logo'
 import { LargeLogo } from '../../assets/largeLogo'
 import { PrimaryButton } from '../../components/PrimaryButton'
+import TypingEffect from '../../components/TypingEffect'
+import { ArrowRight } from '../../assets/icons'
 
 export function Login() {
-    const [emailError, setEmailError] = useState('')
-    const [passwordError, setPasswordError] = useState('')
+  const [emailError, setEmailError] = useState('')
+  const [passwordError, setPasswordError] = useState('')
 
-    const [user, setUser] = useState({
-        email: "",
-        password: ""
-        
-    })
+  const [user, setUser] = useState({
+    email: '',
+    password: '',
+  })
 
-
-    const handleSubmit = async (e:any) => {
-        
-        
-            
-        
-        if(user.email !== '' && user.password !== ''){
-            /*try {
+  const handleSubmit = async (e: any) => {
+    if (user.email !== '' && user.password !== '') {
+      /* try {
             console.log(`user ${apiKey}`)
 
             const response = await axiosInstance.post(
@@ -54,85 +50,79 @@ export function Login() {
                 // Tratar erros de rede
                 console.error('Erro de rede:', error.response);
                 setErrorText(error.response.data.message)
-            }*/
-            setPasswordError("")
-            setEmailError("")
-            console.log(user)
-        }
-        else if(user.email !== '' && user.password === ''){
-            setPasswordError("Preencha o campo de senha")
-            setEmailError("")
-        }
-        else if(user.email === '' && user.password !== ''){
-            setEmailError("Preencha o campo de E-mail")
-            setPasswordError("")
-        }
-        else{
-            setPasswordError("Preencha o campo de senha")
-            setEmailError("Preencha o campo de E-mail")
-        }
-
-        e.preventDefault()
-        console.log(user)
-
-        
+            } */
+      setPasswordError('')
+      setEmailError('')
+      console.log(user)
+    } else if (user.email !== '' && user.password === '') {
+      setPasswordError('Preencha o campo de senha')
+      setEmailError('')
+    } else if (user.email === '' && user.password !== '') {
+      setEmailError('Preencha o campo de E-mail')
+      setPasswordError('')
+    } else {
+      setPasswordError('Preencha o campo de senha')
+      setEmailError('Preencha o campo de E-mail')
     }
 
-    return (
+    e.preventDefault()
+    console.log(user)
+  }
 
-        <Page.Background>
-            
-            <Page.Image>
-                <LoginImage/>
-            </Page.Image>
-            <Page.Content>
-                <Page.WrapperLogoAndText>
-                    <LargeLogo/>
-                    <Page.LogoTitle>Datamed</Page.LogoTitle>
-                    <Page.Slogan>Tenha seus dados de saúde ao seu alcance</Page.Slogan>
-                </Page.WrapperLogoAndText>
-                <S.LoginForm>
-                    <Input.Root>
-                        <Input.Label>E-mail *</Input.Label>
-                        <Input.Input
-                            type="email"
-                            onChange={(e) => setUser({...user, email: e.target.value})}
-                            hasError={emailError !== ''}
-                        />
-                    </Input.Root>
+  return (
+    <Page.Background>
+      <Page.Image alt="Doctor" src="src/pages/HomePage/assets/login.png" />
+      <Page.Content>
+        <Page.WrapperLogoAndText>
+          <LargeLogo />
+          <Page.LogoTitle>
+            <TypingEffect text="Daatamed" />
+          </Page.LogoTitle>
+          <Page.Slogan>
+            <TypingEffect text="Teenha seus dados de saúde ao seu alcance." />
+          </Page.Slogan>
+        </Page.WrapperLogoAndText>
+        <S.LoginForm>
+          <Input.Root>
+            <Input.Label>E-mail *</Input.Label>
+            <Input.Input
+              type="email"
+              onChange={(e) => setUser({ ...user, email: e.target.value })}
+              hasError={emailError !== ''}
+            />
+          </Input.Root>
 
-                    <Input.ErrorMessageRoot>
-                        <Input.ErrorMessage>{emailError}</Input.ErrorMessage>
-                    </Input.ErrorMessageRoot>
+          <Input.ErrorMessageRoot>
+            <Input.ErrorMessage>{emailError}</Input.ErrorMessage>
+          </Input.ErrorMessageRoot>
 
-                    <Input.Root>
-                        <Input.Label>Senha *</Input.Label>
-                        <Input.Input
-                            type="password"
-                            onChange={(e) => setUser({...user, password: e.target.value})}
-                            hasError={passwordError !== ''}
-                        />
-                    </Input.Root>
+          <Input.Root>
+            <Input.Label>Senha *</Input.Label>
+            <Input.Input
+              type="password"
+              onChange={(e) => setUser({ ...user, password: e.target.value })}
+              hasError={passwordError !== ''}
+            />
+          </Input.Root>
 
-                    <Input.ErrorMessageRoot>
-                        <Input.ErrorMessage>{passwordError}</Input.ErrorMessage>
-                    </Input.ErrorMessageRoot>
+          <Input.ErrorMessageRoot>
+            <Input.ErrorMessage>{passwordError}</Input.ErrorMessage>
+          </Input.ErrorMessageRoot>
 
-                    <PrimaryButton
-                        onClick={handleSubmit}
-                    >
-                        {"Entrar >"}
-                    </PrimaryButton>
-                    <S.Link>Esqueceu a senha?</S.Link>
-                </S.LoginForm>
+          <S.WrapperButtonAndLink>
+            <PrimaryButton onClick={handleSubmit}>
+              Entrar <ArrowRight />
+            </PrimaryButton>
+            <S.Link>Esqueceu a senha?</S.Link>
+          </S.WrapperButtonAndLink>
+        </S.LoginForm>
 
-                <S.RegisterArea>
-                    <S.RegisterPhrase>Não possui uma conta? <S.Link>Cadastre-se</S.Link></S.RegisterPhrase>
-                </S.RegisterArea>
-            </Page.Content>
-           
-
-
-        </Page.Background>
-    );
+        <S.RegisterArea>
+          <S.RegisterPhrase>
+            Não possui uma conta? <S.Link>Cadastre-se</S.Link>
+          </S.RegisterPhrase>
+        </S.RegisterArea>
+      </Page.Content>
+    </Page.Background>
+  )
 }
