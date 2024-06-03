@@ -1,6 +1,6 @@
 import { styled, css } from 'styled-components'
 
-export const SignupForm = styled.form`
+export const SignupFieldsForm = styled.form`
   display: flex;
   flex-direction: column;
   height: 340px;
@@ -9,6 +9,12 @@ export const SignupForm = styled.form`
   overflow-y: scroll;
   padding-right: ${({ theme }) => theme.space[2]};
   overflow-x: hidden;
+  margin-bottom: ${({ theme }) => theme.space[4]};
+`
+
+export const SignupForm = styled.form`
+  display: flex;
+  flex-direction: column;
 `
 
 export const SignupProgress = styled.div`

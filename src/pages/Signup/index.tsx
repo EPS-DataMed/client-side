@@ -92,108 +92,110 @@ export function Signup() {
         </Page.WrapperLogoAndText>
 
         <S.SignupForm onSubmit={handleSubmit(onSubmit)}>
-          <InputField
-            label="Nome Completo"
-            name="name"
-            control={control}
-            description="Informe o seu nome completo, sem abreviações."
-            required
-          />
+          <S.SignupFieldsForm>
+            <InputField
+              label="Nome Completo"
+              name="name"
+              control={control}
+              description="Informe o seu nome completo, sem abreviações."
+              required
+            />
 
-          <InputField
-            label="E-mail"
-            name="email"
-            control={control}
-            description="Informe o seu e-mail pessoal."
-            required
-          />
+            <InputField
+              label="E-mail"
+              name="email"
+              control={control}
+              description="Informe o seu e-mail pessoal."
+              required
+            />
 
-          <InputField
-            label="Data de Nascimento"
-            name="dateOfBirth"
-            control={control}
-            description="Informe sua data de nascimento."
-            required
-          />
+            <InputField
+              label="Data de Nascimento"
+              name="dateOfBirth"
+              control={control}
+              description="Informe sua data de nascimento."
+              required
+            />
 
-          <Controller
-            name="sex"
-            control={control}
-            render={({ field }) => (
-              <Input.Root>
-                <Input.Label>Sexo *</Input.Label>
-                <Input.Description>Informe seu sexo.</Input.Description>
-                <S.SexInput {...field} hasError={Boolean(errors.sex)}>
-                  <option value="">Selecione</option>
-                  <option value={Sex.Masculino}>Masculino</option>
-                  <option value={Sex.Feminino}>Feminino</option>
-                </S.SexInput>
-                {errors.sex && (
-                  <Input.ErrorMessageRoot>
-                    <Input.ErrorMessage>
-                      {errors.sex.message}
-                    </Input.ErrorMessage>
-                  </Input.ErrorMessageRoot>
-                )}
-              </Input.Root>
-            )}
-          />
+            <Controller
+              name="sex"
+              control={control}
+              render={({ field }) => (
+                <Input.Root>
+                  <Input.Label>Sexo *</Input.Label>
+                  <Input.Description>Informe seu sexo.</Input.Description>
+                  <S.SexInput {...field} hasError={Boolean(errors.sex)}>
+                    <option value="">Selecione</option>
+                    <option value={Sex.Masculino}>Masculino</option>
+                    <option value={Sex.Feminino}>Feminino</option>
+                  </S.SexInput>
+                  {errors.sex && (
+                    <Input.ErrorMessageRoot>
+                      <Input.ErrorMessage>
+                        {errors.sex.message}
+                      </Input.ErrorMessage>
+                    </Input.ErrorMessageRoot>
+                  )}
+                </Input.Root>
+              )}
+            />
 
-          <InputField
-            label="Senha"
-            name="password"
-            type="password"
-            control={control}
-            description="Deve conter pelo menos oito caracteres, com letras e números."
-            required
-          />
+            <InputField
+              label="Senha"
+              name="password"
+              type="password"
+              control={control}
+              description="Deve conter pelo menos oito caracteres, com letras e números."
+              required
+            />
 
-          <InputField
-            label="Confirme sua senha"
-            name="confirmPassword"
-            control={control}
-            type="password"
-            description="Confirme sua senha definida no campo acima."
-            required
-          />
+            <InputField
+              label="Confirme sua senha"
+              name="confirmPassword"
+              control={control}
+              type="password"
+              description="Confirme sua senha definida no campo acima."
+              required
+            />
 
-          <InputField
-            label="CRM"
-            name="crm"
-            control={control}
-            description="Informe o CRM/ESTADO (se aplicável)."
-          />
+            <InputField
+              label="CRM"
+              name="crm"
+              control={control}
+              description="Informe o CRM/ESTADO (se aplicável)."
+            />
 
-          <Controller
-            name="specialty"
-            control={control}
-            render={({ field }) => (
-              <Input.Root>
-                <Input.Label>Especialidade</Input.Label>
-                <Input.Description>
-                  Selecione sua especialidade.
-                </Input.Description>
-                <S.SpecialtyInput
-                  {...field}
-                  hasError={Boolean(errors.specialty)}
-                >
-                  <option value="">Selecione</option>
-                  {MEDIACL_SPECIALTIES.map((specialty) => (
-                    <option key={specialty} value={specialty}>
-                      {specialty}
-                    </option>
-                  ))}
-                </S.SpecialtyInput>
-                {errors.specialty && (
-                  <Input.ErrorMessageRoot>
-                    <Input.ErrorMessage>
-                      {errors.specialty.message}
-                    </Input.ErrorMessage>
-                  </Input.ErrorMessageRoot>
-                )}
-              </Input.Root>
-            )}
-          />
+            <Controller
+              name="specialty"
+              control={control}
+              render={({ field }) => (
+                <Input.Root>
+                  <Input.Label>Especialidade</Input.Label>
+                  <Input.Description>
+                    Selecione sua especialidade.
+                  </Input.Description>
+                  <S.SpecialtyInput
+                    {...field}
+                    hasError={Boolean(errors.specialty)}
+                  >
+                    <option value="">Selecione</option>
+                    {MEDIACL_SPECIALTIES.map((specialty) => (
+                      <option key={specialty} value={specialty}>
+                        {specialty}
+                      </option>
+                    ))}
+                  </S.SpecialtyInput>
+                  {errors.specialty && (
+                    <Input.ErrorMessageRoot>
+                      <Input.ErrorMessage>
+                        {errors.specialty.message}
+                      </Input.ErrorMessage>
+                    </Input.ErrorMessageRoot>
+                  )}
+                </Input.Root>
+              )}
+            />
+          </S.SignupFieldsForm>
 
           <S.ForwardButtonWrapper>
             <PrimaryButton type="submit" disabled={loading}>
@@ -202,7 +204,10 @@ export function Signup() {
           </S.ForwardButtonWrapper>
         </S.SignupForm>
       </Page.Content>
-      <Page.Image alt="Doctor" src="src/pages/HomePage/assets/signup.png" />
+      <Page.Image
+        alt="Doctor"
+        src="https://github.com/EPS-DataMed/client-side/blob/r1/src/pages/HomePage/assets/signup.png?raw=true"
+      />
     </Page.Background>
   )
 }

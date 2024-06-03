@@ -60,7 +60,7 @@ export function HomePage() {
                 Envie seus exames e extraia seus dados de saúde.
               </S.OptionDescription>
               <S.ImageWrapper>
-                <S.Image src="src/pages/HomePage/assets/BlueCircleAndDoctor.png" />
+                <S.Image src="https://github.com/EPS-DataMed/client-side/blob/r1/src/pages/HomePage/assets/BlueCircleAndDoctor.png?raw=true" />
               </S.ImageWrapper>
             </S.HomepageOption>
 
@@ -70,7 +70,7 @@ export function HomePage() {
                 Adicione e gerencie os exames do seu paciente.
               </S.OptionDescription>
               <S.ImageWrapper>
-                <S.Image src="src/pages/HomePage/assets/BlueCircleAndExam.png" />
+                <S.Image src="https://github.com/EPS-DataMed/client-side/blob/r1/src/pages/HomePage/assets/BlueCircleAndExam.png?raw=true" />
               </S.ImageWrapper>
             </S.HomepageOption>
           </S.Options>

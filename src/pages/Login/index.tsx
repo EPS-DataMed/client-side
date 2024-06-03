@@ -52,7 +52,10 @@ export function Login() {
 
   return (
     <Page.Background>
-      <Page.Image alt="Doctor" src="src/pages/HomePage/assets/login.png" />
+      <Page.Image
+        alt="Doctor"
+        src="https://github.com/EPS-DataMed/client-side/blob/r1/src/pages/HomePage/assets/login.png?raw=true"
+      />
       <Page.Content>
         <Page.WrapperLogoAndText>
           <LargeLogo />
