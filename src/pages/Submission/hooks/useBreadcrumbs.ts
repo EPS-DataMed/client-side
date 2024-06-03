@@ -14,14 +14,14 @@ export function useBreadcrumbs() {
     () => [
       {
         label: 'Home',
-        action: () => navigateTo('/'),
+        action: () => navigateTo('/home'),
       },
       {
         label: 'Enviar exames',
         activate: true,
       },
     ],
-    [],
+    [navigateTo],
   )
 
   return BREADCRUMBS

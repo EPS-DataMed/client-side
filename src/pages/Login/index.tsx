@@ -1,72 +1,53 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import * as Page from '../../components/GenericSignupLoginPage'
-import { GenericPage } from '../../components/GenericPage'
-import { Input } from '../../components/Input'
 import * as S from './styles'
-import LoginImage from '../../assets/login.png'
-import { LogoSVG } from '../../assets/logo'
 import { LargeLogo } from '../../assets/largeLogo'
 import { PrimaryButton } from '../../components/PrimaryButton'
 import TypingEffect from '../../components/TypingEffect'
 import { ArrowRight } from '../../assets/icons'
+import useNavigation from '../../hooks/useNavigation'
+import { useUserContext } from '../../contexts/UserContext'
+import InputField from '../../components/Input/InputField'
+import { useForm, SubmitHandler } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+import { ErrorToast } from '../../components/Toast'
+
+const loginSchema = z.object({
+  email: z.string().email('E-mail inválido'),
+  password: z.string().min(6, 'A senha é obrigatória'),
+})
+
+type LoginFormData = z.infer<typeof loginSchema>
 
 export function Login() {
-  const [emailError, setEmailError] = useState('')
-  const [passwordError, setPasswordError] = useState('')
+  const { getUser } = useUserContext()
+  const navigateTo = useNavigation()
+  const [loading, setLoading] = useState(false)
 
-  const [user, setUser] = useState({
-    email: '',
-    password: '',
+  const { control, handleSubmit } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
   })
 
-  const handleSubmit = async (e: any) => {
-    if (user.email !== '' && user.password !== '') {
-      /* try {
-            console.log(`user ${apiKey}`)
-
-            const response = await axiosInstance.post(
-                '/users', 
-                user,
-                {
-                    headers: {
-                        'x-api-key': `${apiKey}`
-                    }
-                }
-                
-            )
-            
-        
-            if (response.status === 201) {
-                // Cadastro bem-sucedido
-                console.log('Usuário cadastrado:', response.data);
-                setErrorText('')
-                setModalOpen(true)
-                
-            } else {
-                // Tratar erros de requisição
-                console.error('Erro ao cadastrar usuário:', response.statusText);
-            }
-            } catch (error) {
-                // Tratar erros de rede
-                console.error('Erro de rede:', error.response);
-                setErrorText(error.response.data.message)
-            } */
-      setPasswordError('')
-      setEmailError('')
-      console.log(user)
-    } else if (user.email !== '' && user.password === '') {
-      setPasswordError('Preencha o campo de senha')
-      setEmailError('')
-    } else if (user.email === '' && user.password !== '') {
-      setEmailError('Preencha o campo de E-mail')
-      setPasswordError('')
+  const onSubmit: SubmitHandler<LoginFormData> = (data) => {
+    const storedUser = getUser()
+    if (
+      data.email === storedUser.email &&
+      data.password === storedUser.password
+    ) {
+      setLoading(true)
+      console.log('User:', data)
+      setTimeout(() => {
+        setLoading(false)
+        navigateTo('/home', { replace: true })
+      }, 2000)
     } else {
-      setPasswordError('Preencha o campo de senha')
-      setEmailError('Preencha o campo de E-mail')
+      ErrorToast('E-mail ou senha inválida.')
     }
-
-    e.preventDefault()
-    console.log(user)
   }
 
   return (
@@ -82,36 +63,28 @@ export function Login() {
             <TypingEffect text="Teenha seus dados de saúde ao seu alcance." />
           </Page.Slogan>
         </Page.WrapperLogoAndText>
-        <S.LoginForm>
-          <Input.Root>
-            <Input.Label>E-mail *</Input.Label>
-            <Input.Input
-              type="email"
-              onChange={(e) => setUser({ ...user, email: e.target.value })}
-              hasError={emailError !== ''}
-            />
-          </Input.Root>
 
-          <Input.ErrorMessageRoot>
-            <Input.ErrorMessage>{emailError}</Input.ErrorMessage>
-          </Input.ErrorMessageRoot>
+        <S.LoginForm onSubmit={handleSubmit(onSubmit)}>
+          <InputField
+            label="E-mail"
+            name="email"
+            control={control}
+            description="Informe o seu e-mail pessoal."
+            required
+          />
 
-          <Input.Root>
-            <Input.Label>Senha *</Input.Label>
-            <Input.Input
-              type="password"
-              onChange={(e) => setUser({ ...user, password: e.target.value })}
-              hasError={passwordError !== ''}
-            />
-          </Input.Root>
-
-          <Input.ErrorMessageRoot>
-            <Input.ErrorMessage>{passwordError}</Input.ErrorMessage>
-          </Input.ErrorMessageRoot>
+          <InputField
+            label="Senha"
+            name="password"
+            control={control}
+            description="Informe a sua senha."
+            type="password"
+            required
+          />
 
           <S.WrapperButtonAndLink>
-            <PrimaryButton onClick={handleSubmit}>
-              Entrar <ArrowRight />
+            <PrimaryButton type="submit" disabled={loading}>
+              {loading ? 'Carregando...' : 'Entrar'} <ArrowRight />
             </PrimaryButton>
             <S.Link>Esqueceu a senha?</S.Link>
           </S.WrapperButtonAndLink>
@@ -119,7 +92,14 @@ export function Login() {
 
         <S.RegisterArea>
           <S.RegisterPhrase>
-            Não possui uma conta? <S.Link>Cadastre-se</S.Link>
+            Não possui uma conta?{' '}
+            <S.Link
+              onClick={() => {
+                navigateTo('/signup')
+              }}
+            >
+              Cadastre-se
+            </S.Link>
           </S.RegisterPhrase>
         </S.RegisterArea>
       </Page.Content>

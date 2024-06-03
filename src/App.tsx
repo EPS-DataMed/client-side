@@ -11,7 +11,8 @@ import { SubmissionTestProvider } from './contexts/SubmissionTestContext'
 import { UserForm } from './pages/UserForm'
 import { Login } from './pages/Login'
 import { Signup } from './pages/Signup'
-import { SignupDoctor } from './pages/SignupDoctor'
+import { UserProvider } from './contexts/UserContext'
+import ProtectedRoute from './components/ProtectedRoute'
 
 export const queryClient = new QueryClient()
 
@@ -33,16 +34,40 @@ export function App() {
           theme="colored"
         />
         <Router>
-          <SubmissionTestProvider>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/submission" element={<Submission />} />
-              <Route path="/form" element={<UserForm />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/signupdoctor" element={<SignupDoctor />} />
-            </Routes>
-          </SubmissionTestProvider>
+          <UserProvider>
+            <SubmissionTestProvider>
+              <Routes>
+                <Route path="/" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
+                {/* <Route path="/signupdoctor" element={<SignupDoctor />} /> */}
+                <Route
+                  path="/home"
+                  element={
+                    <ProtectedRoute>
+                      <HomePage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/submission"
+                  element={
+                    <ProtectedRoute>
+                      <Submission />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/form"
+                  element={
+                    <ProtectedRoute>
+                      <UserForm />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="*" element={<Login />} />
+              </Routes>
+            </SubmissionTestProvider>
+          </UserProvider>
         </Router>
       </ThemeProvider>
     </QueryClientProvider>

@@ -8,6 +8,7 @@ export const SignupForm = styled.form`
   gap: ${({ theme }) => theme.space[4]};
   overflow-y: scroll;
   padding-right: ${({ theme }) => theme.space[2]};
+  overflow-x: hidden;
 `
 
 export const SignupProgress = styled.div`
@@ -48,6 +49,20 @@ interface SelectProps {
 
 export const SexInput = styled.select<SelectProps>`
   height: 35px;
+  border-radius: ${({ theme }) => theme.radii.md};
+  padding: 0 16px;
+  background-color: inherit;
+  border: 1px solid ${({ theme }) => theme.colors.neutral600};
+  ${({ hasError, theme }) =>
+    hasError &&
+    css`
+      border: 1px solid ${theme.colors.red500};
+    `}
+`
+
+export const SpecialtyInput = styled.select<SelectProps>`
+  height: 35px;
+  padding: 0 16px;
   border-radius: ${({ theme }) => theme.radii.md};
   border: 1px solid ${({ theme }) => theme.colors.neutral600};
   ${({ hasError, theme }) =>

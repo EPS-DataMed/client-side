@@ -6,13 +6,24 @@ import { Pen } from '../../assets/icons/pen'
 import { Logout } from '../../assets/icons/logout'
 import * as S from './styles'
 import useNavigation from '../../hooks/useNavigation'
+import { useUserContext } from '../../contexts/UserContext'
 
 export function HomePage() {
+  const { getUser } = useUserContext()
+  const user = getUser()
+
   const navigateTo = useNavigation()
 
   const handleNavigationToSubmission = () => {
     navigateTo('/submission')
   }
+
+  const firstName = user.name.split(' ')[0]
+  const greeting = user.sex === 'Masculino' ? 'Bem vindo' : 'Bem vinda '
+  const title = user.crm ? 'Dr. ' : ''
+  const welcomeMessageText = `${greeting}, ${title} ${firstName}!`
+  const firstLetter = user.name[0]
+
   return (
     <>
       <GenericPage.Root hasNoScrollbar>
@@ -24,7 +35,7 @@ export function HomePage() {
 
           <ButtonsAndProfile>
             <ProfileCircle>
-              <p>A</p>
+              <p>{firstLetter}</p>
             </ProfileCircle>
             <PrimaryButton>
               <Pen />
@@ -39,7 +50,7 @@ export function HomePage() {
 
         <GenericPage.Divider />
         <S.MainContent>
-          <S.WelcomeText>Bem vinda de volta, Ana!</S.WelcomeText>
+          <S.WelcomeText>{welcomeMessageText}</S.WelcomeText>
           <S.WelcomeQuestion>O que deseja acessar hoje?</S.WelcomeQuestion>
 
           <S.Options>

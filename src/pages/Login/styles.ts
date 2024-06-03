@@ -22,9 +22,9 @@ export const Link = styled.a`
   font-size: ${({ theme }) => theme.fontSizes.sm};
   font-weight: ${({ theme }) => theme.fontWeights.bold};
   color: ${({ theme }) => theme.colors.blue500};
+
   &:hover {
-    color: ${({ theme }) => darkenColor(theme.colors.blue500, 0.2)};
-    text-decoration: underline;
+    color: ${({ theme }) => darkenColor(theme.colors.blue500, 0.1)};
     cursor: pointer;
   }
 `

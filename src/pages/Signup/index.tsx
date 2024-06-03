@@ -1,200 +1,81 @@
-import { useState } from 'react'
+import { useForm, SubmitHandler, Controller } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import * as Page from '../../components/GenericSignupLoginPage'
-import { useNavigate, useLocation } from 'react-router-dom'
-import { Input } from '../../components/Input'
+import { useLocation } from 'react-router-dom'
 import * as S from './styles'
 import { LogoSVG } from '../../assets/logo'
-
 import { PrimaryButton } from '../../components/PrimaryButton'
 import TypingEffect from '../../components/TypingEffect'
-import { ArrowRight } from '../../assets/icons'
+import InputField from '../../components/Input/InputField'
+import { Input } from '../../components/Input'
+import { MEDIACL_SPECIALTIES } from './constants'
+import { useUserContext } from '../../contexts/UserContext'
+import useNavigation from '../../hooks/useNavigation'
+import { useState } from 'react'
+import { GenericPage } from '../../components/GenericPage'
+
+enum Sex {
+  Masculino = 'Masculino',
+  Feminino = 'Feminino',
+}
+
+const SignupSchema = z
+  .object({
+    name: z.string().nonempty('Nome é obrigatório'),
+    email: z.string().email('E-mail em formato inválido'),
+    dateOfBirth: z.string().nonempty('Data de nascimento é obrigatória'),
+    sex: z.nativeEnum(Sex, {
+      required_error: 'Sexo é obrigatório',
+    }),
+    password: z
+      .string()
+      .min(8, 'Deve conter no mínimo 8 caracteres')
+      .regex(/[a-zA-Z]/, 'Deve conter letras')
+      .regex(/\d/, 'Deve conter números'),
+    confirmPassword: z.string().nonempty('Confirmação de senha é obrigatória'),
+    crm: z.string().optional(),
+    specialty: z.string().optional(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'As senhas estão diferentes',
+    path: ['confirmPassword'],
+  })
+
+type SignupFormData = z.infer<typeof SignupSchema>
 
 export function Signup() {
   const location = useLocation()
   const { user: userFromNavigation } = location.state || { user: {} }
-  const navigate = useNavigate()
-  const sexList = ['Masculino', 'Feminino']
-  const [user, setUser] = useState({
-    name: userFromNavigation !== undefined ? userFromNavigation.name : '',
-    email: userFromNavigation !== undefined ? userFromNavigation.email : '',
-    password:
-      userFromNavigation !== undefined ? userFromNavigation.password : '',
-    dateOfBirth:
-      userFromNavigation !== undefined ? userFromNavigation.dateOfBirth : '',
-    sex: userFromNavigation !== undefined ? userFromNavigation.sex : '',
+  const navigateTo = useNavigation()
+  const { setUser } = useUserContext()
+  const [loading, setLoading] = useState(false)
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignupFormData>({
+    resolver: zodResolver(SignupSchema),
+    defaultValues: {
+      name: userFromNavigation?.name || '',
+      email: userFromNavigation?.email || '',
+      dateOfBirth: userFromNavigation?.dateOfBirth || '',
+      sex: userFromNavigation?.sex || '',
+      password: '',
+      confirmPassword: '',
+      crm: '',
+      specialty: '',
+    },
   })
 
-  const [confirmPassword, setConfirmPassword] = useState({
-    value: '',
-    isValid: true,
-    errorMessage: '',
-  })
-
-  const [name, setName] = useState({
-    isValid: true,
-    errorMessage: '',
-  })
-
-  const [email, setEmail] = useState({
-    isValid: true,
-    errorMessage: '',
-  })
-
-  const [dateOfBirth, setDateOfBirth] = useState({
-    isValid: true,
-    errorMessage: '',
-  })
-
-  const [sex, setSex] = useState({
-    isValid: true,
-    errorMessage: '',
-  })
-  const [password, setPassword] = useState({
-    isValid: true,
-    errorMessage: '',
-  })
-
-  function isPasswordValid(password: string) {
-    const hasLetter = /[a-zA-Z]/.test(password)
-    const hasNumber = /\d/.test(password)
-    const length = password.length >= 8
-
-    return hasLetter && hasNumber && length
-  }
-
-  const validateUserData = async (e: any) => {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    let isValid = true
-    const newNameState = { isValid: true, errorMessage: '' }
-    if (user.name === undefined) {
-      newNameState.isValid = false
-      newNameState.errorMessage = 'Nome é obrigatório'
-
-      e.preventDefault()
-    } else {
-      newNameState.isValid = true
-      newNameState.errorMessage = ''
-      e.preventDefault()
-    }
-
-    setName(newNameState)
-
-    const newEmailState = { isValid: true, errorMessage: '' }
-    if (user.email === undefined) {
-      newEmailState.isValid = false
-      newEmailState.errorMessage = 'E-mail é obrigatório'
-      isValid = false
-      e.preventDefault()
-    } else if (!regex.test(user.email)) {
-      newEmailState.isValid = false
-      newEmailState.errorMessage = 'E-mail em formato inválido'
-      isValid = false
-      e.preventDefault()
-    } else {
-      newEmailState.isValid = true
-      newEmailState.errorMessage = ''
-
-      e.preventDefault()
-    }
-
-    setEmail(newEmailState)
-
-    const newDateOfBirthState = { isValid: true, errorMessage: '' }
-    if (user.dateOfBirth === undefined) {
-      newDateOfBirthState.isValid = false
-      newDateOfBirthState.errorMessage = 'Data de nascimento é obrigatória'
-      isValid = false
-      e.preventDefault()
-    } else {
-      newDateOfBirthState.isValid = true
-      newDateOfBirthState.errorMessage = ''
-
-      e.preventDefault()
-    }
-
-    setDateOfBirth(newDateOfBirthState)
-
-    const newSexState = { isValid: true, errorMessage: '' }
-    if (user.sex === undefined) {
-      newSexState.isValid = false
-      newSexState.errorMessage = 'Sexo é obrigatório'
-      isValid = false
-      e.preventDefault()
-    } else {
-      newSexState.isValid = true
-      newSexState.errorMessage = ''
-
-      e.preventDefault()
-    }
-
-    setSex(newSexState)
-
-    const newPasswordState = { isValid: true, errorMessage: '' }
-    if (user.password === undefined) {
-      newPasswordState.isValid = false
-      newPasswordState.errorMessage = 'Senha é obrigatória'
-      isValid = false
-      e.preventDefault()
-    } else if (!isPasswordValid(user.password)) {
-      newPasswordState.isValid = false
-      newPasswordState.errorMessage =
-        'Deve conter no mínimo 8 caracteres, com letras e números'
-      isValid = false
-      e.preventDefault()
-    } else {
-      newPasswordState.isValid = true
-      newPasswordState.errorMessage = ''
-
-      e.preventDefault()
-    }
-
-    setPassword(newPasswordState)
-
-    const newConfirmPasswordState = {
-      value: confirmPassword.value,
-      isValid: true,
-      errorMessage: '',
-    }
-    if (confirmPassword.value === undefined) {
-      newConfirmPasswordState.isValid = false
-      newConfirmPasswordState.errorMessage = 'Este campo é obrigatório'
-      isValid = false
-      e.preventDefault()
-    } else if (!isPasswordValid(confirmPassword.value)) {
-      newConfirmPasswordState.isValid = false
-      newConfirmPasswordState.errorMessage =
-        'Deve conter no mínimo 8 caracteres, com letras e números'
-      isValid = false
-      e.preventDefault()
-    } else {
-      newConfirmPasswordState.isValid = true
-      newConfirmPasswordState.errorMessage = ''
-      e.preventDefault()
-    }
-    if (user.password !== confirmPassword.value) {
-      newPasswordState.isValid = false
-      newPasswordState.errorMessage = 'As senhas estão diferentes'
-      newConfirmPasswordState.isValid = false
-      newConfirmPasswordState.errorMessage = 'As senhas estão diferentes'
-      isValid = false
-      e.preventDefault()
-    }
-    setConfirmPassword(newConfirmPasswordState)
-    setPassword(newPasswordState)
-    return isValid
-  }
-  const handleSubmit = async (e: any) => {
-    e.preventDefault()
-    console.log('usernavigation: ', userFromNavigation)
-    const validation = await validateUserData(e)
-
-    console.log(name, email, password)
-
-    if (validation) {
-      navigate('/signupdoctor', { state: { user } })
-
-      console.log(user)
-    }
+  const onSubmit: SubmitHandler<SignupFormData> = (data) => {
+    setLoading(true)
+    setUser(data)
+    setTimeout(() => {
+      navigateTo('/', { replace: true })
+      setLoading(false)
+    }, 2000)
   }
 
   return (
@@ -210,141 +91,117 @@ export function Signup() {
           </Page.Slogan>
         </Page.WrapperLogoAndText>
 
-        <S.SignupProgress>
-          <S.BlueProgressCircle />
-          <S.GreyProgressCircle />
-        </S.SignupProgress>
+        <S.SignupForm onSubmit={handleSubmit(onSubmit)}>
+          <InputField
+            label="Nome Completo"
+            name="name"
+            control={control}
+            description="Informe o seu nome completo, sem abreviações."
+            required
+          />
 
-        <S.SignupInstruction>
-          Preencha suas <b>informações básicas</b> e avance para a proxima
-          etapa.
-        </S.SignupInstruction>
+          <InputField
+            label="E-mail"
+            name="email"
+            control={control}
+            description="Informe o seu e-mail pessoal."
+            required
+          />
 
-        <S.SignupForm>
-          <Input.Root>
-            <Input.Label>Nome Completo *</Input.Label>
-            <Input.Description>
-              Informe o seu nome completo, sem abreviações.
-            </Input.Description>
-            <Input.Input
-              type="text"
-              hasError={!name.isValid}
-              onChange={(e) => setUser({ ...user, name: e.target.value })}
-              value={user.name}
-            />
-          </Input.Root>
+          <InputField
+            label="Data de Nascimento"
+            name="dateOfBirth"
+            control={control}
+            description="Informe sua data de nascimento."
+            required
+          />
 
-          <Input.ErrorMessageRoot>
-            <Input.ErrorMessage>{name.errorMessage}</Input.ErrorMessage>
-          </Input.ErrorMessageRoot>
+          <Controller
+            name="sex"
+            control={control}
+            render={({ field }) => (
+              <Input.Root>
+                <Input.Label>Sexo *</Input.Label>
+                <Input.Description>Informe seu sexo.</Input.Description>
+                <S.SexInput {...field} hasError={Boolean(errors.sex)}>
+                  <option value="">Selecione</option>
+                  <option value={Sex.Masculino}>Masculino</option>
+                  <option value={Sex.Feminino}>Feminino</option>
+                </S.SexInput>
+                {errors.sex && (
+                  <Input.ErrorMessageRoot>
+                    <Input.ErrorMessage>
+                      {errors.sex.message}
+                    </Input.ErrorMessage>
+                  </Input.ErrorMessageRoot>
+                )}
+              </Input.Root>
+            )}
+          />
 
-          <Input.Root>
-            <Input.Label>E-mail *</Input.Label>
-            <Input.Description>Informe o seu e-mail pessoal.</Input.Description>
-            <Input.Input
-              type="email"
-              onChange={(e) => setUser({ ...user, email: e.target.value })}
-              hasError={!email.isValid}
-              value={user.email}
-            />
-          </Input.Root>
+          <InputField
+            label="Senha"
+            name="password"
+            type="password"
+            control={control}
+            description="Deve conter pelo menos oito caracteres, com letras e números."
+            required
+          />
 
-          <Input.ErrorMessageRoot>
-            <Input.ErrorMessage>{email.errorMessage}</Input.ErrorMessage>
-          </Input.ErrorMessageRoot>
+          <InputField
+            label="Confirme sua senha"
+            name="confirmPassword"
+            control={control}
+            type="password"
+            description="Confirme sua senha definida no campo acima."
+            required
+          />
 
-          <Input.Root>
-            <Input.Label>Data de Nascimento *</Input.Label>
-            <Input.Description>
-              Informe sua data de nascimento.
-            </Input.Description>
-            <Input.Input
-              type="date"
-              onChange={(e) =>
-                setUser({ ...user, dateOfBirth: e.target.value })
-              }
-              hasError={!dateOfBirth.isValid}
-              value={user.dateOfBirth}
-            />
-          </Input.Root>
+          <InputField
+            label="CRM"
+            name="crm"
+            control={control}
+            description="Informe o CRM/ESTADO (se aplicável)."
+          />
 
-          <Input.ErrorMessageRoot>
-            <Input.ErrorMessage>{dateOfBirth.errorMessage}</Input.ErrorMessage>
-          </Input.ErrorMessageRoot>
+          <Controller
+            name="specialty"
+            control={control}
+            render={({ field }) => (
+              <Input.Root>
+                <Input.Label>Especialidade</Input.Label>
+                <Input.Description>
+                  Selecione sua especialidade.
+                </Input.Description>
+                <S.SpecialtyInput
+                  {...field}
+                  hasError={Boolean(errors.specialty)}
+                >
+                  <option value="">Selecione</option>
+                  {MEDIACL_SPECIALTIES.map((specialty) => (
+                    <option key={specialty} value={specialty}>
+                      {specialty}
+                    </option>
+                  ))}
+                </S.SpecialtyInput>
+                {errors.specialty && (
+                  <Input.ErrorMessageRoot>
+                    <Input.ErrorMessage>
+                      {errors.specialty.message}
+                    </Input.ErrorMessage>
+                  </Input.ErrorMessageRoot>
+                )}
+              </Input.Root>
+            )}
+          />
 
-          <Input.Root>
-            <Input.Label>Sexo *</Input.Label>
-            <Input.Description>Informe seu sexo.</Input.Description>
-            <S.SexInput
-              hasError={!sex.isValid}
-              onChange={(e) =>
-                setUser({
-                  ...user,
-                  sex: e.target.value === 'Masculino' ? 'M' : 'F',
-                })
-              }
-            >
-              <option>{''}</option>
-              {sexList.map((sex, index) => (
-                <option key={index} value={sex}>
-                  {sex}
-                </option>
-              ))}
-            </S.SexInput>
-          </Input.Root>
-
-          <Input.ErrorMessageRoot>
-            <Input.ErrorMessage>{sex.errorMessage}</Input.ErrorMessage>
-          </Input.ErrorMessageRoot>
-
-          <Input.Root>
-            <Input.Label>Senha *</Input.Label>
-            <Input.Description>
-              Deve conter pelo menos <b>oito caracteres</b>, com <b>letras</b> e{' '}
-              <b>números</b>.
-            </Input.Description>
-            <Input.Input
-              type="password"
-              onChange={(e) => setUser({ ...user, password: e.target.value })}
-              hasError={!password.isValid}
-            />
-          </Input.Root>
-
-          <Input.ErrorMessageRoot>
-            <Input.ErrorMessage>{password.errorMessage}</Input.ErrorMessage>
-          </Input.ErrorMessageRoot>
-
-          <Input.Root>
-            <Input.Label>Confirme sua senha *</Input.Label>
-            <Input.Description>
-              Confirme sua senha definida no campo acima.
-            </Input.Description>
-            <Input.Input
-              type="password"
-              onChange={(e) =>
-                setConfirmPassword({
-                  ...confirmPassword,
-                  value: e.target.value,
-                })
-              }
-              hasError={!confirmPassword.isValid}
-            />
-          </Input.Root>
-
-          <Input.ErrorMessageRoot>
-            <Input.ErrorMessage>
-              {confirmPassword.errorMessage}
-            </Input.ErrorMessage>
-          </Input.ErrorMessageRoot>
+          <S.ForwardButtonWrapper>
+            <PrimaryButton type="submit" disabled={loading}>
+              {loading ? 'Carregando...' : 'Cadastrar'}
+            </PrimaryButton>
+          </S.ForwardButtonWrapper>
         </S.SignupForm>
-
-        <S.ForwardButtonWrapper>
-          <PrimaryButton onClick={handleSubmit}>
-            Avançar <ArrowRight />
-          </PrimaryButton>
-        </S.ForwardButtonWrapper>
       </Page.Content>
-
       <Page.Image alt="Doctor" src="src/pages/HomePage/assets/signup.png" />
     </Page.Background>
   )
