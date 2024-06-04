@@ -1,15 +1,23 @@
 import { styled, css } from 'styled-components'
+import { darkenColor } from '../../utils/colors'
 
 export const SignupFieldsForm = styled.form`
   display: flex;
-  flex-direction: column;
-  height: 340px;
   width: 365px;
-  gap: ${({ theme }) => theme.space[4]};
+  height: 340px;
   overflow-y: scroll;
-  padding-right: ${({ theme }) => theme.space[2]};
   overflow-x: hidden;
+  padding-right: ${({ theme }) => theme.space[2]};
+
+  flex-direction: column;
+  gap: ${({ theme }) => theme.space[4]};
+
   margin-bottom: ${({ theme }) => theme.space[4]};
+
+  @media (min-width: 1604px) {
+    overflow: hidden;
+    height: auto;
+  }
 `
 
 export const SignupForm = styled.form`
@@ -37,43 +45,38 @@ export const GreyProgressCircle = styled.div`
   background-color: ${({ theme }) => theme.colors.neutral300};
 `
 export const SignupInstruction = styled.p`
-  margin: 0;
   font-size: ${({ theme }) => theme.fontSizes.sm};
   font-weight: ${({ theme }) => theme.fontWeights.regular};
   color: ${({ theme }) => theme.colors.neutral600};
   width: 365px;
+  margin-bottom: ${({ theme }) => theme.space[6]};
 `
 
 export const ForwardButtonWrapper = styled.div`
   width: 365px;
   display: flex;
+  gap: ${({ theme }) => theme.space[1]};
   justify-content: center;
 `
-interface SelectProps {
-  hasError?: boolean
-}
 
-export const SexInput = styled.select<SelectProps>`
-  height: 35px;
-  border-radius: ${({ theme }) => theme.radii.md};
-  padding: 0 16px;
-  background-color: inherit;
-  border: 1px solid ${({ theme }) => theme.colors.neutral600};
-  ${({ hasError, theme }) =>
-    hasError &&
-    css`
-      border: 1px solid ${theme.colors.red500};
-    `}
+export const RegisterArea = styled.div`
+  align-self: center;
+  margin-top: ${({ theme }) => theme.space[8]};
 `
 
-export const SpecialtyInput = styled.select<SelectProps>`
-  height: 35px;
-  padding: 0 16px;
-  border-radius: ${({ theme }) => theme.radii.md};
-  border: 1px solid ${({ theme }) => theme.colors.neutral600};
-  ${({ hasError, theme }) =>
-    hasError &&
-    css`
-      border: 1px solid ${theme.colors.red500};
-    `}
+export const RegisterPhrase = styled.span`
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  font-weight: ${({ theme }) => theme.fontWeights.bold};
+  color: ${({ theme }) => theme.colors.neutral900};
+`
+
+export const Link = styled.a`
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  font-weight: ${({ theme }) => theme.fontWeights.bold};
+  color: ${({ theme }) => theme.colors.blue500};
+
+  &:hover {
+    color: ${({ theme }) => darkenColor(theme.colors.blue500, 0.1)};
+    cursor: pointer;
+  }
 `

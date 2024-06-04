@@ -1,4 +1,4 @@
-export const MEDIACL_SPECIALTIES = [
+export const MEDICAL_SPECIALTIES = [
   'Alergia e Imunologia',
   'Anestesiologia',
   'Angiologia',

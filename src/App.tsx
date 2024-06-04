@@ -39,7 +39,6 @@ export function App() {
               <Routes>
                 <Route path="/" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
-                {/* <Route path="/signupdoctor" element={<SignupDoctor />} /> */}
                 <Route
                   path="/home"
                   element={
@@ -49,7 +48,7 @@ export function App() {
                   }
                 />
                 <Route
-                  path="/submission"
+                  path="/submission/:userId"
                   element={
                     <ProtectedRoute>
                       <Submission />

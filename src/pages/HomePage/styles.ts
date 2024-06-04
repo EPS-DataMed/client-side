@@ -1,5 +1,6 @@
 import { styled } from 'styled-components'
 import { lightenColor } from '../../utils/colors'
+import { Skeleton } from '../../components/Skeleton'
 
 export const Header = styled.header`
   display: flex;
@@ -48,6 +49,7 @@ export const HomepageOption = styled.div`
   height: 480px;
   border-radius: 4px;
   box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.5);
+  outline: 2px solid ${({ theme }) => theme.colors.neutral50};
   transition: outline 0.3s, background-color 0.3s, transform 0.3s;
 
   img {
@@ -81,6 +83,7 @@ export const ImageWrapper = styled.div`
   flex-grow: 1;
   display: flex;
   align-items: center;
+  position: absolute;
 `
 export const Image = styled.img`
   max-width: 296px;
@@ -88,4 +91,14 @@ export const Image = styled.img`
   display: block;
   position: relative;
   left: 10%;
+  top: 126px !important;
+`
+
+export const SkeletonImage = styled(Skeleton)`
+  width: 296px !important;
+  height: 296px !important;
+  position: relative;
+  left: 10%;
+  border-radius: ${({ theme }) => theme.radii.full};
+  top: 126px !important;
 `

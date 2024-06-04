@@ -12,6 +12,7 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { ErrorToast } from '../../components/Toast'
+import { Skeleton } from '../../components/Skeleton'
 
 const loginSchema = z.object({
   email: z.string().email('E-mail inválido'),
@@ -24,6 +25,8 @@ export function Login() {
   const { getUser } = useUserContext()
   const navigateTo = useNavigation()
   const [loading, setLoading] = useState(false)
+  const [imageLoaded, setImageLoaded] = useState(false)
+  // const [isCreatingInspection, setIsCreatingInspection] = useState(false)
 
   const { control, handleSubmit } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -50,11 +53,31 @@ export function Login() {
     }
   }
 
+  // async function onSubmit(dataToSend: any) {
+  //   try {
+  //     setIsCreatingInspection(true)
+  //     const response = await postInspectionData(dataToSend)
+
+  //     const { token, inspection, user } = response.data.data
+
+  //     setAccessToken(token)
+  //     navigateTo(`/home/${inspection}/${user}`)
+
+  //   } catch (error: unknown) {
+  //     if (error instanceof AxiosError) ErrorToast(error.response?.data.message)
+  //   } finally {
+  //     setIsCreatingInspection(false)
+  //   }
+  // }
+
   return (
     <Page.Background>
+      {!imageLoaded && <Skeleton style={{ width: '50vw', height: '100%' }} />}
       <Page.Image
         alt="Doctor"
         src="https://github.com/EPS-DataMed/client-side/blob/r1/src/pages/HomePage/assets/login.png?raw=true"
+        onLoad={() => setImageLoaded(true)}
+        style={{ display: imageLoaded ? 'block' : 'none' }}
       />
       <Page.Content>
         <Page.WrapperLogoAndText>
