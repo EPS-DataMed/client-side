@@ -40,7 +40,7 @@ export function App() {
                 <Route path="/" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route
-                  path="/home/:userId"
+                  path="/home"
                   element={
                     <ProtectedRoute>
                       <HomePage />
@@ -48,7 +48,7 @@ export function App() {
                   }
                 />
                 <Route
-                  path="/submission/:userId"
+                  path="/submission"
                   element={
                     <ProtectedRoute>
                       <Submission />

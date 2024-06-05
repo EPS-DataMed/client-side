@@ -1,4 +1,3 @@
-// pages/Login/Login.tsx
 import { useState } from 'react'
 import * as Page from '../../components/GenericSignupLoginPage'
 import * as S from './styles'
@@ -7,17 +6,17 @@ import { PrimaryButton } from '../../components/PrimaryButton'
 import TypingEffect from '../../components/TypingEffect'
 import { ArrowRight } from '../../assets/icons'
 import InputField from '../../components/Input/InputField'
-import { useForm } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Skeleton } from '../../components/Skeleton'
 import { LoginFormData, loginSchema } from './schema'
-import { useLogin } from './hooks/useLogin'
-import useNavigation from '../../hooks/useNavigation'
+import { login } from './services'
+import { saveCookie } from '../../utils/cookies'
+import { ErrorToast } from '../../components/Toast'
+import { useNavigate } from 'react-router-dom'
 
 export function Login() {
-  const navigatoTo = useNavigation()
-
-  const { loading, onSubmit } = useLogin()
+  const [loading, setLoading] = useState(false)
   const [imageLoaded, setImageLoaded] = useState(false)
 
   const { control, handleSubmit } = useForm<LoginFormData>({
@@ -27,6 +26,24 @@ export function Login() {
       password: '',
     },
   })
+
+  const navigate = useNavigate()
+
+  const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
+    setLoading(true)
+    try {
+      const response = await login(data)
+      saveCookie('access_token', response.content.access_token, 1)
+      navigate(`/home`)
+      console.log('teste')
+    } catch (error) {
+      ErrorToast(
+        'Verifique suas informações novamente! Ou tente novamente mais tarde.',
+      )
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <Page.Background>
@@ -79,7 +96,7 @@ export function Login() {
             Não possui uma conta?{' '}
             <S.Link
               onClick={() => {
-                navigatoTo('/signup')
+                navigate('/signup')
               }}
             >
               Cadastre-se
