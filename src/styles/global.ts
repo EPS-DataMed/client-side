@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components'
+import { darkenColor } from '../utils/colors'
 
 export const GlobalStyle = createGlobalStyle`
   * {
@@ -39,12 +40,12 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   ::-webkit-scrollbar-thumb {
-    background: ${(props) => props.theme.colors.neutral700}; 
+    background: ${(props) => props.theme.colors.blue500}; 
     border-radius: ${(props) => props.theme.radii.full};
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: ${(props) => props.theme.colors.blue440}; 
+    background: ${(props) => darkenColor(props.theme.colors.blue440, 0.4)}; 
   }
 
 

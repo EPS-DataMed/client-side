@@ -12,7 +12,7 @@ export const defaultTheme = {
     neutral900: '#181818',
     blue500: '#2980B9',
     blue440: '#34CDFF',
-    green500: '#21A635',
+    green500: '#3fd255',
     red500: '#FF0000',
   },
   fontSizes: {

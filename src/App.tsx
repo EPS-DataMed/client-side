@@ -6,6 +6,13 @@ import { GlobalStyle } from './styles/global'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/ReactToastify.min.css'
 import { HomePage } from './pages/HomePage'
+import { Submission } from './pages/Submission'
+import { SubmissionTestProvider } from './contexts/SubmissionTestContext'
+import { UserForm } from './pages/UserForm'
+import { Login } from './pages/Login'
+import { Signup } from './pages/Signup'
+import { UserProvider } from './contexts/UserContext'
+import ProtectedRoute from './components/ProtectedRoute'
 
 export const queryClient = new QueryClient()
 
@@ -27,9 +34,39 @@ export function App() {
           theme="colored"
         />
         <Router>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-          </Routes>
+          <UserProvider>
+            <SubmissionTestProvider>
+              <Routes>
+                <Route path="/" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route
+                  path="/home/:userId"
+                  element={
+                    <ProtectedRoute>
+                      <HomePage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/submission/:userId"
+                  element={
+                    <ProtectedRoute>
+                      <Submission />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/form"
+                  element={
+                    <ProtectedRoute>
+                      <UserForm />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="*" element={<Login />} />
+              </Routes>
+            </SubmissionTestProvider>
+          </UserProvider>
         </Router>
       </ThemeProvider>
     </QueryClientProvider>

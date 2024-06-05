@@ -22,7 +22,7 @@ const InputComponent = styled.input<InputProps>`
   font-size: ${({ theme }) => theme.fontSizes.sm};
   font-weight: ${({ theme }) => theme.fontWeights.regular};
   box-sizing: border-box;
-  border: 1px solid ${({ theme }) => theme.colors.neutral600};
+  border: 1px solid ${({ theme }) => theme.colors.neutral400};
 
   padding: 0 ${({ theme }) => theme.space[4]};
   transition: all 0.3s;
@@ -32,7 +32,9 @@ const InputComponent = styled.input<InputProps>`
   &:hover {
     border: 1px solid ${({ theme }) => theme.colors.blue500};
   }
-
+  &:invalid {
+    border: 1px solid ${({ theme }) => theme.colors.red500};
+  }
   &::placeholder {
     color: ${({ theme }) => theme.colors.neutral400};
   }
@@ -74,14 +76,14 @@ const InputComponent = styled.input<InputProps>`
 `
 
 const Label = styled.label`
-  color: ${({ theme }) => theme.colors.neutral};
-  font-size: ${({ theme }) => theme.fontSizes.md};
+  color: ${({ theme }) => theme.colors.neutral900};
+  font-size: ${({ theme }) => theme.fontSizes.sm};
   font-style: normal;
   font-weight: ${({ theme }) => theme.fontWeights.bold};
 `
 
 const Description = styled.span`
-  color: ${({ theme }) => theme.colors.neutral};
+  color: ${({ theme }) => theme.colors.neutral600};
   font-size: ${({ theme }) => theme.fontSizes.sm};
   font-style: normal;
   font-weight: ${({ theme }) => theme.fontWeights.regular};
@@ -93,7 +95,7 @@ interface RequiredTextProps {
 }
 
 const RequiredText = styled.span<RequiredTextProps>`
-  color: ${({ theme }) => theme.colors.neutral};
+  color: ${({ theme }) => theme.colors.neutral900};
   font-size: ${({ theme }) => theme.fontSizes.sm};
   font-style: normal;
   font-weight: ${({ theme }) => theme.fontWeights.regular};
@@ -116,8 +118,8 @@ const ErrorMessageRoot = styled.div`
 
 const ErrorMessage = styled.span`
   color: ${({ theme }) => theme.colors.red500};
-  font-size: ${({ theme }) => theme.fontSizes.sm};
-  font-style: normal;
+  font-size: ${({ theme }) => theme.fontSizes.xs};
+  font-style: italic;
   font-weight: ${({ theme }) => theme.fontWeights.regular};
 `
 

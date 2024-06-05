@@ -4,16 +4,16 @@ import * as S from './styles'
 interface CustomButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode
-  variant?: 'primary' | 'secondary'
+  variant?: 'primary' | 'secondary' | 'red' | 'success'
 }
 
 export const PrimaryButton: React.FC<CustomButtonProps> = ({
   children,
   variant = 'primary',
-  ...props
+  ...rest
 }) => {
   return (
-    <S.StyledButton variant={variant} {...props}>
+    <S.StyledButton variant={variant} {...rest}>
       {children}
     </S.StyledButton>
   )

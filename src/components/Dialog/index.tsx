@@ -67,10 +67,6 @@ const Description = styled(DialogRadix.Description)`
   color: ${({ theme }) => theme.colors.neutral900};
 `
 
-const WarningProvider = styled(DialogRadix.WarningProvider)`
-  font-family: ${({ theme }) => theme.fonts.primary};
-`
-
 const CloseIconButton = styled(DialogRadix.Close)`
   position: absolute;
   background: transparent;
@@ -92,6 +88,5 @@ export const Dialog = {
   Close,
   Title,
   Description,
-  WarningProvider,
   CloseIconButton,
 }

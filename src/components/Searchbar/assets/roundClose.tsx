@@ -3,7 +3,7 @@ import React, { SVGProps } from 'react'
 export const RoundCloseIcon: React.FC<SVGProps<SVGSVGElement>> = ({
   width = '16',
   height = '16',
-  fill = '#2980B9',
+  fill = '#3fd255',
   ...props
 }) => (
   <>

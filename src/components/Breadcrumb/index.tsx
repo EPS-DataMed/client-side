@@ -14,7 +14,7 @@ interface BreadcrumbProps {
 
 export function Breadcrumb({ items }: BreadcrumbProps) {
   return (
-    <S.Container>
+    <S.Container data-testid="breadcrumb">
       {items.map((breadcrumb, index) => (
         <Fragment key={breadcrumb.label}>
           <S.Label onClick={breadcrumb.action} activate={breadcrumb.activate}>
