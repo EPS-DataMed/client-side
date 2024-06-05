@@ -6,24 +6,20 @@ import { Pen } from '../../assets/icons/pen'
 import { Logout } from '../../assets/icons/logout'
 import * as S from './styles'
 import useNavigation from '../../hooks/useNavigation'
-import { useUserContext } from '../../contexts/UserContext'
 import { useState } from 'react'
 
 export function HomePage() {
-  const { getUser } = useUserContext()
-  const user = getUser()
-
   const navigateTo = useNavigation()
 
   const handleNavigationToSubmission = () => {
     navigateTo('/submission')
   }
 
-  const firstName = user.name.split(' ')[0]
-  const greeting = user.sex === 'Masculino' ? 'Bem vindo' : 'Bem vinda '
-  const title = user.crm ? 'Dr. ' : ''
-  const welcomeMessageText = `${greeting}, ${title} ${firstName}!`
-  const firstLetter = user.name[0]
+  // const firstName = user.name.split(' ')[0]
+  // const greeting = user.sex === 'Masculino' ? 'Bem vindo' : 'Bem vinda '
+  // const title = user.crm ? 'Dr. ' : ''
+  // const welcomeMessageText = `${greeting}, ${title} ${firstName}!`
+  // const firstLetter = user.name[0]
   const [imageManagerTestLoaded, setImageManagerTestLoaded] = useState(false)
   const [imageManagerPatientLoaded, setImageManagerPatientLoaded] =
     useState(false)
@@ -39,7 +35,7 @@ export function HomePage() {
 
           <ButtonsAndProfile>
             <ProfileCircle>
-              <p>{firstLetter}</p>
+              <p>D</p>
             </ProfileCircle>
             <PrimaryButton>
               <Pen />
@@ -54,7 +50,7 @@ export function HomePage() {
 
         <GenericPage.Divider />
         <S.MainContent>
-          <S.WelcomeText>{welcomeMessageText}</S.WelcomeText>
+          <S.WelcomeText>Bem vindo! </S.WelcomeText>
           <S.WelcomeQuestion>O que deseja acessar hoje?</S.WelcomeQuestion>
 
           <S.Options>

@@ -5,28 +5,20 @@ import { LargeLogo } from '../../assets/largeLogo'
 import { PrimaryButton } from '../../components/PrimaryButton'
 import TypingEffect from '../../components/TypingEffect'
 import { ArrowRight } from '../../assets/icons'
-import useNavigation from '../../hooks/useNavigation'
-import { useUserContext } from '../../contexts/UserContext'
 import InputField from '../../components/Input/InputField'
-import { useForm, SubmitHandler } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import { ErrorToast } from '../../components/Toast'
 import { Skeleton } from '../../components/Skeleton'
-
-const loginSchema = z.object({
-  email: z.string().email('E-mail inválido'),
-  password: z.string().min(6, 'A senha é obrigatória'),
-})
-
-type LoginFormData = z.infer<typeof loginSchema>
+import { LoginFormData, loginSchema } from './schema'
+import { login } from './services'
+import { decodeJwt } from './utils'
+import { saveCookie } from '../../utils/cookies'
+import { ErrorToast } from '../../components/Toast'
+import { useNavigate } from 'react-router-dom'
 
 export function Login() {
-  const { getUser } = useUserContext()
-  const navigateTo = useNavigation()
   const [loading, setLoading] = useState(false)
   const [imageLoaded, setImageLoaded] = useState(false)
-  // const [isCreatingInspection, setIsCreatingInspection] = useState(false)
 
   const { control, handleSubmit } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -36,39 +28,24 @@ export function Login() {
     },
   })
 
-  const onSubmit: SubmitHandler<LoginFormData> = (data) => {
-    const storedUser = getUser()
-    if (
-      data.email === storedUser.email &&
-      data.password === storedUser.password
-    ) {
-      setLoading(true)
-      console.log('User:', data)
-      setTimeout(() => {
-        setLoading(false)
-        navigateTo('/home', { replace: true })
-      }, 2000)
-    } else {
-      ErrorToast('E-mail ou senha inválida.')
+  const navigate = useNavigate()
+
+  const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
+    setLoading(true)
+    try {
+      const response = await login(data)
+      const decodedToken = decodeJwt(response.content.access_token)
+      const userId = decodedToken.user_id
+      saveCookie('access_token', response.content.access_token, 1)
+      navigate(`/home`)
+    } catch (error) {
+      ErrorToast(
+        'Verifique suas informações novamente! Ou tente novamente mais tarde.',
+      )
+    } finally {
+      setLoading(false)
     }
   }
-
-  // async function onSubmit(dataToSend: any) {
-  //   try {
-  //     setIsCreatingInspection(true)
-  //     const response = await postInspectionData(dataToSend)
-
-  //     const { token, inspection, user } = response.data.data
-
-  //     setAccessToken(token)
-  //     navigateTo(`/home/${inspection}/${user}`)
-
-  //   } catch (error: unknown) {
-  //     if (error instanceof AxiosError) ErrorToast(error.response?.data.message)
-  //   } finally {
-  //     setIsCreatingInspection(false)
-  //   }
-  // }
 
   return (
     <Page.Background>
@@ -121,7 +98,7 @@ export function Login() {
             Não possui uma conta?{' '}
             <S.Link
               onClick={() => {
-                navigateTo('/signup')
+                navigate('/signup')
               }}
             >
               Cadastre-se

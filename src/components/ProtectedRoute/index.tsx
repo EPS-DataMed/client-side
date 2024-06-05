@@ -1,22 +1,18 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useUserContext } from '../../contexts/UserContext'
-import { hasObjectValidKeys } from '../../interfaces/typeGuards'
+import { getCookie } from '../../utils/cookies'
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { getUser } = useUserContext()
+  const token = getCookie('access_token')
   const navigate = useNavigate()
 
-  const user = getUser()
-  const isUserExist = hasObjectValidKeys(user)
-
   useEffect(() => {
-    if (!isUserExist) {
+    if (!token) {
       navigate('/')
     }
-  }, [isUserExist, navigate])
+  }, [navigate, token])
 
-  return isUserExist ? children : null
+  return token ? children : null
 }
 
 export default ProtectedRoute
