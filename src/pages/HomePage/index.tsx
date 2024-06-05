@@ -15,6 +15,10 @@ export function HomePage() {
     navigateTo('/submission')
   }
 
+  const navigateToUserData = () =>{
+    navigateTo('/edituser')
+  }
+
   // const firstName = user.name.split(' ')[0]
   // const greeting = user.sex === 'Masculino' ? 'Bem vindo' : 'Bem vinda '
   // const title = user.crm ? 'Dr. ' : ''
@@ -37,7 +41,7 @@ export function HomePage() {
             <ProfileCircle>
               <p>D</p>
             </ProfileCircle>
-            <PrimaryButton>
+            <PrimaryButton onClick={navigateToUserData}>
               <Pen />
               <p>Paciente</p>
             </PrimaryButton>
