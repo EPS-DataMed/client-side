@@ -42,7 +42,7 @@ export function useFileUpload() {
           ),
         )
       } catch (error) {
-        ErrorToast(error.message)
+        ErrorToast('Não foi possível enviar o arquivo!')
       } finally {
         setLoadingFiles(false)
       }

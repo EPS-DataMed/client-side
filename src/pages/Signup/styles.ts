@@ -1,4 +1,4 @@
-import { styled, css } from 'styled-components'
+import { styled } from 'styled-components'
 import { darkenColor } from '../../utils/colors'
 
 export const SignupFieldsForm = styled.form`
