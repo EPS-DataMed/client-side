@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseURL = 'https://gateway-zhl1.onrender.com'
+const baseURL = process.env.REACT_APP_BASE_URL
 
 export const api = axios.create({
   baseURL,

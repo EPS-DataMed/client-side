@@ -38,6 +38,7 @@ export const defaultTheme = {
   fonts: {
     primary: 'Open Sans, sans-serif',
     secondary: 'Poppins, sans-serif',
+    tertiary: 'Podkova, cursive',
   },
   lineHeights: {
     shorter: '125%',

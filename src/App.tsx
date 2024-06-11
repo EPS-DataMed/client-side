@@ -55,14 +55,7 @@ export function App() {
                     </ProtectedRoute>
                   }
                 />
-                <Route
-                  path="/form"
-                  element={
-                    <ProtectedRoute>
-                      <UserForm />
-                    </ProtectedRoute>
-                  }
-                />
+                <Route path="/form" element={<UserForm />} />
                 <Route path="*" element={<Login />} />
               </Routes>
             </SubmissionTestProvider>

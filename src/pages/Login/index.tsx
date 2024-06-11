@@ -35,7 +35,6 @@ export function Login() {
       const response = await login(data)
       saveCookie('access_token', response.content.access_token, 1)
       navigate(`/home`)
-      console.log('teste')
     } catch (error) {
       ErrorToast(
         'Verifique suas informações novamente! Ou tente novamente mais tarde.',

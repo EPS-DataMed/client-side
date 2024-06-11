@@ -9,6 +9,7 @@ interface InputFieldProps {
   placeholder?: string
   description?: string
   required?: boolean
+  disabled?: boolean
 }
 
 const InputField: React.FC<InputFieldProps> = ({
@@ -18,6 +19,7 @@ const InputField: React.FC<InputFieldProps> = ({
   placeholder = '',
   description,
   required = false,
+  disabled = false,
 }) => {
   const {
     field,
@@ -43,6 +45,7 @@ const InputField: React.FC<InputFieldProps> = ({
         {...field}
         placeholder={placeholder}
         hasError={Boolean(error)}
+        disabled={disabled}
       />
       {error && (
         <Input.ErrorMessageRoot>
