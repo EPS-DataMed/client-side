@@ -1,6 +1,5 @@
 import styled, { css } from 'styled-components'
 import { PrimaryButton } from '../../components/PrimaryButton'
-import { lightenColor } from '../../utils/colors'
 
 export const Header = styled.header`
   display: flex;
@@ -48,4 +47,14 @@ export const ButtonStyled = styled(PrimaryButton)`
         background-color: ${({ theme }) => theme.colors.neutral400} !important;
       }
     `}
+`
+
+export const PrintComponent = styled.div`
+  visibility: hidden;
+  display: none;
+
+  @page {
+    size: A4;
+    margin: 0;
+  }
 `

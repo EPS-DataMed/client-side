@@ -19,6 +19,7 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({ control }) => (
         description={field.description}
         control={control}
         required={field.required}
+        disabled={field.name === 'bmi'}
       />
     ))}
   </Section>

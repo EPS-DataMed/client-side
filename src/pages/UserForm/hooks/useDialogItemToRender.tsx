@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { DialogStatus } from '../../../components/Dialog/components/DialogStatus'
 import { useTitleDialogStatus } from '../../../components/Dialog/components/DialogStatus/hooks/useTitleDialogStatus'
 import { DialogConfig } from '../../../components/DialogControlled/interfaces'
@@ -6,16 +7,32 @@ import { DialogStep } from '../interfaces'
 interface DialogItemToRenderProps {
   dialogSubmissionStep: DialogStep
   handleNavigationToSubmission: () => void
+  handleHealthDataPrint: any
+  handleUpdateDialogControlled: (open: boolean) => void
+  setDialogSubmissionStep: (value: React.SetStateAction<DialogStep>) => void
 }
 
 export function useDialogItemToRender({
   dialogSubmissionStep,
   handleNavigationToSubmission,
+  handleHealthDataPrint,
+  handleUpdateDialogControlled,
+  setDialogSubmissionStep,
 }: DialogItemToRenderProps) {
   const titleFormatted = useTitleDialogStatus({
     fullString: 'Formulário salvo com sucesso!',
     substring: 'sucesso!',
   })
+
+  const handlePrintCard = useCallback(async () => {
+    await handleHealthDataPrint()
+    handleUpdateDialogControlled(false)
+    setDialogSubmissionStep('')
+  }, [
+    handleHealthDataPrint,
+    handleUpdateDialogControlled,
+    setDialogSubmissionStep,
+  ])
 
   const dialogConfig: DialogConfig = {
     save_form: {
@@ -48,7 +65,7 @@ export function useDialogItemToRender({
           label: 'Visualizar/ imprimir cartão',
           variant: 'primary',
           action: () => {
-            console.log('Visualizar/ imprimir cartão')
+            handlePrintCard()
           },
         },
       ],
