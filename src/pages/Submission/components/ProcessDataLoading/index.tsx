@@ -18,14 +18,17 @@ export function ProcessDataLoading() {
   const [fade, setFade] = useState<'in' | 'out'>('in')
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    const handleFadeOut = () => {
       setFade('out')
-      setTimeout(() => {
-        setMessageIndex((prevIndex) => (prevIndex + 1) % MESSAGES.length)
-        setFade('in')
-      }, 500)
-    }, 3000)
+      setTimeout(updateMessageIndex, 500)
+    }
 
+    const updateMessageIndex = () => {
+      setMessageIndex((prevIndex) => (prevIndex + 1) % MESSAGES.length)
+      setFade('in')
+    }
+
+    const interval = setInterval(handleFadeOut, 3000)
     return () => clearInterval(interval)
   }, [MESSAGES.length])
 
