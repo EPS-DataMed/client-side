@@ -41,29 +41,29 @@ export const PERSONAL_INFO_FIELDS = [
 export const HEMOGRAM_FIELDS = [
   {
     name: 'redBloodCell',
-    label: 'Hemácias (milhões/µL)',
-    placeholder: 'Ex: 4.2',
+    label: 'Hemácias (milhões/mm³)',
+    placeholder: 'Ex: 4.5',
     description: '',
     required: true,
   },
   {
     name: 'hemoglobin',
     label: 'Hemoglobina (g/dL)',
-    placeholder: 'Ex: 12.3',
+    placeholder: 'Ex: 14.0',
     description: '',
     required: true,
   },
   {
     name: 'hematocrit',
     label: 'Hematócrito (%)',
-    placeholder: 'Ex: 35.5',
+    placeholder: 'Ex: 45',
     description: '',
     required: true,
   },
   {
     name: 'glycatedHemoglobin',
     label: 'Hemoglobina Glicada (%)',
-    placeholder: 'Ex: 123',
+    placeholder: 'Ex: 5.2',
     required: true,
   },
 ]
@@ -72,16 +72,16 @@ export const HEPATIC_FUNCTION_FIELDS = [
   {
     name: 'ast',
     label: 'AST (U/L)',
-    placeholder: 'Ex: 25',
+    placeholder: 'Ex: 30',
     description: '',
-    required: false,
+    required: true,
   },
   {
     name: 'alt',
     label: 'ALT (U/L)',
-    placeholder: 'Ex: 30',
+    placeholder: 'Ex: 40',
     description: '',
-    required: false,
+    required: true,
   },
 ]
 
@@ -89,16 +89,16 @@ export const RENAL_FUNCTION_FIELDS = [
   {
     name: 'urea',
     label: 'Ureia (mg/dL)',
-    placeholder: 'Ex: 15',
+    placeholder: 'Ex: 20',
     description: '',
     required: true,
   },
   {
     name: 'creatinine',
     label: 'Creatinina (mg/dL)',
-    placeholder: 'Ex: 1.2',
+    placeholder: 'Ex: 1.0',
     description: '',
-    required: false,
+    required: true,
   },
 ]
 
@@ -178,7 +178,7 @@ export const FIELD_CONFIG: FieldConfig<keyof User>[] = [
   {
     id: 'ast',
     label: 'AST',
-    healthyMin: 10,
+    healthyMin: 5,
     healthyMax: 40,
     absoluteMin: 0,
     absoluteMax: 50,
@@ -198,10 +198,10 @@ export const FIELD_CONFIG: FieldConfig<keyof User>[] = [
   {
     id: 'urea',
     label: 'Ureia',
-    healthyMin: 7,
-    healthyMax: 20,
+    healthyMin: 10,
+    healthyMax: 40,
     absoluteMin: 0,
-    absoluteMax: 30,
+    absoluteMax: 50,
     unitLabel: 'mg/dL',
     weight: 12.5,
   },
@@ -218,8 +218,8 @@ export const FIELD_CONFIG: FieldConfig<keyof User>[] = [
   {
     id: 'hematocrit',
     label: 'Hematócrito',
-    healthyMin: 36,
-    healthyMax: 50,
+    healthyMin: 37,
+    healthyMax: 52,
     absoluteMin: 20,
     absoluteMax: 60,
     unitLabel: '%',
@@ -228,18 +228,18 @@ export const FIELD_CONFIG: FieldConfig<keyof User>[] = [
   {
     id: 'redBloodCell',
     label: 'Hemácia',
-    healthyMin: 4.7,
-    healthyMax: 6.1,
+    healthyMin: 4.2,
+    healthyMax: 5.9,
     absoluteMin: 0,
     absoluteMax: 10,
-    unitLabel: 'million cells/µL',
+    unitLabel: 'milhões/mm³',
     weight: 12.5,
   },
   {
     id: 'glycatedHemoglobin',
     label: 'Hemoglobina Glicada',
     healthyMin: 4,
-    healthyMax: 5.7,
+    healthyMax: 5.6,
     absoluteMin: 0,
     absoluteMax: 10,
     unitLabel: '%',
