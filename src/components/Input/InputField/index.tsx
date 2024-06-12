@@ -9,7 +9,7 @@ interface InputFieldProps {
   placeholder?: string
   description?: string
   required?: boolean
-  type?: string // Adicionando a prop type
+  type?: string
 }
 
 const InputField: React.FC<InputFieldProps> = ({
@@ -43,7 +43,7 @@ const InputField: React.FC<InputFieldProps> = ({
       {description && <Input.Description>{description}</Input.Description>}
       <Input.Input
         {...field}
-        type={type} // Usando a prop type
+        type={type}
         placeholder={placeholder}
         hasError={Boolean(error)}
       />

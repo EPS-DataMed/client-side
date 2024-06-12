@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { useSubmissionTestContext } from '../../../../../contexts/SubmissionTestContext'
-import { ErrorToast } from '../../../../../components/Toast'
+import { ErrorToast, SuccessToast } from '../../../../../components/Toast'
 import { generateRandomId } from '../../../../../utils/mockFunctions'
+import { uploadFiles } from '../../../services'
 
 type VariantFile = 'valid' | 'invalid'
 
@@ -27,18 +28,24 @@ export function useFileUpload() {
         return
       }
 
-      setTimeout(() => {
-        setLoadingFiles(false)
+      try {
+        const uploadResponse = await uploadFiles(acceptedFiles, 9)
+        SuccessToast('Arquivos enviados com sucesso')
+
         setFilesUploaded((prevFiles) =>
           prevFiles.concat(
             acceptedFiles.map((file) => ({
               name: file.name,
-              url: 'www.example.com',
+              url: uploadResponse.url || 'www.example.com',
               id: generateRandomId(),
             })),
           ),
         )
-      }, 3000)
+      } catch (error) {
+        ErrorToast('Não foi possível enviar o arquivo!')
+      } finally {
+        setLoadingFiles(false)
+      }
     },
     [filesUploaded, setFilesUploaded, setLoadingFiles],
   )

@@ -40,6 +40,14 @@ const InputComponent = styled.input<InputProps>`
     color: ${({ theme }) => theme.colors.neutral400};
   }
 
+  ${({ disabled }) =>
+    disabled &&
+    css`
+      cursor: not-allowed;
+      borborder: 1px solid ${({ theme }) => theme.colors.neutral400};
+      background-color: ${({ theme }) => theme.colors.neutral100};
+    `}
+
   ${({ hasError, theme }) =>
     hasError &&
     css`

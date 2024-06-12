@@ -1,4 +1,5 @@
-import { useForm, SubmitHandler } from 'react-hook-form'
+import { useForm, SubmitHandler, useWatch } from 'react-hook-form'
+import { useReactToPrint } from 'react-to-print'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import AdditionalInfo from './components/AdditionalInfo'
@@ -14,68 +15,93 @@ import {
   DialogControlled,
   useDialogControlled,
 } from '../../components/DialogControlled'
-import { isNotUndefined } from '../../interfaces/typeGuards'
+import { hasObjectValidKeys, isNotUndefined } from '../../interfaces/typeGuards'
 import { useDialogItemToRender } from './hooks/useDialogItemToRender'
-import { DialogStep } from './interfaces'
-import { useState } from 'react'
+import { DialogStep, User } from './interfaces'
+import { useRef, useState, useEffect } from 'react'
 import useNavigation from '../../hooks/useNavigation'
-
-const schema = z.object({
-  weight: z.string().min(1, 'Campo obrigatório'),
-  height: z.string().min(1, 'Campo obrigatório'),
-  bmi: z.string().min(1, 'Campo obrigatório'),
-  bloodType: z.string().min(1, 'Campo obrigatório'),
-  abdominalCircumference: z.string().min(1, 'Campo obrigatório'),
-  hemoglobin: z.string().min(1, 'Campo obrigatório'),
-  ast: z.string().min(1, 'Campo obrigatório'),
-  alt: z.string().min(1, 'Campo obrigatório'),
-  urea: z.string().min(1, 'Campo obrigatório'),
-  creatinine: z.string().min(1, 'Campo obrigatório'),
-  hematocrit: z.string().min(1, 'Campo obrigatório'),
-  hemoglobinA1c: z.string().min(1, 'Campo obrigatório'),
-  glycatedHemoglobin: z.string().min(1, 'Campo obrigatório'),
-  allergies: z.string().min(1, 'Campo obrigatório'),
-  diseases: z.string().min(1, 'Campo obrigatório'),
-  medications: z.string().min(1, 'Campo obrigatório'),
-  familyHistory: z.string().min(1, 'Campo obrigatório'),
-  importantNotes: z.string().min(1, 'Campo obrigatório'),
-  imageReports: z.string().min(1, 'Campo obrigatório'),
-})
+import { PAGE_PRINT_STYLE } from './constants'
+import DatamedCard from './DatamedCard'
+import useRemoveSpecificSvg from './hooks/useRemoveSpecificSvg'
+import { schema } from './schema'
 
 type FormData = z.infer<typeof schema>
 
 export function UserForm() {
   const [dialogSubmissionStep, setDialogSubmissionStep] =
     useState<DialogStep>('')
+  const [userInfoFilled, setUserInfoFilled] = useState({} as User)
 
-  const { handleSubmit, control } = useForm<FormData>({
+  const { handleSubmit, control, setValue } = useForm<FormData>({
     resolver: zodResolver(schema),
   })
 
+  console.log(
+    'hasObjectValidKeys(userInfoFilled): ',
+    hasObjectValidKeys(userInfoFilled),
+  )
   const { handleUpdateDialogControlled, isDialogControlledOpen } =
     useDialogControlled()
 
+  const healthDataRef = useRef<HTMLDivElement | null>(null)
   const navigateTo = useNavigation()
 
   const handleNavigationToSubmission = () => {
     navigateTo('/submission', { replace: true })
   }
 
+  const handleHealthDataPrint = useReactToPrint({
+    content: () => healthDataRef.current,
+    pageStyle: PAGE_PRINT_STYLE,
+    documentTitle: 'graficos_exportados',
+    onAfterPrint: () => setUserInfoFilled({} as User),
+  })
+
   const { dialogItemToRender } = useDialogItemToRender({
     dialogSubmissionStep,
     handleNavigationToSubmission,
+    handleHealthDataPrint,
+    handleUpdateDialogControlled,
+    setDialogSubmissionStep,
   })
 
   function handleCloseDialog() {
     setDialogSubmissionStep('')
   }
 
+  const weight = useWatch({
+    control,
+    name: 'weight',
+  })
+
+  const height = useWatch({
+    control,
+    name: 'height',
+  })
+
+  useEffect(() => {
+    if (weight && height) {
+      const weightNum = parseFloat(weight)
+      const heightNum = parseFloat(height) / 100
+      if (!isNaN(weightNum) && !isNaN(heightNum) && heightNum > 0) {
+        const bmi = (weightNum / (heightNum * heightNum)).toFixed(2)
+        setValue('bmi', bmi)
+      }
+    }
+  }, [weight, height, setValue])
+
   const onSubmit: SubmitHandler<FormData> = (data) => {
     handleUpdateDialogControlled(true)
+    const USER_TO_PUT_IN_GRAPH: User = {
+      ...data,
+      name: 'Elvis Presley',
+      age: 40,
+    }
     setDialogSubmissionStep('save_form')
-    console.log(data)
+    setUserInfoFilled({ ...USER_TO_PUT_IN_GRAPH })
   }
 
+  useRemoveSpecificSvg()
   const BREADCRUMBS = useBreadcrumbs()
 
   return (
@@ -131,6 +157,12 @@ export function UserForm() {
           isLoadingRequisition={false}
           onClose={handleCloseDialog}
         />
+      )}
+
+      {hasObjectValidKeys(userInfoFilled) && (
+        <S.PrintComponent>
+          <DatamedCard user={userInfoFilled} componentRef={healthDataRef} />
+        </S.PrintComponent>
       )}
     </>
   )
