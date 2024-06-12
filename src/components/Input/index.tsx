@@ -9,6 +9,8 @@ const Root = styled.div`
 interface InputProps {
   hasError?: boolean
   variant?: 'searchbar'
+  cursor?: string
+  edit?: boolean
 }
 
 const InputComponent = styled.input<InputProps>`
@@ -23,7 +25,6 @@ const InputComponent = styled.input<InputProps>`
   font-weight: ${({ theme }) => theme.fontWeights.regular};
   box-sizing: border-box;
   border: 1px solid ${({ theme }) => theme.colors.neutral400};
-
   padding: 0 ${({ theme }) => theme.space[4]};
   transition: all 0.3s;
   &:focus {
@@ -45,6 +46,20 @@ const InputComponent = styled.input<InputProps>`
       border: 1px solid ${theme.colors.red500};
     `}
 
+  ${(props) =>
+    props.cursor == 'not-allowed' &&
+    css`
+      cursor: not-allowed;
+    `
+  }
+
+  ${(props) =>
+    props.edit == false &&
+    css`
+      color: ${({ theme }) => theme.colors.neutral400};
+    `
+
+  }
   ${(props) =>
     props.variant === 'searchbar' &&
     css`

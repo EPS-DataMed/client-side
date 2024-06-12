@@ -13,24 +13,91 @@ import { Controller } from 'react-hook-form'
 import { Input } from '../../components/Input'
 import { SelectConfig } from '../../components/Select/SelectConfig'
 import { Sex } from '../Signup/interfaces'
+import { Breadcrumb } from '../../components/Breadcrumb'
+import { useBreadcrumbs } from './hooks/useBreadCrumbs'
+import { Padlock } from './assets/padlock'
+import { getUser } from './services'
+import { useEffect, useState } from 'react'
+import { useDialogItemToRender } from './hooks/dialogItemToRender'
+import {
+    DialogControlled,
+    useDialogControlled,
+} from '../../components/DialogControlled'
+import { useUserContext } from "../../contexts/UserContext"
+import {
+    isArrayEmpty,
+    isArrayNotEmpty,
+    isNotUndefined,
+} from '../../interfaces/typeGuards'
+
+import { DialogStep } from './interfaces/dialogStep'
 
 export function EditUser(){
+    const [user, setUser] = useState({
+        name: '',
+        email: ''
+    })
 
+    const { handleUpdateDialogControlled, isDialogControlledOpen } = useDialogControlled()
+    
+    const [dialogSubmissionStep, setDialogSubmissionStep] = useState<DialogStep>('')
+    
+
+    const { dialogItemToRender } = useDialogItemToRender({
+        handleUpdateDialogControlled,
+        dialogSubmissionStep,
+    })
+    const BREADCRUMBS = useBreadcrumbs()
     const { control, handleSubmit , formState: { errors } } = useForm<EditFormData>({
         resolver: zodResolver(EditSchema),
         defaultValues: {
-            name: '',
-            email: '',
-            dateOfBirth: '',
-            sex: ''
+            password: '',
+            newPassword: '',
+            confirmNewPassword: ''
 
         },
-      })
+    })
 
+
+    useEffect(() =>{
+        const fetchData = async () =>{
+            const userData = await getUser("")
+            console.log("user", userData)
+            setUser(userData)
+        }
+
+        fetchData()
+    }, [])
+
+    function openChangePassword() {
+        handleUpdateDialogControlled(true)
+        setDialogSubmissionStep('change_password')
+        
+    }
+
+    function openDeleteAccount(){
+        handleUpdateDialogControlled(true)
+        setDialogSubmissionStep('delete_account')
+
+    }
+
+    function handleCloseDialog() {
+        setDialogSubmissionStep('')
+        //setOptionToDelete({} as OptionProps)
+    }
 
     return (
         <>
-            <GenericPage.Root hasNoScrollbar>
+            {isDialogControlledOpen && isNotUndefined(dialogItemToRender) && (
+                <DialogControlled
+                    isDialogControlledOpen={isDialogControlledOpen}
+                    handleUpdateDialogControlled={handleUpdateDialogControlled}
+                    dialogItemToRender={dialogItemToRender}
+                    isLoadingRequisition={false}
+                    onClose={handleCloseDialog}
+                />
+            )}
+            <GenericPage.Root>
                 <S.Header>
                     <S.WrapperLogoAndLogoTitle>
                         <GenericPage.Logo />
@@ -53,8 +120,13 @@ export function EditUser(){
                         </PrimaryButton>
 
                     </ButtonsAndProfile>
+                    
                 </S.Header>
 
+                <S.BreadcrumbWrapper>
+                    <Breadcrumb items={BREADCRUMBS} />
+                </S.BreadcrumbWrapper>
+                
                 <GenericPage.Divider />
 
                 <S.MainContent>
@@ -63,54 +135,130 @@ export function EditUser(){
                         <S.SectionDescription>Visualize suas informações pessoais</S.SectionDescription>
                         <GenericPage.Divider/>
                         <S.UserDataInputs>
-                            <InputField
-                                label="Nome"
-                                name="name"
-                                control={control}
-                                description=""
-                                required
-                            />
-                            <InputField
-                                label="E-mail"
-                                name="email"
-                                control={control}
-                                description=""
-                                required
-                            />
-                            <Controller
-                                name="sex"
-                                control={control}
-                                render={({ field }) => (
-                                    <Input.Root>
-                                    <Input.Label>Sexo *</Input.Label>
-                                    <SelectConfig
-                                        items={[
-                                        { value: Sex.Masculino, label: 'Masculino' },
-                                        { value: Sex.Feminino, label: 'Feminino' },
-                                        ]}
-                                        hasError={!!errors.sex?.message}
-                                        handleValueChange={field.onChange}
-                                        defaultValue={field.value}
-                                    />
-                                    {errors.sex && (
-                                        <Input.ErrorMessageRoot>
-                                        <Input.ErrorMessage>{errors.sex.message}</Input.ErrorMessage>
-                                        </Input.ErrorMessageRoot>
-                                    )}
-                                    </Input.Root>
-                                )}
-                            />
+                            <Input.Root>
+                                <Input.Label>Nome *</Input.Label>
+                                <Input.Input
+                                    cursor="not-allowed"
+                                    edit={false}
+                                    readOnly
+                                    value={user.name}
+                                />
+                                
+                            </Input.Root>
 
 
-                            <InputField
-                                label="Data de nascimento"
-                                name="dateOfBirth"
-                                control={control}
-                                description=""
-                                required
-                            />
+                            <Input.Root>
+                                <Input.Label>E-mail *</Input.Label>
+                                <Input.Input
+                                    cursor="not-allowed"
+                                    readOnly
+                                />
+                                
+                            </Input.Root>
+
+                            <Input.Root>
+                                <Input.Label>Sexo biológico *</Input.Label>
+                                <Input.Input
+                                    cursor="not-allowed"
+                                    readOnly
+                                />
+                                
+                            </Input.Root>
+                            
+                            <Input.Root>
+                                <Input.Label>Data de nascimento *</Input.Label>
+                                <Input.Input
+                                    cursor="not-allowed"
+                                    readOnly
+                                />
+                                
+                            </Input.Root>
+
                         </S.UserDataInputs>
                     </S.Section>
+
+                    <S.Section>
+                        <S.SectionTitle>Senha</S.SectionTitle>
+                        <S.SectionDescription>Se quiser, você pode alterar sua senha</S.SectionDescription>
+                        <GenericPage.Divider/>
+                        <S.UserDataInputs>
+                            <InputField
+                                label="Senha atual"
+                                name="password"
+                                control={control}
+                                description=""
+                                type="password"
+                                required
+                            />
+                            <InputField
+                                label="Nova senha"
+                                name="newPassword"
+                                control={control}
+                                description=""
+                                type="password"
+                                required
+                            />
+                            
+                            <InputField
+                                label="Confirmar senha"
+                                name="confirmNewPassword"
+                                control={control}
+                                description=""
+                                type="password"
+                                required
+                            />
+                            
+                            <S.ButtonWrapper>
+                                <PrimaryButton
+                                    onClick={openChangePassword}
+                                >
+                                    <Padlock />
+                                    <p>Alterar</p>
+                                </PrimaryButton>
+                            </S.ButtonWrapper>
+                            
+                            
+                            
+
+                        </S.UserDataInputs>
+                    </S.Section>
+
+                    <S.DeleteSection>
+                        <S.SectionTitle>Apagar conta</S.SectionTitle>
+                        <S.SectionDescription>Se quiser, você pode apagar sua conta, você perderá todas as suas informações.</S.SectionDescription>
+                        <GenericPage.Divider/>
+                        <S.UserDataInputs>
+                            <InputField
+                                label="Senha atual"
+                                name="password"
+                                control={control}
+                                description=""
+                                type="password"
+                                required
+                            />
+                            
+                            
+                            <InputField
+                                label="Confirmar senha"
+                                name="confirmNewPassword"
+                                control={control}
+                                description=""
+                                type="password"
+                                required
+                            />
+
+                            <S.ButtonWrapper>
+                                <PrimaryButton 
+                                    variant="red"
+                                    onClick={openDeleteAccount}
+                                >
+                                    <Padlock />
+                                    <p>Apagar</p>
+                                </PrimaryButton>
+                            </S.ButtonWrapper>
+
+                        </S.UserDataInputs>
+                    </S.DeleteSection>
                 </S.MainContent>
 
                 <GenericPage.Divider />
