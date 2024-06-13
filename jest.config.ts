@@ -16,6 +16,8 @@ const config: Config.InitialOptions = {
     '!src/**/assets/**',
     '!src/**/icons/**',
     '!src/**/interfaces/**',
+    '!src/**/services/**',
+    '!src/**/repositories/**',
     '!src/**/mocks/**',
     '!src/**/utils/**',
     '!src/**/contexts/**',

@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 export interface OptionProps {
   name: string
-  id: string
+  id: string | number
 }
 
 export type SearchbarQueryHookReturnType = {

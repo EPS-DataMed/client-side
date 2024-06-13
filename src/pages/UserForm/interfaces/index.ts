@@ -1,4 +1,4 @@
-export type DialogStep = '' | 'save_form'
+export type DialogStep = '' | 'save_form' | 'logout'
 
 export interface User {
   name: string

@@ -24,6 +24,7 @@ import { PAGE_PRINT_STYLE } from './constants'
 import DatamedCard from './DatamedCard'
 import useRemoveSpecificSvg from './hooks/useRemoveSpecificSvg'
 import { schema } from './schema'
+import { useLogout } from '../../hooks/useLogout'
 
 type FormData = z.infer<typeof schema>
 
@@ -36,10 +37,6 @@ export function UserForm() {
     resolver: zodResolver(schema),
   })
 
-  console.log(
-    'hasObjectValidKeys(userInfoFilled): ',
-    hasObjectValidKeys(userInfoFilled),
-  )
   const { handleUpdateDialogControlled, isDialogControlledOpen } =
     useDialogControlled()
 
@@ -57,12 +54,18 @@ export function UserForm() {
     onAfterPrint: () => setUserInfoFilled({} as User),
   })
 
+  const { handleOpenLogoutDialog, logoutConfig } = useLogout({
+    handleOpenDialog: (value) => handleUpdateDialogControlled(value),
+    handleStep: (value: DialogStep) => setDialogSubmissionStep(value),
+  })
+
   const { dialogItemToRender } = useDialogItemToRender({
     dialogSubmissionStep,
     handleNavigationToSubmission,
     handleHealthDataPrint,
     handleUpdateDialogControlled,
     setDialogSubmissionStep,
+    logoutConfig,
   })
 
   function handleCloseDialog() {
@@ -107,13 +110,20 @@ export function UserForm() {
   return (
     <>
       <GenericPage.Root>
-        <S.Header>
-          <S.WrapperLogoAndLogoTitle>
-            <GenericPage.Logo />
-            <GenericPage.LogoTitle>DataMed</GenericPage.LogoTitle>
-          </S.WrapperLogoAndLogoTitle>
+        <S.WrapperHeaderAndBreadcrumb>
+          <GenericPage.Header>
+            <S.WrapperLogoAndLogoTitle>
+              <GenericPage.Logo />
+              <GenericPage.LogoTitle>DataMed</GenericPage.LogoTitle>
+            </S.WrapperLogoAndLogoTitle>
+
+            <GenericPage.HeaderOptions>
+              <GenericPage.ProfileButton letter="D" />
+              <GenericPage.LogoutButton action={handleOpenLogoutDialog} />
+            </GenericPage.HeaderOptions>
+          </GenericPage.Header>
           <Breadcrumb items={BREADCRUMBS} />
-        </S.Header>
+        </S.WrapperHeaderAndBreadcrumb>
 
         <GenericPage.Divider />
 

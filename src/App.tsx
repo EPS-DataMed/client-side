@@ -12,7 +12,9 @@ import { UserForm } from './pages/UserForm'
 import { Login } from './pages/Login'
 import { Signup } from './pages/Signup'
 import { UserProvider } from './contexts/UserContext'
-import ProtectedRoute from './components/ProtectedRoute'
+// import ProtectedRoute from './components/ProtectedRoute'
+import { ManagerUsers } from './pages/ManagerUsers'
+import { DependentConfirm } from './pages/DependentConfirm'
 
 export const queryClient = new QueryClient()
 
@@ -39,23 +41,11 @@ export function App() {
               <Routes>
                 <Route path="/" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
-                <Route
-                  path="/home"
-                  element={
-                    <ProtectedRoute>
-                      <HomePage />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/submission"
-                  element={
-                    <ProtectedRoute>
-                      <Submission />
-                    </ProtectedRoute>
-                  }
-                />
+                <Route path="/confirm" element={<DependentConfirm />} />
+                <Route path="/home" element={<HomePage />} />
+                <Route path="/submission/:path" element={<Submission />} />
                 <Route path="/form" element={<UserForm />} />
+                <Route path="/manager/users" element={<ManagerUsers />} />
                 <Route path="*" element={<Login />} />
               </Routes>
             </SubmissionTestProvider>

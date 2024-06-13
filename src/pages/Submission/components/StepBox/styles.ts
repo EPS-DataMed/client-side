@@ -6,6 +6,7 @@ import {
   slideAnimation,
   verticalAnimation,
 } from '../../../../styles/animations'
+import { Skeleton } from '../../../../components/Skeleton'
 
 interface ContainerProps {
   enabled: boolean
@@ -90,4 +91,19 @@ function chooseAnimationOption(option: 'slide' | 'vertical' | 'rotate' | 'fadeIn
 
 export const AnimationDiv = styled.div<AnimationDivProps>`
   animation: ${({ animation }) => chooseAnimationOption(animation)} ${({ timeAnimation }) => timeAnimation} ${({ typeAnimation }) => typeAnimation};
+`
+
+export const SkeletonContainer = styled(Skeleton)`
+  border-radius: ${({ theme }) => theme.radii.xs};
+  transition: background-color 1s ease-in-out;
+  transition: border-color 1s ease-in-out;
+
+  background-color: ${({ theme }) => theme.colors.neutral50};
+
+  border: 2px solid ${({ theme }) => theme.colors.neutral400};
+  height: 360px;
+  width: 355px;
+
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  animation: ${fadeInAnimation} 0.5s linear;
 `

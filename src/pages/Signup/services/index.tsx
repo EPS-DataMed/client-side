@@ -1,17 +1,15 @@
 import { api } from '../../../lib/axios'
 
 interface CreateUserPayload {
-  nome_completo: string
+  full_name: string
   email: string
-  data_nascimento: string
-  sexo_biologico: string
-  formulario: object
-  status_formulario: string
-  senha: string
+  birth_date: string
+  biological_sex: string
+  password: string
 }
 
 export const createUser = async (payload: CreateUserPayload) => {
-  const response = await api.post('/user/users', payload, {
+  const response = await api.post('/auth/users', payload, {
     headers: {
       'Content-Type': 'application/json',
     },
