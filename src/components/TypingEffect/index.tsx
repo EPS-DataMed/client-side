@@ -10,17 +10,22 @@ const TypingEffect: React.FC<TypingEffectProps> = ({ text, speed = 100 }) => {
 
   useEffect(() => {
     let currentIndex = 0
+    setDisplayedText('')
 
-    const interval = setInterval(() => {
-      if (currentIndex < text.length - 1) {
-        setDisplayedText((prev) => prev + text[currentIndex])
-        currentIndex++
-      } else {
-        clearInterval(interval)
-      }
-    }, speed)
+    const timeout = setTimeout(() => {
+      const interval = setInterval(() => {
+        if (currentIndex < text.length - 1) {
+          setDisplayedText((prev) => prev + text[currentIndex])
+          currentIndex++
+        } else {
+          clearInterval(interval)
+        }
+      }, speed)
 
-    return () => clearInterval(interval)
+      return () => clearInterval(interval)
+    }, 20)
+
+    return () => clearTimeout(timeout)
   }, [text, speed])
 
   return <span>{displayedText}</span>

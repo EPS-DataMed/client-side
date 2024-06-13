@@ -7,11 +7,18 @@ export const WrapperLogoAndLogoTitle = styled.div`
   align-items: center;
   gap: ${({ theme }) => theme.space[4]};
 `
-export const Header = styled.header`
+
+export const WrapperHeaderAndBreadcrumb = styled.div`
   display: flex;
   flex-direction: column;
+  margin-bottom: ${({ theme }) => theme.space[2]};
+`
+
+export const Header = styled.header`
+  display: flex;
   gap: ${({ theme }) => theme.space[4]};
   margin-bottom: ${({ theme }) => theme.space[2]};
+  justify-content: space-between;
 `
 
 export const MainContent = styled.main`

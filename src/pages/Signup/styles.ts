@@ -66,7 +66,6 @@ export const RegisterArea = styled.div`
 
 export const RegisterPhrase = styled.span`
   font-size: ${({ theme }) => theme.fontSizes.sm};
-  font-weight: ${({ theme }) => theme.fontWeights.bold};
   color: ${({ theme }) => theme.colors.neutral900};
 `
 

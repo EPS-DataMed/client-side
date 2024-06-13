@@ -10,6 +10,7 @@ interface InputFieldProps {
   description?: string
   required?: boolean
   disabled?: boolean
+  width?: string
 }
 
 const InputField: React.FC<InputFieldProps> = ({
@@ -20,6 +21,7 @@ const InputField: React.FC<InputFieldProps> = ({
   description,
   required = false,
   disabled = false,
+  width = '225px',
 }) => {
   const {
     field,
@@ -31,7 +33,7 @@ const InputField: React.FC<InputFieldProps> = ({
   })
 
   return (
-    <Input.Root style={{ width: '225px' }}>
+    <Input.Root style={{ width }}>
       <Input.Label>
         {label}
         {required && (

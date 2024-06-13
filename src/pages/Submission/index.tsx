@@ -24,6 +24,10 @@ import { DialogStep } from './interfaces'
 import { SUBMIT_EXAM_OPTIONS } from './constants'
 import { useBreadcrumbs } from './hooks/useBreadcrumbs'
 import { ProcessDataLoading } from './components/ProcessDataLoading'
+import { useParams } from 'react-router-dom'
+import { useLogout } from '../../hooks/useLogout'
+import { listExamsRepository } from './repositories/listExamsRepository'
+import { SkeletonContainer } from './components/StepBox/styles'
 
 export function Submission() {
   const [isLoadingSubmissionTest, setIsLoadingSubmissionTest] = useState(false)
@@ -36,12 +40,9 @@ export function Submission() {
   const [dialogSubmissionStep, setDialogSubmissionStep] =
     useState<DialogStep>('')
 
-  const { dialogItemToRender } = useDialogItemToRender({
-    handleUpdateDialogControlled,
-    dialogSubmissionStep,
-  })
+  const { path } = useParams()
 
-  const BREADCRUMBS = useBreadcrumbs()
+  const BREADCRUMBS = useBreadcrumbs({ path: path as string })
 
   function handleSubmissionTest() {
     setIsLoadingSubmissionTest(true)
@@ -58,7 +59,7 @@ export function Submission() {
 
   const formattedFiles = filesUploaded.map((file) => {
     return {
-      name: file.name,
+      name: file.test_name,
       id: file.id,
     }
   })
@@ -76,16 +77,36 @@ export function Submission() {
     setOptionToDelete({} as OptionProps)
   }
 
+  const { handleOpenLogoutDialog, logoutConfig } = useLogout({
+    handleOpenDialog: (value) => handleUpdateDialogControlled(value),
+    handleStep: (value: DialogStep) => setDialogSubmissionStep(value),
+  })
+
+  const { dialogItemToRender } = useDialogItemToRender({
+    handleUpdateDialogControlled,
+    dialogSubmissionStep,
+    logoutConfig,
+  })
+
+  const { isListExamsLoading } = listExamsRepository()
+
   return (
     <>
       <GenericPage.Root hasNoScrollbar>
-        <S.Header>
-          <S.WrapperLogoAndLogoTitle>
-            <GenericPage.Logo />
-            <GenericPage.LogoTitle>DataMed</GenericPage.LogoTitle>
-          </S.WrapperLogoAndLogoTitle>
+        <S.WrapperHeaderAndBreadcrumb>
+          <GenericPage.Header>
+            <S.WrapperLogoAndLogoTitle>
+              <GenericPage.Logo />
+              <GenericPage.LogoTitle>DataMed</GenericPage.LogoTitle>
+            </S.WrapperLogoAndLogoTitle>
+
+            <GenericPage.HeaderOptions>
+              <GenericPage.ProfileButton letter="D" />
+              <GenericPage.LogoutButton action={handleOpenLogoutDialog} />
+            </GenericPage.HeaderOptions>
+          </GenericPage.Header>
           <Breadcrumb items={BREADCRUMBS} />
-        </S.Header>
+        </S.WrapperHeaderAndBreadcrumb>
 
         <GenericPage.Divider />
 
@@ -107,37 +128,41 @@ export function Submission() {
               </S.WrapperPageInformation>
 
               <S.WrrapperBoxes>
-                <FileUploader.FileUploader
-                  success={hasFiles}
-                  {...getRootProps()}
-                  variant={'valid'}
-                  data-testid="file-uploader"
-                >
-                  <FileUploader.AnimationUploadIcon>
-                    <FileUploader.UploadIcon success={hasFiles} />
-                  </FileUploader.AnimationUploadIcon>
-                  <div>
-                    <FileUploader.WrapperIconAndMessageUpload>
-                      <FileUploader.MessageUpload>
-                        Arraste seu(s) exame(s) aqui ou{' '}
-                        <FileUploader.MessageUploadBold>
-                          clique para buscar
-                        </FileUploader.MessageUploadBold>{' '}
-                        em seu computador.
-                      </FileUploader.MessageUpload>
-                    </FileUploader.WrapperIconAndMessageUpload>
+                {isListExamsLoading ? (
+                  <SkeletonContainer />
+                ) : (
+                  <FileUploader.FileUploader
+                    success={hasFiles}
+                    {...getRootProps()}
+                    variant={'valid'}
+                    data-testid="file-uploader"
+                  >
+                    <FileUploader.AnimationUploadIcon>
+                      <FileUploader.UploadIcon success={hasFiles} />
+                    </FileUploader.AnimationUploadIcon>
+                    <div>
+                      <FileUploader.WrapperIconAndMessageUpload>
+                        <FileUploader.MessageUpload>
+                          Arraste seu(s) exame(s) aqui ou{' '}
+                          <FileUploader.MessageUploadBold>
+                            clique para buscar
+                          </FileUploader.MessageUploadBold>{' '}
+                          em seu computador.
+                        </FileUploader.MessageUpload>
+                      </FileUploader.WrapperIconAndMessageUpload>
 
-                    <FileUploader.MessageUploadDescription>
-                      Apenas arquivos no formato <b>pdf</b> são permitidos.
-                    </FileUploader.MessageUploadDescription>
-                  </div>
+                      <FileUploader.MessageUploadDescription>
+                        Apenas arquivos no formato <b>pdf</b> são permitidos.
+                      </FileUploader.MessageUploadDescription>
+                    </div>
 
-                  <input
-                    name="dropzone-file"
-                    {...getInputProps()}
-                    data-testid="thumbnail-file"
-                  />
-                </FileUploader.FileUploader>
+                    <input
+                      name="dropzone-file"
+                      {...getInputProps()}
+                      data-testid="thumbnail-file"
+                    />
+                  </FileUploader.FileUploader>
+                )}
 
                 <StepBox
                   icon={selectedOptionEnabledFormatted.icon}
@@ -148,6 +173,7 @@ export function Submission() {
                   timeAnimation={selectedOptionEnabledFormatted.timeAnimation}
                   data-testid="step-box"
                   typeBox={hasFiles ? 'load_success' : undefined}
+                  activeSkeleton={isListExamsLoading}
                 />
 
                 {!hasFiles && (
@@ -159,6 +185,7 @@ export function Submission() {
                     enabled={!loadingFiles && hasFiles}
                     description="Sua lista de exames está vazia. Adicione seu(s) exame(s) e visualize-os aqui."
                     data-testid="step-box-empty"
+                    activeSkeleton={isListExamsLoading}
                   />
                 )}
 
@@ -169,6 +196,7 @@ export function Submission() {
                     enabled={true}
                     data-testid="step-box-filled"
                     typeBox="list_tests"
+                    activeSkeleton={isListExamsLoading}
                   >
                     <S.UploadedDocumentsContainer data-testid="uploaded-documents-container">
                       <S.WrapperInformations>

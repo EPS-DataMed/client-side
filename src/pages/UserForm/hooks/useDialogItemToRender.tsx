@@ -8,6 +8,7 @@ interface DialogItemToRenderProps {
   dialogSubmissionStep: DialogStep
   handleNavigationToSubmission: () => void
   handleHealthDataPrint: any
+  logoutConfig: any
   handleUpdateDialogControlled: (open: boolean) => void
   setDialogSubmissionStep: (value: React.SetStateAction<DialogStep>) => void
 }
@@ -18,6 +19,7 @@ export function useDialogItemToRender({
   handleHealthDataPrint,
   handleUpdateDialogControlled,
   setDialogSubmissionStep,
+  logoutConfig,
 }: DialogItemToRenderProps) {
   const titleFormatted = useTitleDialogStatus({
     fullString: 'Formulário salvo com sucesso!',
@@ -70,6 +72,7 @@ export function useDialogItemToRender({
         },
       ],
     },
+    logout: logoutConfig,
   }
 
   const dialogItemToRender = dialogConfig[dialogSubmissionStep]

@@ -7,3 +7,7 @@ export const saveCookie = (name: string, value: string, days: number) => {
 export const getCookie = (name: string): string | undefined => {
   return Cookies.get(name)
 }
+
+export function removeAccessToken() {
+  Cookies.remove('access_token')
+}

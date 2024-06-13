@@ -9,6 +9,7 @@ interface StepBoxProps extends React.HTMLAttributes<HTMLDivElement> {
   typeAnimation?: 'infinite' | 'linear' | 'ease-in-out'
   timeAnimation?: string
   typeBox?: 'load_success' | 'list_tests'
+  activeSkeleton?: boolean
 }
 
 export function StepBox({
@@ -20,9 +21,14 @@ export function StepBox({
   typeAnimation = 'infinite',
   timeAnimation = '2s',
   typeBox,
+  activeSkeleton = false,
   ...rest
 }: StepBoxProps) {
   const hasIcon = Icon && animation
+
+  if (activeSkeleton) {
+    return <S.SkeletonContainer />
+  }
 
   return (
     <S.Container typeBox={typeBox} enabled={enabled} {...rest}>
