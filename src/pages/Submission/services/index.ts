@@ -1,12 +1,19 @@
 import { AxiosResponse } from 'axios'
 import { api } from '../../../lib/axios'
-import { DeleteResponse, Exam } from '../interfaces'
+import {
+  DeleteResponse,
+  Exam,
+  GetResponseProps,
+  RequestDeleteFile,
+  RequestExams,
+  RequestUploadProps,
+} from '../interfaces'
 
-export const uploadFiles = async (
-  userId: number,
-  files: File[],
-  token?: string,
-): Promise<any> => {
+export const uploadFiles = async ({
+  files,
+  token,
+  userId,
+}: RequestUploadProps): Promise<any> => {
   const formData = new FormData()
   files.forEach((file) => {
     formData.append('files', file)
@@ -14,28 +21,23 @@ export const uploadFiles = async (
 
   const headers: Record<string, string> = {
     'Content-Type': 'multipart/form-data',
-  }
-  if (token) {
-    headers.Authorization = `Bearer ${token}`
+    Authorization: `Bearer ${token}`,
   }
 
-  const response: AxiosResponse<any> = await api.post(
-    `/data/upload/${userId}`,
-    formData,
-    { headers },
-  )
+  const response = await api.post(`/data/upload/${userId}`, formData, {
+    headers,
+  })
 
   return response.data
 }
 
-export const deleteFile = async (
-  userId: number,
-  fileId: number,
-  token?: string,
-): Promise<DeleteResponse> => {
-  const headers: Record<string, string> = {}
-  if (token) {
-    headers.Authorization = `Bearer ${token}`
+export const deleteFile = async ({
+  userId,
+  token,
+  fileId,
+}: RequestDeleteFile): Promise<DeleteResponse> => {
+  const headers: Record<string, string> = {
+    Authorization: `Bearer ${token}`,
   }
 
   const response: AxiosResponse<DeleteResponse> = await api.delete(
@@ -46,19 +48,18 @@ export const deleteFile = async (
   return response.data
 }
 
-export const getExams = async (
-  userId: number,
-  token?: string,
-): Promise<Exam[]> => {
-  const headers: Record<string, string> = {}
-  if (token) {
-    headers.Authorization = `Bearer ${token}`
+export const getExams = async ({
+  token,
+  userId,
+}: RequestExams): Promise<Exam[]> => {
+  const headers: Record<string, string> = {
+    Authorization: `Bearer ${token}`,
   }
 
-  const response: AxiosResponse<Exam[]> = await api.get(
+  const response: AxiosResponse<GetResponseProps> = await api.get(
     `/data/tests/${userId}`,
     { headers },
   )
 
-  return response.data
+  return response.data.data
 }

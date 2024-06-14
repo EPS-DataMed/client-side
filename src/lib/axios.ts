@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseURL = 'https://data-processing-service.onrender.com/'
+const baseURL = 'https://gateway-zhl1.onrender.com'
 
 export const api = axios.create({
   baseURL,

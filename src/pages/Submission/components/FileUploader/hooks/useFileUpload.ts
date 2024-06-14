@@ -3,12 +3,16 @@ import { useDropzone } from 'react-dropzone'
 import { useSubmissionTestContext } from '../../../../../contexts/SubmissionTestContext'
 import { ErrorToast, SuccessToast } from '../../../../../components/Toast'
 import { uploadFiles } from '../../../services'
+import { getUserId } from '../../../../../utils/getUserId'
+import { getCookie } from '../../../../../utils/cookies'
 
 type VariantFile = 'valid' | 'invalid'
 
 export function useFileUpload() {
   const [loadingFiles, setLoadingFiles] = useState(false)
   const firstRender = useRef(true)
+  const { userId } = getUserId()
+  const token = getCookie('access_token')
 
   const { setFilesUploaded, filesUploaded } = useSubmissionTestContext()
 
@@ -30,7 +34,11 @@ export function useFileUpload() {
       }
 
       try {
-        const uploadResponse = await uploadFiles(1, acceptedFiles)
+        const uploadResponse = await uploadFiles({
+          token: token as string,
+          files: acceptedFiles,
+          userId: userId as number,
+        })
         SuccessToast('Arquivos enviados com sucesso')
 
         const newFiles = Array.isArray(uploadResponse.data)
@@ -43,7 +51,7 @@ export function useFileUpload() {
         setLoadingFiles(false)
       }
     },
-    [filesUploaded, setFilesUploaded],
+    [filesUploaded, setFilesUploaded, token, userId],
   )
 
   const { getRootProps, getInputProps, isDragAccept, acceptedFiles } =

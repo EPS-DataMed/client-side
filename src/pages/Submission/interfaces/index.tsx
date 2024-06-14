@@ -7,7 +7,28 @@ export interface Exam {
   submission_date: string
 }
 
+export interface RequestUploadProps {
+  userId: number
+  files: File[]
+  token: string
+}
+
+export interface RequestDeleteFile {
+  userId: number
+  fileId: number
+  token: string
+}
+
+export interface RequestExams {
+  userId: number
+  token: string
+}
 export interface DeleteResponse {
   success: boolean
   message: string
+  data: Exam[]
+}
+
+export interface GetResponseProps {
+  data: Exam[]
 }

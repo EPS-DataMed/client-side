@@ -19,12 +19,12 @@ export const createUser = async (payload: CreateUserPayload) => {
 
 interface CreateDoctorPayload {
   crm: string
-  especialidade: string
-  id_usuario: number
+  specialty: string
+  user_id: number
 }
 
 export const createDoctor = async (payload: CreateDoctorPayload) => {
-  const response = await api.post('/user/doctors', payload, {
+  const response = await api.post('/auth/doctors', payload, {
     headers: {
       'Content-Type': 'application/json',
     },

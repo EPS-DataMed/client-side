@@ -1,15 +1,20 @@
 import { useQuery } from 'react-query'
 import { getExams } from '../services'
 import { useSubmissionTestContext } from '../../../contexts/SubmissionTestContext'
+import { getUserId } from '../../../utils/getUserId'
+import { getCookie } from '../../../utils/cookies'
 
 export function listExamsRepository() {
   const { setFilesUploaded } = useSubmissionTestContext()
 
-  // const token = getCookie('access_token')
-  // const { user_id } =
+  const { userId } = getUserId()
+  const token = getCookie('access_token')
 
   async function fetchListExams(): Promise<void> {
-    const response = await getExams(1)
+    const response = await getExams({
+      token: token as string,
+      userId: userId as number,
+    })
 
     setFilesUploaded(response)
   }

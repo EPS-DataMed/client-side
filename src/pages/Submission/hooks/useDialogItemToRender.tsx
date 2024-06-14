@@ -2,6 +2,8 @@ import { DialogConfig } from '../../../components/DialogControlled/interfaces'
 import { SuccessToast } from '../../../components/Toast'
 import { useSubmissionTestContext } from '../../../contexts/SubmissionTestContext'
 import { defaultTheme } from '../../../styles/themes/default'
+import { getCookie } from '../../../utils/cookies'
+import { getUserId } from '../../../utils/getUserId'
 import { DialogStep } from '../interfaces'
 import { deleteFile } from '../services'
 
@@ -18,8 +20,15 @@ export function useDialogItemToRender({
 }: DialogItemToRenderProps) {
   const { handleDeleteFileUpload, optionToDelete } = useSubmissionTestContext()
 
+  const { userId } = getUserId()
+  const token = getCookie('access_token')
+
   function deleteExam() {
-    deleteFile(1, Number(optionToDelete.id))
+    deleteFile({
+      fileId: Number(optionToDelete.id),
+      userId: userId as number,
+      token: token as string,
+    })
     handleDeleteFileUpload()
     handleUpdateDialogControlled(false)
     SuccessToast('Exame deletado com sucesso!')

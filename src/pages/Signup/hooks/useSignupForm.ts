@@ -76,8 +76,8 @@ export const useSignupForm = () => {
       if (isMedicalInfoFilled) {
         const doctorPayload = {
           crm: data.crm as string,
-          especialidade: data.specialty as string,
-          id_usuario: userId,
+          specialty: data.specialty as string,
+          user_id: userId,
         }
         await createDoctor(doctorPayload)
       }
