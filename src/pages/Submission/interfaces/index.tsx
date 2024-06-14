@@ -28,7 +28,3 @@ export interface DeleteResponse {
   message: string
   data: Exam[]
 }
-
-export interface GetResponseProps {
-  data: Exam[]
-}

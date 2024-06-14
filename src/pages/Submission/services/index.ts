@@ -3,7 +3,6 @@ import { api } from '../../../lib/axios'
 import {
   DeleteResponse,
   Exam,
-  GetResponseProps,
   RequestDeleteFile,
   RequestExams,
   RequestUploadProps,
@@ -54,12 +53,12 @@ export const getExams = async ({
 }: RequestExams): Promise<Exam[]> => {
   const headers: Record<string, string> = {
     Authorization: `Bearer ${token}`,
+    Accept: 'application/json',
   }
 
-  const response: AxiosResponse<GetResponseProps> = await api.get(
-    `/data/tests/${userId}`,
-    { headers },
-  )
+  const response: AxiosResponse<any> = await api.get(`/data/tests/${userId}`, {
+    headers,
+  })
 
-  return response.data.data
+  return response.data.data || response.data.content.data
 }
