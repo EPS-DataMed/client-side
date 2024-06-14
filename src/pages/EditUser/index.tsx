@@ -9,10 +9,7 @@ import InputField from '../../components/Input/InputField'
 import { EditFormData, EditSchema } from './schema'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Controller } from 'react-hook-form'
 import { Input } from '../../components/Input'
-import { SelectConfig } from '../../components/Select/SelectConfig'
-import { Sex } from '../Signup/interfaces'
 import { Breadcrumb } from '../../components/Breadcrumb'
 import { useBreadcrumbs } from './hooks/useBreadCrumbs'
 import { Padlock } from './assets/padlock'
@@ -23,19 +20,30 @@ import {
     DialogControlled,
     useDialogControlled,
 } from '../../components/DialogControlled'
-import { useUserContext } from "../../contexts/UserContext"
 import {
-    isArrayEmpty,
-    isArrayNotEmpty,
     isNotUndefined,
 } from '../../interfaces/typeGuards'
 
 import { DialogStep } from './interfaces/dialogStep'
-
+import { getUserId } from '../../utils/getUserId'
+import { useEditUserForm } from './hooks/useEditUserForm'
 export function EditUser(){
+
+    const {
+        
+        
+        loading,
+        onSubmit,
+        
+      } = useEditUserForm()
+
     const [user, setUser] = useState({
-        name: '',
-        email: ''
+        content:{
+            nome_completo: '',
+            email: '',
+            data_nascimento: '',
+            sexo_biologico: '',
+        }
     })
 
     const { handleUpdateDialogControlled, isDialogControlledOpen } = useDialogControlled()
@@ -61,7 +69,8 @@ export function EditUser(){
 
     useEffect(() =>{
         const fetchData = async () =>{
-            const userData = await getUser("")
+            const { userId } = getUserId()
+            const userData = await getUser(userId)
             console.log("user", userData)
             setUser(userData)
         }
@@ -86,6 +95,10 @@ export function EditUser(){
         //setOptionToDelete({} as OptionProps)
     }
 
+    function getFormattedDate(date: string){
+        let split_date = date.split('-')
+        return `${split_date[2]}/${split_date[1]}/${split_date[0]}`
+    }
     return (
         <>
             {isDialogControlledOpen && isNotUndefined(dialogItemToRender) && (
@@ -95,6 +108,7 @@ export function EditUser(){
                     dialogItemToRender={dialogItemToRender}
                     isLoadingRequisition={false}
                     onClose={handleCloseDialog}
+                    onSubmit={handleSubmit(onSubmit)}
                 />
             )}
             <GenericPage.Root>
@@ -141,7 +155,7 @@ export function EditUser(){
                                     cursor="not-allowed"
                                     edit={false}
                                     readOnly
-                                    value={user.name}
+                                    value={user.content.nome_completo}
                                 />
                                 
                             </Input.Root>
@@ -152,6 +166,7 @@ export function EditUser(){
                                 <Input.Input
                                     cursor="not-allowed"
                                     readOnly
+                                    value={user.content.email}
                                 />
                                 
                             </Input.Root>
@@ -161,6 +176,7 @@ export function EditUser(){
                                 <Input.Input
                                     cursor="not-allowed"
                                     readOnly
+                                    value={user.content.sexo_biologico === 'M' ? 'Masculino' : 'Feminino'}
                                 />
                                 
                             </Input.Root>
@@ -170,6 +186,7 @@ export function EditUser(){
                                 <Input.Input
                                     cursor="not-allowed"
                                     readOnly
+                                    value={getFormattedDate(user.content.data_nascimento)}
                                 />
                                 
                             </Input.Root>

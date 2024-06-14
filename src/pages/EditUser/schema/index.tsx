@@ -1,8 +1,8 @@
 import { z } from 'zod'
-import { Sex } from '../../Signup/interfaces'
+
 
 export const EditSchema = z.object({
-    
+    userId: z.number(),
   
     password: z
       .string()

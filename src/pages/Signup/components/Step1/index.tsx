@@ -36,6 +36,7 @@ export function Step1({ control, errors, setStep }: StepProps) {
           control={control}
           description="Informe sua data de nascimento."
           required
+          type="date"
         />
 
         <Controller
