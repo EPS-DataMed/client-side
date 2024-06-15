@@ -5,16 +5,11 @@ import {
   SearchbarQueryHookReturnType,
   useSearchbarQuery,
 } from '../components/Searchbar/hooks/useSearchbarQuery'
-
-export type Files = {
-  name: string
-  url: string
-  id: string
-}[]
+import { Exam } from '../pages/Submission/interfaces'
 
 interface SubmissionTestContextType {
-  filesUploaded: Files
-  setFilesUploaded: React.Dispatch<React.SetStateAction<Files>>
+  filesUploaded: Exam[]
+  setFilesUploaded: React.Dispatch<React.SetStateAction<Exam[]>>
   setOptionToDelete: React.Dispatch<React.SetStateAction<OptionProps>>
   handleDeleteFileUpload: () => void
   optionToDelete: OptionProps
@@ -32,7 +27,7 @@ export const SubmissionTestContext = createContext(
 export function SubmissionTestProvider({
   children,
 }: SubmissionTestProviderProps) {
-  const [filesUploaded, setFilesUploaded] = useState<Files>([])
+  const [filesUploaded, setFilesUploaded] = useState<Exam[]>([])
   const [optionToDelete, setOptionToDelete] = useState<OptionProps>(
     {} as OptionProps,
   )
@@ -43,7 +38,7 @@ export function SubmissionTestProvider({
 
   const handleDeleteFileUpload = useCallback(() => {
     setFilesUploaded((prev) =>
-      prev.filter((file) => file.id !== optionToDelete.id),
+      prev.filter((file) => file.id !== Number(optionToDelete.id)),
     )
     setSelectedOption({} as OptionProps)
     setQuery('')

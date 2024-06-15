@@ -7,11 +7,11 @@ export interface BreadcrumbItem {
   activate?: boolean
 }
 
-export function useBreadcrumbs() {
+export function useBreadcrumbs({ path }: { path: string }) {
   const navigateTo = useNavigation()
 
-  const BREADCRUMBS: BreadcrumbItem[] = useMemo(
-    () => [
+  const BREADCRUMBS: BreadcrumbItem[] = useMemo(() => {
+    const breadcrumbs: BreadcrumbItem[] = [
       {
         label: 'Home',
         action: () => navigateTo('/home'),
@@ -20,9 +20,17 @@ export function useBreadcrumbs() {
         label: 'Enviar exames',
         activate: true,
       },
-    ],
-    [navigateTo],
-  )
+    ]
+
+    if (path === 'manager') {
+      breadcrumbs.splice(1, 0, {
+        label: 'Gerenciar dependentes',
+        action: () => navigateTo('/manager/users'),
+      })
+    }
+
+    return breadcrumbs
+  }, [navigateTo, path])
 
   return BREADCRUMBS
 }

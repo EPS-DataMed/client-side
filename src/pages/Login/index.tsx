@@ -33,7 +33,7 @@ export function Login() {
     setLoading(true)
     try {
       const response = await login(data)
-      saveCookie('access_token', response.content.access_token, 1)
+      saveCookie('access_token', response.content.access_token, 30)
       navigate(`/home`)
     } catch (error) {
       ErrorToast(
@@ -45,16 +45,22 @@ export function Login() {
   }
 
   return (
-    <Page.Background>
-      {!imageLoaded && <Skeleton style={{ width: '50vw', height: '100%' }} />}
+    <Page.Background data-testid="login-background">
+      {!imageLoaded && (
+        <Skeleton
+          style={{ width: '50vw', height: '100%' }}
+          data-testid="login-skeleton"
+        />
+      )}
       <Page.Image
         alt="Doctor"
         src="https://github.com/EPS-DataMed/client-side/blob/r1/src/pages/HomePage/assets/login.png?raw=true"
         onLoad={() => setImageLoaded(true)}
         style={{ display: imageLoaded ? 'block' : 'none' }}
+        data-testid="login-image"
       />
-      <Page.Content>
-        <Page.WrapperLogoAndText>
+      <Page.Content data-testid="login-content">
+        <Page.WrapperLogoAndText data-testid="logo-and-text">
           <LargeLogo />
           <Page.LogoTitle>
             <TypingEffect text="Daatamed" />
@@ -64,7 +70,7 @@ export function Login() {
           </Page.Slogan>
         </Page.WrapperLogoAndText>
 
-        <S.LoginForm onSubmit={handleSubmit(onSubmit)}>
+        <S.LoginForm onSubmit={handleSubmit(onSubmit)} data-testid="login-form">
           <InputField
             label="E-mail"
             name="email"
@@ -83,10 +89,21 @@ export function Login() {
           />
 
           <S.WrapperButtonAndLink>
-            <PrimaryButton type="submit" disabled={loading}>
+            <PrimaryButton
+              type="submit"
+              disabled={loading}
+              data-testid="submit-button"
+            >
               {loading ? 'Carregando...' : 'Entrar'} <ArrowRight />
             </PrimaryButton>
-            <S.Link>Esqueceu a senha?</S.Link>
+            <S.Link
+              onClick={() => {
+                navigate('/recover')
+              }}
+              data-testid="forgot-password-link"
+            >
+              Esqueceu a senha?
+            </S.Link>
           </S.WrapperButtonAndLink>
         </S.LoginForm>
 
@@ -97,6 +114,7 @@ export function Login() {
               onClick={() => {
                 navigate('/signup')
               }}
+              data-testid="signup-link"
             >
               Cadastre-se
             </S.Link>

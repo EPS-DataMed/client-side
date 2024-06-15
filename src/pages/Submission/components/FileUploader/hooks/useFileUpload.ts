@@ -2,14 +2,17 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { useSubmissionTestContext } from '../../../../../contexts/SubmissionTestContext'
 import { ErrorToast, SuccessToast } from '../../../../../components/Toast'
-import { generateRandomId } from '../../../../../utils/mockFunctions'
 import { uploadFiles } from '../../../services'
+import { getUserId } from '../../../../../utils/getUserId'
+import { getCookie } from '../../../../../utils/cookies'
 
 type VariantFile = 'valid' | 'invalid'
 
 export function useFileUpload() {
   const [loadingFiles, setLoadingFiles] = useState(false)
   const firstRender = useRef(true)
+  const { userId } = getUserId()
+  const token = getCookie('access_token')
 
   const { setFilesUploaded, filesUploaded } = useSubmissionTestContext()
 
@@ -17,7 +20,9 @@ export function useFileUpload() {
     async (acceptedFiles: File[]) => {
       setLoadingFiles(true)
       const duplicateNames = acceptedFiles.filter((file) =>
-        filesUploaded.some((existingFile) => existingFile.name === file.name),
+        filesUploaded.some(
+          (existingFile) => existingFile.test_name === file.name,
+        ),
       )
 
       if (duplicateNames.length > 0) {
@@ -29,25 +34,24 @@ export function useFileUpload() {
       }
 
       try {
-        const uploadResponse = await uploadFiles(acceptedFiles, 9)
+        const uploadResponse = await uploadFiles({
+          token: token as string,
+          files: acceptedFiles,
+          userId: userId as number,
+        })
         SuccessToast('Arquivos enviados com sucesso')
 
-        setFilesUploaded((prevFiles) =>
-          prevFiles.concat(
-            acceptedFiles.map((file) => ({
-              name: file.name,
-              url: uploadResponse.url || 'www.example.com',
-              id: generateRandomId(),
-            })),
-          ),
-        )
+        const newFiles = Array.isArray(uploadResponse.data)
+          ? uploadResponse.data
+          : [uploadResponse.data]
+        setFilesUploaded((prev) => [...prev, ...newFiles])
       } catch (error) {
         ErrorToast('Não foi possível enviar o arquivo!')
       } finally {
         setLoadingFiles(false)
       }
     },
-    [filesUploaded, setFilesUploaded, setLoadingFiles],
+    [filesUploaded, setFilesUploaded, token, userId],
   )
 
   const { getRootProps, getInputProps, isDragAccept, acceptedFiles } =
@@ -60,7 +64,7 @@ export function useFileUpload() {
 
   const onClearFile = (name: string) => {
     setFilesUploaded((prevFiles) =>
-      prevFiles.filter((file) => file.name !== name),
+      prevFiles.filter((file) => file.test_name !== name),
     )
   }
 

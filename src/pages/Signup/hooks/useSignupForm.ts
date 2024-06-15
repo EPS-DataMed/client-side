@@ -62,13 +62,11 @@ export const useSignupForm = () => {
       const formattedDateOfBirth = formatDate(data.dateOfBirth)
 
       const userPayload = {
-        nome_completo: data.name,
+        full_name: data.name,
         email: data.email,
-        data_nascimento: formattedDateOfBirth,
-        sexo_biologico: data.sex === 'Masculino' ? 'M' : 'F',
-        formulario: {},
-        status_formulario: 'Não iniciado',
-        senha: data.password,
+        birth_date: formattedDateOfBirth,
+        biological_sex: data.sex === 'Masculino' ? 'M' : 'F',
+        password: data.password,
       }
 
       const userResponse = await createUser(userPayload)
@@ -78,8 +76,8 @@ export const useSignupForm = () => {
       if (isMedicalInfoFilled) {
         const doctorPayload = {
           crm: data.crm as string,
-          especialidade: data.specialty as string,
-          id_usuario: userId,
+          specialty: data.specialty as string,
+          user_id: userId,
         }
         await createDoctor(doctorPayload)
       }

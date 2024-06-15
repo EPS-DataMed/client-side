@@ -1,18 +1,25 @@
 import { GenericPage } from '../../components/GenericPage'
-import { PrimaryButton } from '../../components/PrimaryButton'
-import { ButtonsAndProfile } from '../../components/ButtonsAndProfile'
-import { ProfileCircle } from '../../components/ProfileCircle'
-import { Pen } from '../../assets/icons/pen'
-import { Logout } from '../../assets/icons/logout'
 import * as S from './styles'
 import useNavigation from '../../hooks/useNavigation'
 import { useState } from 'react'
+import {
+  DialogControlled,
+  useDialogControlled,
+} from '../../components/DialogControlled'
+import { useLogout } from '../../hooks/useLogout'
+import { ProfileButton } from '../../components/ProfileButton'
+
+export type HomePageDialog = 'logout' | ''
 
 export function HomePage() {
   const navigateTo = useNavigation()
 
   const handleNavigationToSubmission = () => {
-    navigateTo('/submission')
+    navigateTo('/submission/home')
+  }
+
+  const handleNavigationToManagerUsers = () => {
+    navigateTo('/manager/users')
   }
 
   const navigateToUserData = () =>{
@@ -28,6 +35,13 @@ export function HomePage() {
   const [imageManagerPatientLoaded, setImageManagerPatientLoaded] =
     useState(false)
 
+  const { handleUpdateDialogControlled, isDialogControlledOpen } =
+    useDialogControlled()
+
+  const { handleOpenLogoutDialog, logoutConfig } = useLogout({
+    handleOpenDialog: (value) => handleUpdateDialogControlled(value),
+  })
+
   return (
     <>
       <GenericPage.Root hasNoScrollbar>
@@ -37,19 +51,10 @@ export function HomePage() {
             <GenericPage.LogoTitle>DataMed</GenericPage.LogoTitle>
           </S.WrapperLogoAndLogoTitle>
 
-          <ButtonsAndProfile>
-            <ProfileCircle>
-              <p>D</p>
-            </ProfileCircle>
-            <PrimaryButton onClick={navigateToUserData}>
-              <Pen />
-              <p>Paciente</p>
-            </PrimaryButton>
-            <PrimaryButton variant="red">
-              <Logout />
-              <p>Sair</p>
-            </PrimaryButton>
-          </ButtonsAndProfile>
+          <GenericPage.HeaderOptions>
+            <ProfileButton letter="D" />
+            <GenericPage.LogoutButton action={handleOpenLogoutDialog} />
+          </GenericPage.HeaderOptions>
         </S.Header>
 
         <GenericPage.Divider />
@@ -73,7 +78,7 @@ export function HomePage() {
               </S.ImageWrapper>
             </S.HomepageOption>
 
-            <S.HomepageOption>
+            <S.HomepageOption onClick={handleNavigationToManagerUsers}>
               <S.OptionTitle>Gerenciar Pacientes</S.OptionTitle>
               <S.OptionDescription>
                 Adicione e gerencie os exames do seu paciente.
@@ -93,6 +98,13 @@ export function HomePage() {
         </S.MainContent>
         <GenericPage.Divider />
       </GenericPage.Root>
+
+      <DialogControlled
+        isDialogControlledOpen={isDialogControlledOpen}
+        handleUpdateDialogControlled={handleUpdateDialogControlled}
+        dialogItemToRender={logoutConfig}
+        isLoadingRequisition={false}
+      />
     </>
   )
 }

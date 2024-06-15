@@ -32,7 +32,7 @@ const InputField: React.FC<InputFieldProps> = ({
 
   return (
     <Input.Root>
-      <Input.Label>
+      <Input.Label htmlFor={name}>
         {label}
         {required && (
           <Input.RequiredText variant={error ? 'error' : ''}>
@@ -43,6 +43,7 @@ const InputField: React.FC<InputFieldProps> = ({
       {description && <Input.Description>{description}</Input.Description>}
       <Input.Input
         {...field}
+        id={name}
         type={type}
         placeholder={placeholder}
         hasError={Boolean(error)}

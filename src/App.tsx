@@ -13,7 +13,11 @@ import { Login } from './pages/Login'
 import { Signup } from './pages/Signup'
 import { EditUser } from './pages/EditUser'
 import { UserProvider } from './contexts/UserContext'
+import { ManagerUsers } from './pages/ManagerUsers'
+import { DependentConfirm } from './pages/DependentConfirm'
 import ProtectedRoute from './components/ProtectedRoute'
+import { RecoverPassword } from './pages/RecoverPassword'
+import { ChangePassword } from './pages/ChangePassword'
 
 export const queryClient = new QueryClient()
 
@@ -35,33 +39,49 @@ export function App() {
           theme="colored"
         />
         <Router>
-          <UserProvider>
-            <SubmissionTestProvider>
-              <Routes>
-                <Route path="/" element={<Login />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route
-                  path="/home"
-                  element={
-                    <ProtectedRoute>
-                      <HomePage />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/submission"
-                  element={
-                    <ProtectedRoute>
-                      <Submission />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route path="/form" element={<UserForm />} />
-                <Route path="*" element={<Login />} />
-                <Route path="/edituser" element={<EditUser/>}/>
-              </Routes>
-            </SubmissionTestProvider>
-          </UserProvider>
+          <SubmissionTestProvider>
+            <Routes>
+              <Route path="/" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/recover" element={<RecoverPassword />} />
+              <Route path="/change" element={<ChangePassword />} />
+              <Route path="/confirm" element={<DependentConfirm />} />
+              <Route
+                path="/home"
+                element={
+                  <ProtectedRoute>
+                    <HomePage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/submission/:path"
+                element={
+                  <ProtectedRoute>
+                    <Submission />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/form"
+                element={
+                  <ProtectedRoute>
+                    <UserForm />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/manager/users"
+                element={
+                  <ProtectedRoute>
+                    <ManagerUsers />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="*" element={<Login />} />
+              <Route path="/edituser" element={<EditUser/>}/>
+            </Routes>
+          </SubmissionTestProvider>
         </Router>
       </ThemeProvider>
     </QueryClientProvider>

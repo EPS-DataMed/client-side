@@ -26,6 +26,7 @@ describe('Toast Functions', () => {
     expect(toast.error).toHaveBeenCalledWith(message, {
       ...defaultConfig,
       ...customConfig,
+      toastId: 'error-toast',
     })
   })
 
@@ -38,6 +39,7 @@ describe('Toast Functions', () => {
     expect(toast.success).toHaveBeenCalledWith(message, {
       ...defaultConfig,
       ...customConfig,
+      toastId: 'success-toast',
     })
   })
 
@@ -50,6 +52,7 @@ describe('Toast Functions', () => {
     expect(toast.info).toHaveBeenCalledWith(message, {
       ...defaultConfig,
       ...customConfig,
+      toastId: 'info-toast',
     })
   })
 
@@ -58,7 +61,10 @@ describe('Toast Functions', () => {
 
     ErrorToast(message)
 
-    expect(toast.error).toHaveBeenCalledWith(message, defaultConfig)
+    expect(toast.error).toHaveBeenCalledWith(message, {
+      ...defaultConfig,
+      toastId: 'error-toast',
+    })
   })
 
   it('should call toast.success with default config if no custom config is provided for SuccessToast', () => {
@@ -66,7 +72,10 @@ describe('Toast Functions', () => {
 
     SuccessToast(message)
 
-    expect(toast.success).toHaveBeenCalledWith(message, defaultConfig)
+    expect(toast.success).toHaveBeenCalledWith(message, {
+      ...defaultConfig,
+      toastId: 'success-toast',
+    })
   })
 
   it('should call toast.info with default config if no custom config is provided for InfoToast', () => {
@@ -74,6 +83,9 @@ describe('Toast Functions', () => {
 
     InfoToast(message)
 
-    expect(toast.info).toHaveBeenCalledWith(message, defaultConfig)
+    expect(toast.info).toHaveBeenCalledWith(message, {
+      ...defaultConfig,
+      toastId: 'info-toast',
+    })
   })
 })

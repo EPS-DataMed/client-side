@@ -3,11 +3,14 @@ import React from 'react'
 interface LogoSVGProps {
   width?: string
   height?: string
+  onClick?: () => void
 }
 
 export const LogoSVG: React.FC<LogoSVGProps> = ({
   width = '61',
   height = '57',
+  onClick,
+  ...rest
 }) => {
   return (
     <svg
@@ -16,6 +19,9 @@ export const LogoSVG: React.FC<LogoSVGProps> = ({
       viewBox="0 0 61 57"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      onClick={onClick}
+      style={{ cursor: 'pointer' }}
+      {...rest}
     >
       <path
         d="M57.5 24.5C57.5 37.7021 45.4676 48.5 30.5 48.5C15.5324 48.5 3.5 37.7021 3.5 24.5C3.5 11.2979 15.5324 0.5 30.5 0.5C45.4676 0.5 57.5 11.2979 57.5 24.5Z"
