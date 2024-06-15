@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios'
-import { api } from '../../../lib/axios'
+import { api, uploadApi } from '../../../lib/axios'
 import {
   DeleteResponse,
   Exam,
@@ -19,10 +19,11 @@ export const uploadFiles = async ({
   })
 
   const headers: Record<string, string> = {
+    'Content-Type': 'multipart/form-data',
     Authorization: `Bearer ${token}`,
   }
 
-  const response = await api.post(`/data/upload/${userId}`, formData, {
+  const response = await uploadApi.post(`/data/upload/${userId}`, formData, {
     headers,
   })
 
