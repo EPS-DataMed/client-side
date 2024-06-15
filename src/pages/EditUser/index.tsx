@@ -6,7 +6,7 @@ import * as S from './styles'
 import { Pen } from '../../assets/icons/pen'
 import { Logout } from '../../assets/icons/logout'
 import InputField from '../../components/Input/InputField'
-import { EditFormData, EditSchema } from './schema'
+import { EditFormData, EditSchema, DeleteAccData, DeleteAccSchema } from './schema'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Input } from '../../components/Input'
@@ -27,6 +27,7 @@ import {
 import { DialogStep } from './interfaces/dialogStep'
 import { getUserId } from '../../utils/getUserId'
 import { useEditUserForm } from './hooks/useEditUserForm'
+import { useDeleteAccForm } from './hooks/useDeleteAccForm'
 export function EditUser(){
 
     const {
@@ -35,7 +36,15 @@ export function EditUser(){
         loading,
         onSubmit,
         
-      } = useEditUserForm()
+    } = useEditUserForm()
+
+    const {
+        
+        
+        loading: loadingDel,
+        onSubmit: onSubmitDel,
+        
+    } = useDeleteAccForm()
 
     const [user, setUser] = useState({
         content:{
@@ -56,11 +65,20 @@ export function EditUser(){
         dialogSubmissionStep,
     })
     const BREADCRUMBS = useBreadcrumbs()
-    const { control, handleSubmit , formState: { errors } } = useForm<EditFormData>({
+    const { control, handleSubmit  } = useForm<EditFormData>({
         resolver: zodResolver(EditSchema),
         defaultValues: {
             password: '',
             newPassword: '',
+            confirmNewPassword: ''
+
+        },
+    })
+
+    const { control:controlDel, handleSubmit: handleSubmitDel} = useForm<DeleteAccData>({
+        resolver: zodResolver(DeleteAccSchema),
+        defaultValues: {
+            password: '',
             confirmNewPassword: ''
 
         },
@@ -108,7 +126,7 @@ export function EditUser(){
                     dialogItemToRender={dialogItemToRender}
                     isLoadingRequisition={false}
                     onClose={handleCloseDialog}
-                    onSubmit={handleSubmit(onSubmit)}
+                    
                 />
             )}
             <GenericPage.Root>
@@ -227,7 +245,7 @@ export function EditUser(){
                             
                             <S.ButtonWrapper>
                                 <PrimaryButton
-                                    onClick={openChangePassword}
+                                    onClick={handleSubmit(onSubmit)}
                                 >
                                     <Padlock />
                                     <p>Alterar</p>
@@ -248,7 +266,7 @@ export function EditUser(){
                             <InputField
                                 label="Senha atual"
                                 name="password"
-                                control={control}
+                                control={controlDel}
                                 description=""
                                 type="password"
                                 required
@@ -258,7 +276,7 @@ export function EditUser(){
                             <InputField
                                 label="Confirmar senha"
                                 name="confirmNewPassword"
-                                control={control}
+                                control={controlDel}
                                 description=""
                                 type="password"
                                 required
@@ -267,7 +285,7 @@ export function EditUser(){
                             <S.ButtonWrapper>
                                 <PrimaryButton 
                                     variant="red"
-                                    onClick={openDeleteAccount}
+                                    onClick={handleSubmitDel(onSubmitDel)}
                                 >
                                     <Padlock />
                                     <p>Apagar</p>

@@ -14,3 +14,6 @@ export interface EditPasswordPayload {
   senha: string
 }
   
+export interface DeleteResponse{
+  response: string
+}

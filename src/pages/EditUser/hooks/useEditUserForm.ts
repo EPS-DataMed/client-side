@@ -30,20 +30,20 @@ export const useEditUserForm = () => {
 //   const specialty = watch('specialty')
 //   const isMedicalInfoFilled = !!crm && !!specialty
 
-  const findEditPasswordError = async () => {
-    const fields = [
-        'password',
-        'newPassword',
-        'confirmNewPassword'
-    ]
-    for (let i = 0; i < fields.length; i++) {
-      const valid = await trigger(fields[i] as keyof EditFormData)
-      if (!valid) {
-        return fields[i]
-      }
-    }
-    return null
-  }
+  // const findEditPasswordError = async () => {
+  //   const fields = [
+  //       'password',
+  //       'newPassword',
+  //       'confirmNewPassword'
+  //   ]
+  //   for (let i = 0; i < fields.length; i++) {
+  //     const valid = await trigger(fields[i] as keyof EditFormData)
+  //     if (!valid) {
+  //       return fields[i]
+  //     }
+  //   }
+  //   return null
+  // }
 
   const onSubmit: SubmitHandler<EditFormData> = async (data) => {
     setLoading(true)
@@ -62,8 +62,8 @@ export const useEditUserForm = () => {
 
       navigateTo('/', { replace: true })
     } catch (error) {
-      ErrorToast('Erro ao cadastrar usuário. Tente novamente mais tarde.')
-      console.error('Erro ao cadastrar usuário:', error)
+      ErrorToast('Erro mudar senha. Tente novamente mais tarde.')
+      console.error('Erro mudar senha:', error)
     } finally {
       setLoading(false)
     }
