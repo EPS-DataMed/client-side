@@ -14,6 +14,8 @@ const config: Config.InitialOptions = {
     '!src/**/*.d.ts',
     '!src/**/*.styles.ts',
     '!src/**/assets/**',
+    '!src/**/constants/**',
+    '!src/**/hooks/**',
     '!src/**/icons/**',
     '!src/**/interfaces/**',
     '!src/**/services/**',

@@ -19,7 +19,6 @@ export const uploadFiles = async ({
   })
 
   const headers: Record<string, string> = {
-    'Content-Type': 'multipart/form-data',
     Authorization: `Bearer ${token}`,
   }
 

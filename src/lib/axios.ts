@@ -2,7 +2,7 @@ import axios from 'axios'
 import 'react-toastify/dist/ReactToastify.css'
 import { ErrorToast } from '../components/Toast'
 
-const baseURL = 'https://gateway-zhl1.onrender.com'
+const baseURL = 'https://data-processing-service.onrender.com'
 
 export const api = axios.create({
   baseURL,

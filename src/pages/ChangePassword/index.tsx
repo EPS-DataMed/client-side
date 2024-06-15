@@ -9,32 +9,29 @@ import InputField from '../../components/Input/InputField'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Skeleton } from '../../components/Skeleton'
-import { LoginFormData, loginSchema } from './schema'
-import { login } from './services'
-import { saveCookie } from '../../utils/cookies'
-import { ErrorToast } from '../../components/Toast'
+import { ChangePasswordFormData, ChangePasswordSchema } from './schema'
+import { ErrorToast, SuccessToast } from '../../components/Toast'
 import { useNavigate } from 'react-router-dom'
 
-export function Login() {
+export function ChangePassword() {
   const [loading, setLoading] = useState(false)
   const [imageLoaded, setImageLoaded] = useState(false)
 
-  const { control, handleSubmit } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
+  const { control, handleSubmit } = useForm<ChangePasswordFormData>({
+    resolver: zodResolver(ChangePasswordSchema),
     defaultValues: {
-      email: '',
       password: '',
+      confirmPassword: '',
     },
   })
 
   const navigate = useNavigate()
 
-  const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
+  const onSubmit: SubmitHandler<ChangePasswordFormData> = async (data) => {
     setLoading(true)
     try {
-      const response = await login(data)
-      saveCookie('access_token', response.content.access_token, 30)
-      navigate(`/home`)
+      console.log(data)
+      SuccessToast('Senha alterada com sucesso!')
     } catch (error) {
       ErrorToast(
         'Verifique suas informações novamente! Ou tente novamente mais tarde.',
@@ -45,78 +42,57 @@ export function Login() {
   }
 
   return (
-    <Page.Background data-testid="login-background">
-      {!imageLoaded && (
-        <Skeleton
-          style={{ width: '50vw', height: '100%' }}
-          data-testid="login-skeleton"
-        />
-      )}
+    <Page.Background>
+      {!imageLoaded && <Skeleton style={{ width: '50vw', height: '100%' }} />}
       <Page.Image
         alt="Doctor"
         src="https://github.com/EPS-DataMed/client-side/blob/r1/src/pages/HomePage/assets/login.png?raw=true"
         onLoad={() => setImageLoaded(true)}
         style={{ display: imageLoaded ? 'block' : 'none' }}
-        data-testid="login-image"
       />
-      <Page.Content data-testid="login-content">
-        <Page.WrapperLogoAndText data-testid="logo-and-text">
+      <Page.Content>
+        <Page.WrapperLogoAndText>
           <LargeLogo />
           <Page.LogoTitle>
             <TypingEffect text="Daatamed" />
           </Page.LogoTitle>
-          <Page.Slogan>
-            <TypingEffect text="Teenha seus dados de saúde ao seu alcance." />
-          </Page.Slogan>
+          <S.Slogan>Por favor, informe sua nova senha e confirme.</S.Slogan>
         </Page.WrapperLogoAndText>
 
-        <S.LoginForm onSubmit={handleSubmit(onSubmit)} data-testid="login-form">
+        <S.Form onSubmit={handleSubmit(onSubmit)}>
           <InputField
-            label="E-mail"
-            name="email"
+            label="Nova Senha"
+            name="password"
+            type="password"
             control={control}
-            description="Informe o seu e-mail pessoal."
+            description="Informe a sua nova senha."
             required
           />
-
           <InputField
-            label="Senha"
-            name="password"
-            control={control}
-            description="Informe a sua senha."
+            label="Confirme a Nova Senha"
+            name="confirmPassword"
             type="password"
+            control={control}
+            description="Confirme a sua nova senha."
             required
           />
 
           <S.WrapperButtonAndLink>
-            <PrimaryButton
-              type="submit"
-              disabled={loading}
-              data-testid="submit-button"
-            >
-              {loading ? 'Carregando...' : 'Entrar'} <ArrowRight />
+            <PrimaryButton type="submit" disabled={loading}>
+              {loading ? 'Carregando...' : 'Enviar'} <ArrowRight />
             </PrimaryButton>
-            <S.Link
-              onClick={() => {
-                navigate('/recover')
-              }}
-              data-testid="forgot-password-link"
-            >
-              Esqueceu a senha?
-            </S.Link>
           </S.WrapperButtonAndLink>
-        </S.LoginForm>
+        </S.Form>
 
         <S.RegisterArea>
           <S.RegisterPhrase>
-            Não possui uma conta?{' '}
+            Se desejar volte para o{' '}
             <S.Link
               onClick={() => {
-                navigate('/signup')
+                navigate('/')
               }}
-              data-testid="signup-link"
             >
-              Cadastre-se
+              login
             </S.Link>
           </S.RegisterPhrase>
         </S.RegisterArea>
