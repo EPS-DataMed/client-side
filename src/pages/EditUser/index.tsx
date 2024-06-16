@@ -1,7 +1,5 @@
 import { GenericPage } from '../../components/GenericPage'
 import { PrimaryButton } from '../../components/PrimaryButton'
-import { ButtonsAndProfile } from '../../components/ButtonsAndProfile'
-import { ProfileCircle } from '../../components/ProfileCircle'
 import * as S from './styles'
 import { Pen } from '../../assets/icons/pen'
 import { Logout } from '../../assets/icons/logout'
@@ -136,10 +134,9 @@ export function EditUser(){
                         <GenericPage.LogoTitle>DataMed</GenericPage.LogoTitle>
                     </S.WrapperLogoAndLogoTitle>
 
-                    <ButtonsAndProfile>
-                        <ProfileCircle>
-                            <p>D</p>
-                        </ProfileCircle>
+                    <GenericPage.HeaderOptions>
+                        <GenericPage.ProfileButton letter="D" />
+                       
 
                         <PrimaryButton>
                             <Pen />
@@ -151,7 +148,7 @@ export function EditUser(){
                             <p>Sair</p>
                         </PrimaryButton>
 
-                    </ButtonsAndProfile>
+                    </GenericPage.HeaderOptions>
                     
                 </S.Header>
 
