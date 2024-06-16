@@ -45,7 +45,7 @@ describe('Login Component', () => {
   })
 
   test('handles successful login', async () => {
-    mockedLogin.mockResolvedValue({ content: { access_token: 'test-token' } })
+    mockedLogin.mockResolvedValue({ access_token: 'test-token' })
     renderWithProviders(<Login />)
 
     fireEvent.change(screen.getByLabelText(/e-mail/i), {
