@@ -19,6 +19,12 @@ export const SignupSchema = z
     confirmPassword: z.string().min(1, 'Confirmação de senha é obrigatória'),
     crm: z.string().optional(),
     specialty: z.string().optional(),
+    termsOfPrivacy: z.boolean().refine((val) => val === true, {
+      message: 'Aceitação dos Termos de Privacidade é obrigatória',
+    }),
+    termsOfUse: z.boolean().refine((val) => val === true, {
+      message: 'Aceitação dos Termos de Uso é obrigatória',
+    }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'As senhas estão diferentes',

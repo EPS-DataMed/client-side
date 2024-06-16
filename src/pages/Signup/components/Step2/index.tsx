@@ -1,10 +1,13 @@
-import { ArrowLeft, ArrowRight } from '../../../../assets/icons'
+import { Controller } from 'react-hook-form'
 import InputField from '../../../../components/Input/InputField'
 import { PrimaryButton } from '../../../../components/PrimaryButton'
 import { StepProps } from '../../interfaces'
 import * as S from '../../styles'
+import Checkbox from '../../../../components/Checkbox'
+import { ArrowLeft, ArrowRight } from '../../../../assets/icons'
+import { Input } from '../../../../components/Input'
 
-export function Step2({ control, setStep }: StepProps) {
+export function Step2({ control, errors, setStep }: StepProps) {
   return (
     <>
       <S.SignupInstruction>
@@ -29,6 +32,46 @@ export function Step2({ control, setStep }: StepProps) {
           description="Confirme sua senha definida no campo acima."
           required
         />
+
+        <Controller
+          name="termsOfPrivacy"
+          control={control}
+          render={({ field }) => (
+            <Checkbox
+              checked={field.value}
+              onChange={(e) => {
+                field.onChange(e.target.checked)
+              }}
+              label="Eu aceito os Termos de Privacidade"
+            />
+          )}
+        />
+        {errors.termsOfPrivacy && (
+          <Input.ErrorMessageRoot>
+            <Input.ErrorMessage>
+              {errors.termsOfPrivacy.message}
+            </Input.ErrorMessage>
+          </Input.ErrorMessageRoot>
+        )}
+
+        <Controller
+          name="termsOfUse"
+          control={control}
+          render={({ field }) => (
+            <Checkbox
+              checked={field.value}
+              onChange={(e) => {
+                field.onChange(e.target.checked)
+              }}
+              label="Eu aceito os Termos de Uso"
+            />
+          )}
+        />
+        {errors.termsOfUse && (
+          <Input.ErrorMessageRoot>
+            <Input.ErrorMessage>{errors.termsOfUse.message}</Input.ErrorMessage>
+          </Input.ErrorMessageRoot>
+        )}
       </S.SignupFieldsForm>
 
       <S.ForwardButtonWrapper>

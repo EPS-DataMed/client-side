@@ -23,7 +23,7 @@ export const uploadFiles = async ({
     Authorization: `Bearer ${token}`,
   }
 
-  const response = await uploadApi.post(`/data/upload/${userId}`, formData, {
+  const response = await uploadApi.post(`/file/upload/${userId}`, formData, {
     headers,
   })
 
@@ -40,7 +40,7 @@ export const deleteFile = async ({
   }
 
   const response: AxiosResponse<DeleteResponse> = await api.delete(
-    `/data/delete/${userId}/${fileId}`,
+    `/file/delete/${userId}/${fileId}`,
     { headers },
   )
 
@@ -56,7 +56,7 @@ export const getExams = async ({
     Accept: 'application/json',
   }
 
-  const response: AxiosResponse<any> = await api.get(`/data/tests/${userId}`, {
+  const response: AxiosResponse<any> = await api.get(`/file/tests/${userId}`, {
     headers,
   })
 

@@ -9,11 +9,11 @@ export interface User {
   bloodType: string
   abdominalCircumference: string
   hemoglobin: string
-  ast?: string
-  alt?: string
-  urea?: string
+  ast: string
+  alt: string
+  urea: string
   redBloodCell: string
-  creatinine?: string
+  creatinine: string
   hematocrit: string
   glycatedHemoglobin: string
   allergies: string
@@ -22,7 +22,6 @@ export interface User {
   familyHistory: string
   importantNotes?: string
   imageReports?: string
-  healthScore?: number
 }
 
 interface HGraphDatum {

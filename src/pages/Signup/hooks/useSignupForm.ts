@@ -29,6 +29,8 @@ export const useSignupForm = () => {
       confirmPassword: '',
       crm: '',
       specialty: '',
+      termsOfPrivacy: false,
+      termsOfUse: false,
     },
   })
 
@@ -46,6 +48,8 @@ export const useSignupForm = () => {
       'confirmPassword',
       'crm',
       'specialty',
+      'termsOfPrivacy',
+      'termsOfUse',
     ]
     for (let i = 0; i < fields.length; i++) {
       const valid = await trigger(fields[i] as keyof SignupFormData)
@@ -105,6 +109,8 @@ export const useSignupForm = () => {
           break
         case 'password':
         case 'confirmPassword':
+        case 'termsOfPrivacy':
+        case 'termsOfUse':
           setStep(2)
           break
         case 'crm':

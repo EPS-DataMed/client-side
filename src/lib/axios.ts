@@ -3,7 +3,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import { ErrorToast } from '../components/Toast'
 
 const baseURL = 'https://gateway-vctd.onrender.com'
-const uploadURL = 'https://data-processing-service.onrender.com'
+const uploadURL = 'https://file-manager-iuhn.onrender.com'
 
 export const api = axios.create({
   baseURL,
