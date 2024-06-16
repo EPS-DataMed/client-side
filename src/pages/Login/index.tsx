@@ -33,8 +33,7 @@ export function Login() {
     setLoading(true)
     try {
       const response = await login(data)
-
-      saveCookie('access_token', response.access_token, 30)
+      saveCookie('access_token', response.content.access_token, 30)
       navigate(`/home`)
     } catch (error) {
       ErrorToast(

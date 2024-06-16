@@ -1,4 +1,6 @@
 export interface LoginResponse {
-  access_token: string
-  token_type: string
+  content: {
+    access_token: string
+    token_type: string
+  }
 }
