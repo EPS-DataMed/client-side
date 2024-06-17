@@ -55,7 +55,7 @@ export function RecoverPassword() {
         <Page.WrapperLogoAndText>
           <LargeLogo />
           <Page.LogoTitle>
-            <TypingEffect text="Daatamed" />
+            <TypingEffect text="Datamed" />
           </Page.LogoTitle>
           <S.Slogan>
             Esqueceu sua senha? Nos informe o seu e-mail

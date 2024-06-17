@@ -41,10 +41,10 @@ export function Signup() {
         <Page.WrapperLogoAndText>
           <LogoSVG height="91px" width="98px" />
           <Page.LogoTitle>
-            <TypingEffect text="Daatamed" />
+            <TypingEffect text="Datamed" />
           </Page.LogoTitle>
           <Page.Slogan>
-            <TypingEffect text="Teenha seus dados de saúde ao seu alcance." />
+            <TypingEffect text="Tenha seus dados de saúde ao seu alcance." />
           </Page.Slogan>
         </Page.WrapperLogoAndText>
 

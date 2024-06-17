@@ -3,11 +3,51 @@ import InputField from '../../../../components/Input/InputField'
 import { PrimaryButton } from '../../../../components/PrimaryButton'
 import { StepProps } from '../../interfaces'
 import * as S from '../../styles'
-import Checkbox from '../../../../components/Checkbox'
+import Checkbox, { PrivacyLink } from '../../../../components/Checkbox'
 import { ArrowLeft, ArrowRight } from '../../../../assets/icons'
 import { Input } from '../../../../components/Input'
+import { generatePrivacy, generateTerms } from '../../services'
+import { ErrorToast } from '../../../../components/Toast'
 
 export function Step2({ control, errors, setStep }: StepProps) {
+  const handleTermsOfUseClick = async () => {
+    const projectName = 'Datamed'
+    const contactEmail = 'datamedoficial@gmail.com'
+
+    try {
+      const data = await generateTerms({ projectName, contactEmail })
+      const url = window.URL.createObjectURL(data)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `${projectName.toLowerCase()}_terms.pdf`
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+    } catch (error) {
+      ErrorToast('Erro ao gerar os termos, tente novamente mais tarde.')
+    }
+  }
+
+  const handlePrivacyClick = async () => {
+    const projectName = 'Datamed'
+    const contactEmail = 'datamedoficial@gmail.com'
+
+    try {
+      const data = await generatePrivacy({ projectName, contactEmail })
+      const url = window.URL.createObjectURL(data)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `${projectName.toLowerCase()}_privacy.pdf`
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+    } catch (error) {
+      ErrorToast(
+        'Erro ao gerar os termos de privacidade, tente novamente mais tarde.',
+      )
+    }
+  }
+
   return (
     <>
       <S.SignupInstruction>
@@ -42,7 +82,14 @@ export function Step2({ control, errors, setStep }: StepProps) {
               onChange={(e) => {
                 field.onChange(e.target.checked)
               }}
-              label="Eu aceito os Termos de Privacidade"
+              label={
+                <>
+                  Eu aceito os{' '}
+                  <PrivacyLink onClick={handlePrivacyClick}>
+                    Termos de Privacidade
+                  </PrivacyLink>
+                </>
+              }
             />
           )}
         />
@@ -63,7 +110,14 @@ export function Step2({ control, errors, setStep }: StepProps) {
               onChange={(e) => {
                 field.onChange(e.target.checked)
               }}
-              label="Eu aceito os Termos de Uso"
+              label={
+                <>
+                  Eu aceito os{' '}
+                  <PrivacyLink onClick={handleTermsOfUseClick}>
+                    Termos de Uso
+                  </PrivacyLink>
+                </>
+              }
             />
           )}
         />

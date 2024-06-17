@@ -4,13 +4,11 @@ import styled from 'styled-components'
 const CheckboxContainer = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: ${(props) => props.theme.space[2]};
 `
 
 const HiddenCheckbox = styled.input.attrs({ type: 'checkbox' })`
   border: 0;
   clip: rect(0 0 0 0);
-  clippath: inset(50%);
   height: 1px;
   margin: -1px;
   overflow: hidden;
@@ -53,14 +51,20 @@ const CheckboxLabel = styled.label`
   margin-left: ${(props) => props.theme.space[2]};
   cursor: pointer;
   font-family: ${(props) => props.theme.fonts.primary};
-  font-size: ${(props) => props.theme.fontSizes.md};
+  font-size: ${(props) => props.theme.fontSizes.sm};
   color: ${(props) => props.theme.colors.neutral700};
+`
+
+export const PrivacyLink = styled.span`
+  color: ${(props) => props.theme.colors.blue500};
+  text-decoration: underline;
+  cursor: pointer;
 `
 
 interface CheckboxProps {
   checked: boolean
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-  label: string
+  label: string | JSX.Element
 }
 
 const Checkbox: React.FC<CheckboxProps> = ({ checked, onChange, label }) => (

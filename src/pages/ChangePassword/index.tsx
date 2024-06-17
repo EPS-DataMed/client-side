@@ -54,7 +54,7 @@ export function ChangePassword() {
         <Page.WrapperLogoAndText>
           <LargeLogo />
           <Page.LogoTitle>
-            <TypingEffect text="Daatamed" />
+            <TypingEffect text="Datamed" />
           </Page.LogoTitle>
           <S.Slogan>Por favor, informe sua nova senha e confirme.</S.Slogan>
         </Page.WrapperLogoAndText>

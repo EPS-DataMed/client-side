@@ -2,11 +2,12 @@ import axios from 'axios'
 import 'react-toastify/dist/ReactToastify.css'
 import { ErrorToast } from '../components/Toast'
 
-const baseURL = 'https://gateway-vctd.onrender.com'
-const uploadURL = 'https://file-manager-iuhn.onrender.com'
+const BASE_URL = 'https://gateway-vctd.onrender.com'
+const UPLOAD_URL = 'https://file-manager-iuhn.onrender.com'
+const TERM_URL = 'https://terms-qynk.onrender.com/'
 
 export const api = axios.create({
-  baseURL,
+  baseURL: BASE_URL,
 })
 
 api.interceptors.response.use(
@@ -25,7 +26,7 @@ api.interceptors.response.use(
 )
 
 export const uploadApi = axios.create({
-  baseURL: uploadURL,
+  baseURL: UPLOAD_URL,
 })
 
 uploadApi.interceptors.response.use(
@@ -42,3 +43,7 @@ uploadApi.interceptors.response.use(
     return Promise.reject(error)
   },
 )
+
+export const termApi = axios.create({
+  baseURL: TERM_URL,
+})

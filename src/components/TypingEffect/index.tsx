@@ -1,34 +1,23 @@
-import { useEffect, useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
-interface TypingEffectProps {
-  text: string
-  speed?: number
-}
-
-const TypingEffect: React.FC<TypingEffectProps> = ({ text, speed = 100 }) => {
-  const [displayedText, setDisplayedText] = useState('')
+const TypingEffect: React.FC<{ text: string }> = ({ text }) => {
+  const [displayText, setDisplayText] = useState('')
 
   useEffect(() => {
-    let currentIndex = 0
-    setDisplayedText('')
+    let index = 0
+    const interval = setInterval(() => {
+      if (index <= text.length) {
+        setDisplayText(text.slice(0, index))
+        index++
+      } else {
+        clearInterval(interval)
+      }
+    }, 100)
 
-    const timeout = setTimeout(() => {
-      const interval = setInterval(() => {
-        if (currentIndex < text.length - 1) {
-          setDisplayedText((prev) => prev + text[currentIndex])
-          currentIndex++
-        } else {
-          clearInterval(interval)
-        }
-      }, speed)
+    return () => clearInterval(interval)
+  }, [text])
 
-      return () => clearInterval(interval)
-    }, 20)
-
-    return () => clearTimeout(timeout)
-  }, [text, speed])
-
-  return <span>{displayedText}</span>
+  return <span>{displayText}</span>
 }
 
 export default TypingEffect
