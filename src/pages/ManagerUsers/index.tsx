@@ -1,3 +1,4 @@
+import React, { useCallback, useState } from 'react'
 import {
   DialogControlled,
   useDialogControlled,
@@ -5,10 +6,8 @@ import {
 import { isArrayNotEmpty, isNotUndefined } from '../../interfaces/typeGuards'
 import { useDialogItemToRender } from './hooks/useDialogItemToRender'
 import * as S from './styles'
-import React, { useCallback, useState } from 'react'
 import { ErrorToast, SuccessToast } from '../../components/Toast'
 import { TableSkeleton } from './components/TableSkeleton'
-
 import { TitleUpdater } from '../../components/TitleUpdater'
 import { Empty } from '../../components/Empty'
 import { GenericPage } from '../../components/GenericPage'
@@ -19,6 +18,7 @@ import { Pen } from '../../assets/icons/pen'
 import useNavigation from '../../hooks/useNavigation'
 import { Dependent } from './interfaces'
 import { useLogout } from '../../hooks/useLogout'
+import { useUserContext } from '../../contexts/UserContext'
 
 export const DEPENDENTS: Dependent[] = [
   {
@@ -90,39 +90,47 @@ export function ManagerUsers() {
   const [dialogManagerUsersStep, setDialogManagerUsersStep] =
     useState<ManagerUsersDialog>('')
   const [isDeleting, setIsDeleting] = useState(false)
-  const [dependentToDelete, setDependentToDelete] = useState({} as Dependent)
+  const [dependentToDelete, setDependentToDelete] = useState<Dependent | null>(
+    null,
+  )
 
   const navigateTo = useNavigation()
+  const { isUserExists, isDoctor } = useUserContext()
 
-  function handleOpenAddDependentDialog() {
+  const handleOpenAddDependentDialog = () => {
     handleUpdateDialogControlled(true)
     setDialogManagerUsersStep('add_dependent')
   }
 
   const deleteDependentDialog = useCallback(() => {
-    setIsDeleting(true)
-    try {
-      const filledDependentes = dependents.filter(
-        (dependent) => dependent.id !== dependentToDelete.id,
-      )
-
-      setDependents(filledDependentes)
-      SuccessToast('Dependente excluído com sucesso!')
-    } catch (e) {
-      ErrorToast(
-        'Não foi possível excluir o dependente, tente novamente mais tarde.',
-      )
-    } finally {
-      setIsDeleting(false)
+    if (dependentToDelete) {
+      setIsDeleting(true)
+      try {
+        const updatedDependents = dependents.filter(
+          (dependent) => dependent.id !== dependentToDelete.id,
+        )
+        setDependents(updatedDependents)
+        SuccessToast(
+          isDoctor
+            ? 'Paciente excluído com sucesso!'
+            : 'Dependente excluído com sucesso!',
+        )
+      } catch (e) {
+        ErrorToast(
+          'Não foi possível realizar a ação, tente novamente mais tarde.',
+        )
+      } finally {
+        setIsDeleting(false)
+      }
     }
-  }, [dependentToDelete.id, dependents])
+  }, [dependentToDelete, dependents, isDoctor])
 
   const { handleUpdateDialogControlled, isDialogControlledOpen } =
     useDialogControlled()
 
   const { handleOpenLogoutDialog, logoutConfig } = useLogout({
-    handleOpenDialog: (value) => handleUpdateDialogControlled(value),
-    handleStep: (value: ManagerUsersDialog) => setDialogManagerUsersStep(value),
+    handleOpenDialog: handleUpdateDialogControlled,
+    handleStep: setDialogManagerUsersStep,
   })
 
   const { dialogItemToRender } = useDialogItemToRender({
@@ -147,7 +155,10 @@ export function ManagerUsers() {
       label: 'Exames',
       action: () => navigateTo(`/submission/manager`),
     },
-    { label: 'Excluir', action: handleDeleteDependent },
+    {
+      label: 'Excluir',
+      action: handleDeleteDependent,
+    },
   ]
 
   const BREADCRUMBS = useBreadcrumbs()
@@ -158,11 +169,11 @@ export function ManagerUsers() {
   }
 
   const hasDependents = isArrayNotEmpty(dependents)
-  const isDependentsListLoading = false
+  const isDependentsListLoading = !isUserExists
 
   return (
     <>
-      <TitleUpdater title="Gerênciar dependentes" />
+      <TitleUpdater title="Gerenciar dependentes" />
       <GenericPage.Root>
         <S.WrapperHeaderAndBreadcrumb>
           <GenericPage.Header>
@@ -170,89 +181,98 @@ export function ManagerUsers() {
               <GenericPage.Logo />
               <GenericPage.LogoTitle>DataMed</GenericPage.LogoTitle>
             </S.WrapperLogoAndLogoTitle>
-
             <GenericPage.HeaderOptions>
-              <GenericPage.ProfileButton letter="D" />
-
-              <PrimaryButton onClick={handleOpenAddDependentDialog}>
-                <Pen />
-                <p>Dependente</p>
-              </PrimaryButton>
+              <GenericPage.ProfileButton />
+              {isDependentsListLoading ? (
+                <S.SkeletonButton />
+              ) : (
+                <PrimaryButton onClick={handleOpenAddDependentDialog}>
+                  <Pen />
+                  <p>{isDoctor ? 'Paciente' : 'Dependente'}</p>
+                </PrimaryButton>
+              )}
               <GenericPage.LogoutButton action={handleOpenLogoutDialog} />
             </GenericPage.HeaderOptions>
           </GenericPage.Header>
-          <Breadcrumb items={BREADCRUMBS} />
-        </S.WrapperHeaderAndBreadcrumb>
-
-        <GenericPage.Divider />
-
-        <S.MainContent>
           {isDependentsListLoading ? (
-            <TableSkeleton />
+            <S.SkeletonBreadcrumbs />
           ) : (
+            <Breadcrumb items={BREADCRUMBS} />
+          )}
+        </S.WrapperHeaderAndBreadcrumb>
+        <GenericPage.Divider />
+        <S.MainContent>
+          {hasDependents ? (
             <>
-              {hasDependents ? (
-                <>
-                  <S.WrapperPageInformation>
-                    <GenericPage.Title data-testid="page-title">
-                      Dependentes
-                    </GenericPage.Title>
-                    <GenericPage.Description data-testid="page-description">
-                      Mantenha todas as informações dos seus dependentes
-                      organizadas e acessíveis com facilidade.
-                    </GenericPage.Description>
-                  </S.WrapperPageInformation>
+              <S.WrapperPageInformation>
+                {isDependentsListLoading ? (
+                  <S.SkeletonTitle />
+                ) : (
+                  <GenericPage.Title data-testid="page-title">
+                    {isDoctor ? 'Pacientes' : 'Dependentes'}
+                  </GenericPage.Title>
+                )}
 
-                  <S.TableContainer>
-                    <S.TableHeader>Nome</S.TableHeader>
-                    <S.TableHeader>Data de entrada</S.TableHeader>
-                    <S.TableHeader>Formulário</S.TableHeader>
-                    <S.TableHeader />
-                  </S.TableContainer>
-
-                  <S.TableContentContainer>
-                    {dependents.map((item) => {
-                      const status = STATUS_OPTIONS[item.status]
-                      return (
-                        <React.Fragment key={item.id}>
-                          <S.TableTitleCell title={item.name}>
-                            {item.name}
-                          </S.TableTitleCell>
-                          <S.TableCell>{item.createdAt}</S.TableCell>
-                          <S.TableCell>
-                            <S.WrapperStatusIndicator>
-                              <S.StatusIndicator status={item.status} />
-                              {status}
-                            </S.WrapperStatusIndicator>
-                          </S.TableCell>
-                          <S.TableCell hasGap>
-                            <S.WrapperButton>
-                              {STATUS_ACTION_OPTIONS.map((action) => (
-                                <S.ButtonStyled
-                                  onClick={() => action.action(item)}
-                                  label={action.label}
-                                  key={action.label}
-                                >
-                                  {action.label}
-                                </S.ButtonStyled>
-                              ))}
-                            </S.WrapperButton>
-                          </S.TableCell>
-                        </React.Fragment>
-                      )
-                    })}
-                  </S.TableContentContainer>
-                </>
+                {isDependentsListLoading ? (
+                  <S.SkeletonDescription />
+                ) : (
+                  <GenericPage.Description data-testid="page-description">
+                    Mantenha todas as informações dos seus{' '}
+                    {isDoctor ? 'pacientes' : 'dependentes'} organizadas e
+                    acessíveis com facilidade.
+                  </GenericPage.Description>
+                )}
+              </S.WrapperPageInformation>
+              <S.TableContainer>
+                <S.TableHeader>Nome</S.TableHeader>
+                <S.TableHeader>Data de entrada</S.TableHeader>
+                <S.TableHeader>Formulário</S.TableHeader>
+                <S.TableHeader />
+              </S.TableContainer>
+              {isDependentsListLoading ? (
+                <TableSkeleton />
               ) : (
-                <Empty text="Ainda não há dependentes cadastrados." />
+                <S.TableContentContainer>
+                  {dependents.map((item) => (
+                    <React.Fragment key={item.id}>
+                      <S.TableTitleCell title={item.name}>
+                        {item.name}
+                      </S.TableTitleCell>
+                      <S.TableCell>{item.createdAt}</S.TableCell>
+                      <S.TableCell>
+                        <S.WrapperStatusIndicator>
+                          <S.StatusIndicator status={item.status} />
+                          {STATUS_OPTIONS[item.status]}
+                        </S.WrapperStatusIndicator>
+                      </S.TableCell>
+                      <S.TableCell hasGap>
+                        <S.WrapperButton>
+                          {STATUS_ACTION_OPTIONS.map((action) => (
+                            <S.ButtonStyled
+                              onClick={() => action.action(item)}
+                              label={action.label}
+                              key={action.label}
+                            >
+                              {action.label}
+                            </S.ButtonStyled>
+                          ))}
+                        </S.WrapperButton>
+                      </S.TableCell>
+                    </React.Fragment>
+                  ))}
+                </S.TableContentContainer>
               )}
             </>
+          ) : (
+            <Empty
+              text={`Ainda não há ${
+                isDoctor ? 'pacientes' : 'dependentes'
+              } cadastrados.`}
+            />
           )}
         </S.MainContent>
-
         <GenericPage.Divider />
       </GenericPage.Root>
-
       {isDialogControlledOpen && isNotUndefined(dialogItemToRender) && (
         <DialogControlled
           isDialogControlledOpen={isDialogControlledOpen}

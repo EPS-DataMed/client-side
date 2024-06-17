@@ -1,10 +1,11 @@
 import axios from 'axios'
-import 'react-toastify/dist/ReactToastify.css'
 import { ErrorToast } from '../components/Toast'
 
-const BASE_URL = 'https://gateway-vctd.onrender.com'
-const UPLOAD_URL = 'https://file-manager-iuhn.onrender.com'
-const TERM_URL = 'https://terms-qynk.onrender.com/'
+const BASE_URL = import.meta.env.VITE_BASE_URL
+const UPLOAD_URL = import.meta.env.VITE_UPLOAD_URL
+const TERM_URL = import.meta.env.VITE_TERM_URL
+export const PUBLIC_KEY = import.meta.env.VITE_PUBLIC_KEY
+export const PRIVATE_KEY = import.meta.env.VITE_PRIVATE_KEY
 
 export const api = axios.create({
   baseURL: BASE_URL,

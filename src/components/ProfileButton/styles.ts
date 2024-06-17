@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { darkenColor } from '../../utils/colors'
+import { Skeleton } from '../Skeleton'
 
 export const ProfileCircle = styled.div`
   color: ${({ theme }) => theme.colors.neutral};
@@ -18,4 +19,9 @@ export const ProfileCircle = styled.div`
     cursor: pointer;
     background-color: ${({ theme }) => darkenColor(theme.colors.blue440, 0.2)};
   }
+`
+export const SkeletonProfileCircle = styled(Skeleton)`
+  height: 37px;
+  width: 37px;
+  border-radius: 50%;
 `

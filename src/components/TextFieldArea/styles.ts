@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { Skeleton } from '../Skeleton'
 
 export const FormGroup = styled.div`
   display: flex;
@@ -17,4 +18,9 @@ export const TextArea = styled.textarea<{ hasError: boolean }>`
   resize: none;
   border-color: ${({ theme, hasError }) =>
     hasError ? theme.colors.red500 : theme.colors.neutral400};
+`
+
+export const SkeletonTextArea = styled(Skeleton)`
+  width: 100%;
+  height: 86px;
 `

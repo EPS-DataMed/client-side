@@ -11,7 +11,7 @@ export function Step1({ control, errors, setStep }: StepProps) {
   return (
     <>
       <S.SignupInstruction>
-        Preencha suas <b>informações básicas</b> e avance para a proxima etapa.
+        Preencha suas <b>informações básicas</b> e avance para a próxima etapa.
       </S.SignupInstruction>
       <S.SignupFieldsForm>
         <InputField
@@ -36,6 +36,8 @@ export function Step1({ control, errors, setStep }: StepProps) {
           control={control}
           description="Informe sua data de nascimento."
           required
+          type="text"
+          mask="99/99/9999"
         />
 
         <Controller

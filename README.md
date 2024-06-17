@@ -1,7 +1,7 @@
 
 # Client-side
 
-Reposiório responsável pelo client-side do projeto Datamed.
+Repositório responsável pelo client-side do projeto Datamed.
 
 ## Tabela de Conteúdos
 

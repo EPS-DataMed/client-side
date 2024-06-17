@@ -12,6 +12,7 @@ import { Skeleton } from '../../components/Skeleton'
 import { RecoverFormData, RecoverSchema } from './schema'
 import { ErrorToast, SuccessToast } from '../../components/Toast'
 import { useNavigate } from 'react-router-dom'
+import { Spinner } from '../../components/Spinner'
 
 export function RecoverPassword() {
   const [loading, setLoading] = useState(false)
@@ -74,7 +75,15 @@ export function RecoverPassword() {
 
           <S.WrapperButtonAndLink>
             <PrimaryButton type="submit" disabled={loading}>
-              {loading ? 'Carregando...' : 'Enviar'} <ArrowRight />
+              {loading ? (
+                <>
+                  Carregando <Spinner />
+                </>
+              ) : (
+                <>
+                  Enviar <ArrowRight />
+                </>
+              )}
             </PrimaryButton>
           </S.WrapperButtonAndLink>
         </S.Form>

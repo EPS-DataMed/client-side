@@ -9,6 +9,7 @@ interface TextAreaComponentProps {
   required?: boolean
   description: string
   placeholder: string
+  isLoading?: boolean
 }
 
 export const TextFieldArea: React.FC<TextAreaComponentProps> = ({
@@ -18,6 +19,7 @@ export const TextFieldArea: React.FC<TextAreaComponentProps> = ({
   required = false,
   description,
   placeholder,
+  isLoading = false,
 }) => {
   const {
     field,
@@ -40,12 +42,18 @@ export const TextFieldArea: React.FC<TextAreaComponentProps> = ({
       </Input.Label>
 
       <Input.Description>{description}</Input.Description>
-      <S.TextArea
-        id={name}
-        {...field}
-        placeholder={placeholder}
-        hasError={!!error}
-      />
+
+      {isLoading ? (
+        <S.SkeletonTextArea />
+      ) : (
+        <S.TextArea
+          id={name}
+          {...field}
+          placeholder={placeholder}
+          hasError={!!error}
+        />
+      )}
+
       {error && (
         <Input.ErrorMessageRoot>
           <Input.ErrorMessage>{error.message}</Input.ErrorMessage>

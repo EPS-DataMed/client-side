@@ -101,7 +101,7 @@ export function Submission() {
             </S.WrapperLogoAndLogoTitle>
 
             <GenericPage.HeaderOptions>
-              <GenericPage.ProfileButton letter="D" />
+              <GenericPage.ProfileButton />
               <GenericPage.LogoutButton action={handleOpenLogoutDialog} />
             </GenericPage.HeaderOptions>
           </GenericPage.Header>
@@ -123,7 +123,7 @@ export function Submission() {
                   Faça o <b>upload</b> de <b>exames médicos</b> e gerencie-os.
                   Esta etapa tem como objetivo selecionar um exame anexado para,
                   em seguida, avançar para a próxima etapa, que consiste em
-                  gerenciar os campos que serão extraídos do exame.
+                  gerenciar os campos que serão extraídos dos exames.
                 </GenericPage.Description>
               </S.WrapperPageInformation>
 

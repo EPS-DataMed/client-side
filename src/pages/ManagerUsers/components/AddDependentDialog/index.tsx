@@ -1,10 +1,11 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import InputField from '../../../UserForm/components/InputField'
 import { PrimaryButton } from '../../../../components/PrimaryButton'
 import * as S from './styles'
 import useNavigation from '../../../../hooks/useNavigation'
+import InputField from '../../../../components/Input/InputField'
+import { useUserContext } from '../../../../contexts/UserContext'
 
 const schema = z.object({
   email: z.string().email('Email inválido').nonempty('Email é obrigatório'),
@@ -16,6 +17,8 @@ export function AddDependentDialog() {
   const { control, handleSubmit } = useForm<FormData>({
     resolver: zodResolver(schema),
   })
+
+  const { isDoctor } = useUserContext()
 
   const onSubmit = (data: FormData) => {
     console.log(data)
@@ -29,14 +32,16 @@ export function AddDependentDialog() {
         label="E-mail"
         name="email"
         control={control}
+        width="225px"
         description="Informe o seu e-mail pessoal."
         required
       />
 
       <S.MessageArea>
         <S.MessagePhrase>
-          Um e-mail será enviado para o endereço acima. Seu dependente{' '}
-          <b>deve estar cadastrado</b> na plataforma. Se não estiver, cadastre-o{' '}
+          Um e-mail será enviado para o endereço acima. Seu{' '}
+          {isDoctor ? 'paciente' : 'dependente'} <b>deve estar cadastrado</b> na
+          plataforma. Se não estiver, cadastre-o{' '}
           <S.Link
             onClick={() => {
               navigateTo('/signup')

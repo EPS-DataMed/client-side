@@ -47,6 +47,7 @@ export const Title = styled.div`
 
 export const Description = styled.span`
   font-size: ${({ theme }) => theme.fontSizes.md};
+  text-align: justify;
 `
 
 export const LogoTitle = styled.span`

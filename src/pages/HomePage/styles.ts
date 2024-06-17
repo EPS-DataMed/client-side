@@ -26,6 +26,13 @@ export const WelcomeText = styled.h1`
   font-size: ${({ theme }) => theme.fontSizes['4xl']};
   font-weight: ${({ theme }) => theme.fontWeights.bold};
 `
+
+export const SkeletonWelcomeText = styled(Skeleton)`
+  height: 48px;
+  width: 36%;
+  border-radius: 4px;
+`
+
 export const WelcomeQuestion = styled.h5`
   font-size: ${({ theme }) => theme.fontSizes.sm};
   font-weight: ${({ theme }) => theme.fontWeights.regular};
@@ -66,6 +73,11 @@ export const HomepageOption = styled.div`
       transform: scale(1.1);
     }
   }
+`
+export const HomepageOptionSkeleton = styled(Skeleton)`
+  width: 300px;
+  height: 480px;
+  border-radius: 4px;
 `
 
 export const OptionTitle = styled.h3`

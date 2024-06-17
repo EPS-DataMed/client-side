@@ -118,7 +118,7 @@ export function UserForm() {
             </S.WrapperLogoAndLogoTitle>
 
             <GenericPage.HeaderOptions>
-              <GenericPage.ProfileButton letter="D" />
+              <GenericPage.ProfileButton />
               <GenericPage.LogoutButton action={handleOpenLogoutDialog} />
             </GenericPage.HeaderOptions>
           </GenericPage.Header>
@@ -134,8 +134,11 @@ export function UserForm() {
             </GenericPage.Title>
             <GenericPage.Description data-testid="page-description">
               Preencha o formulário abaixo com os campos faltantes, se houver.
-              Ao final, conclua e gere um <b>cartão</b> com suas informações
-              pessoais de saúde derivadas do seu exame.
+              Ao final, conclua e gere um <b>cartão</b> com o resumo dessas
+              informações de saúde. O cartão incluirá detalhes importantes como
+              dados pessoais, informações de saúde e outros dados relevantes
+              derivados dos exames. Ao finalizar, você terá a opção de imprimir
+              o cartão.
             </GenericPage.Description>
           </S.WrapperPageInformation>
 

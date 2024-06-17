@@ -7,6 +7,7 @@ import { MEDICAL_SPECIALTIES } from '../../constants'
 import * as S from '../../styles'
 import { PrimaryButton } from '../../../../components/PrimaryButton'
 import { ArrowLeft } from '../../../../assets/icons'
+import { Spinner } from '../../../../components/Spinner'
 
 export function Step3({
   control,
@@ -72,9 +73,13 @@ export function Step3({
           onClick={handleNextStep}
           disabled={loading}
         >
-          {loading
-            ? 'Carregando...'
-            : `${isMedicalInfoFilled ? `Cadastrar` : `Pular e Cadastrar`}`}
+          {loading ? (
+            <>
+              Carregando <Spinner />
+            </>
+          ) : (
+            `${isMedicalInfoFilled ? `Cadastrar` : `Pular e Cadastrar`}`
+          )}
         </PrimaryButton>
       </S.ForwardButtonWrapper>
     </>

@@ -8,6 +8,7 @@ import 'react-toastify/ReactToastify.min.css'
 import { HomePage } from './pages/HomePage'
 import { Submission } from './pages/Submission'
 import { SubmissionTestProvider } from './contexts/SubmissionTestContext'
+import { UserProvider } from './contexts/UserContext'
 import { UserForm } from './pages/UserForm'
 import { Login } from './pages/Login'
 import { Signup } from './pages/Signup'
@@ -37,48 +38,50 @@ export function App() {
           theme="colored"
         />
         <Router>
-          <SubmissionTestProvider>
-            <Routes>
-              <Route path="/" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/recover" element={<RecoverPassword />} />
-              <Route path="/change" element={<ChangePassword />} />
-              <Route path="/confirm" element={<DependentConfirm />} />
-              <Route
-                path="/home"
-                element={
-                  <ProtectedRoute>
-                    <HomePage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/submission/:path"
-                element={
-                  <ProtectedRoute>
-                    <Submission />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/form"
-                element={
-                  <ProtectedRoute>
-                    <UserForm />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/manager/users"
-                element={
-                  <ProtectedRoute>
-                    <ManagerUsers />
-                  </ProtectedRoute>
-                }
-              />
-              <Route path="*" element={<Login />} />
-            </Routes>
-          </SubmissionTestProvider>
+          <UserProvider>
+            <SubmissionTestProvider>
+              <Routes>
+                <Route path="/" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/recover" element={<RecoverPassword />} />
+                <Route path="/change" element={<ChangePassword />} />
+                <Route path="/confirm" element={<DependentConfirm />} />
+                <Route
+                  path="/home"
+                  element={
+                    <ProtectedRoute>
+                      <HomePage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/submission/:path"
+                  element={
+                    <ProtectedRoute>
+                      <Submission />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/form"
+                  element={
+                    <ProtectedRoute>
+                      <UserForm />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/manager/users"
+                  element={
+                    <ProtectedRoute>
+                      <ManagerUsers />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="*" element={<Login />} />
+              </Routes>
+            </SubmissionTestProvider>
+          </UserProvider>
         </Router>
       </ThemeProvider>
     </QueryClientProvider>

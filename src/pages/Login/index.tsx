@@ -14,6 +14,7 @@ import { login } from './services'
 import { saveCookie } from '../../utils/cookies'
 import { ErrorToast } from '../../components/Toast'
 import { useNavigate } from 'react-router-dom'
+import { Spinner } from '../../components/Spinner'
 
 export function Login() {
   const [loading, setLoading] = useState(false)
@@ -92,8 +93,17 @@ export function Login() {
               disabled={loading}
               data-testid="submit-button"
             >
-              {loading ? 'Carregando...' : 'Entrar'} <ArrowRight />
+              {loading ? (
+                <>
+                  Carregando <Spinner />
+                </>
+              ) : (
+                <>
+                  Entrar <ArrowRight />
+                </>
+              )}
             </PrimaryButton>
+
             <S.Link
               onClick={() => {
                 navigate('/recover')
