@@ -2,7 +2,6 @@ import { z } from 'zod'
 
 
 export const EditSchema = z.object({
-    userId: z.number(),
   
     password: z
       .string()
@@ -17,6 +16,7 @@ export const EditSchema = z.object({
         .regex(/\d/, 'Deve conter números'),
 
     confirmNewPassword: z.string().min(1, 'Confirmação de senha é obrigatória'),
+    
 })
 .refine((data) => data.newPassword === data.confirmNewPassword, {
     message: 'As senhas estão diferentes',
@@ -35,9 +35,10 @@ export const DeleteAccSchema = z.object({
       .regex(/\d/, 'Deve conter números'),
 
 
-    confirmNewPassword: z.string().min(1, 'Confirmação de senha é obrigatória'),
+    confirmPassword: z.string().min(1, 'Confirmação de senha é obrigatória'),
+    
 })
-.refine((data) => data.password === data.confirmNewPassword, {
+.refine((data) => data.password === data.confirmPassword, {
     message: 'As senhas estão diferentes',
     path: ['confirmPassword'],
 })

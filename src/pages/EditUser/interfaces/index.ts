@@ -1,17 +1,18 @@
 export interface GetUserResponse {
   
   content:{
-    nome_completo: string,
+    full_name: string,
     email: string,
-    data_nascimento: string,
-    sexo_biologico: string,
+    birth_date: string,
+    biological_sex: string,
   }
   
     
 }
 
 export interface EditPasswordPayload {
-  senha: string
+  
+  password: string
 }
   
 export interface DeleteResponse{

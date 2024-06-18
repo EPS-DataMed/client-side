@@ -7,8 +7,8 @@ import { editPassword } from '../services'
 import { ErrorToast, SuccessToast } from '../../../components/Toast'
 
 export const useEditUserForm = () => {
-  const navigateTo = useNavigation()
-  const [loading, setLoading] = useState(false)
+  
+  
   
 
   const {
@@ -45,13 +45,17 @@ export const useEditUserForm = () => {
   //   return null
   // }
 
-  const onSubmit: SubmitHandler<EditFormData> = async (data) => {
+  const onSubmit: SubmitHandler<any> = async (data, openEditDialog) => {
     setLoading(true)
     try {
-      
-
+      openEditDialog()
+      console.log(data)
       const newPasswordPayload = {
-        senha: data.newPassword,
+        full_name: data.full_name,
+        email: data.email,
+        birth_date: data.birth_date,
+        biological_sex: data.biological_sex,
+        password: data.newPassword,
       }
 
       const userResponse = await editPassword(data.userId, newPasswordPayload)
@@ -59,7 +63,7 @@ export const useEditUserForm = () => {
       
 
       SuccessToast('Senha alterada com sucesso!')
-
+      console.log("deu ceeto")
       navigateTo('/', { replace: true })
     } catch (error) {
       ErrorToast('Erro mudar senha. Tente novamente mais tarde.')

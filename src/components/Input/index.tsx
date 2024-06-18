@@ -46,6 +46,7 @@ const InputComponent = styled.input<InputProps>`
       cursor: not-allowed;
       borborder: 1px solid ${({ theme }) => theme.colors.neutral400};
       background-color: ${({ theme }) => theme.colors.neutral100};
+      color: ${({ theme }) => theme.colors.neutral400};
     `}
 
   ${({ hasError, theme }) =>
@@ -61,13 +62,7 @@ const InputComponent = styled.input<InputProps>`
     `
   }
 
-  ${(props) =>
-    props.edit == false &&
-    css`
-      color: ${({ theme }) => theme.colors.neutral400};
-    `
-
-  }
+  
   ${(props) =>
     props.variant === 'searchbar' &&
     css`

@@ -6,6 +6,7 @@ import { DeleteAccData, DeleteAccSchema } from '../schema/index'
 import { deleteAccount } from '../services'
 import { ErrorToast, SuccessToast } from '../../../components/Toast'
 
+
 export const useDeleteAccForm = () => {
   const navigateTo = useNavigation()
   const [loading, setLoading] = useState(false)
@@ -21,7 +22,7 @@ export const useDeleteAccForm = () => {
     resolver: zodResolver(DeleteAccSchema),
     defaultValues: {
       password: '',
-      confirmNewPassword: ''
+      confirmPassword: ''
     },
   })
 

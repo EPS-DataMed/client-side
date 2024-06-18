@@ -5,7 +5,7 @@ export function ProfileButton({ letter }: { letter: string }) {
   const navigateTo = useNavigation()
 
   function handleNavigateToProfile() {
-    navigateTo('profile')
+    navigateTo('/editUser')
   }
 
   return (

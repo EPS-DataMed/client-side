@@ -33,9 +33,11 @@ export const MainContent = styled.div`
   
 `
 
+
 export const ButtonWrapper = styled.div`
   heigth: 35px;
 `
+
 
 export const Section = styled.div`
   display: flex;
@@ -55,8 +57,6 @@ export const DeleteSection = styled.div`
   gap: ${({ theme }) => theme.space[2]};
 `
 
-
-
 export const SectionTitle = styled.h2`
   
   font-weight: bold;
@@ -64,8 +64,17 @@ export const SectionTitle = styled.h2`
 export const SectionDescription = styled.h4`
   font-weight: normal;
 `
-export const UserDataInputs = styled.div`
+
+
+export const UserDataInputs = styled.form`
   display: flex;
   align-items: end;
   gap: ${({ theme }) => theme.space[4]};
 `
+
+export const DeleAccForm = styled.form`
+  display: flex;
+  align-items: end;
+  gap: ${({ theme }) => theme.space[4]};
+`
+
