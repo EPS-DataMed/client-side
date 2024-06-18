@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react'
 
-const TypingEffect: React.FC<{ text: string }> = ({ text }) => {
+interface TypingEffectProps {
+  text: string
+  dataTestId?: string
+}
+
+const TypingEffect: React.FC<TypingEffectProps> = ({ text, dataTestId }) => {
   const [displayText, setDisplayText] = useState('')
 
   useEffect(() => {
@@ -17,7 +22,7 @@ const TypingEffect: React.FC<{ text: string }> = ({ text }) => {
     return () => clearInterval(interval)
   }, [text])
 
-  return <span>{displayText}</span>
+  return <span data-testid={dataTestId}>{displayText}</span>
 }
 
 export default TypingEffect

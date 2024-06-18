@@ -19,11 +19,11 @@ export function Step3({
 }: StepProps) {
   return (
     <>
-      <S.SignupInstruction>
+      <S.SignupInstruction data-testid="signup-instruction">
         Se você for <b>médico</b>, preencha as informações abaixo, se não apenas
         continue o cadastro.
       </S.SignupInstruction>
-      <S.SignupFieldsForm>
+      <S.SignupFieldsForm data-testid="signup-fields-form">
         <InputField
           label="CRM"
           name="crm"
@@ -47,10 +47,11 @@ export function Step3({
                 }))}
                 handleValueChange={field.onChange}
                 defaultValue={field.value}
+                dataTestId="select-specialty"
               />
               {errors.specialty && (
                 <Input.ErrorMessageRoot>
-                  <Input.ErrorMessage>
+                  <Input.ErrorMessage data-testid="error-specialty">
                     {errors.specialty.message}
                   </Input.ErrorMessage>
                 </Input.ErrorMessageRoot>
@@ -65,6 +66,7 @@ export function Step3({
           variant="secondary"
           type="button"
           onClick={() => setStep(2)}
+          data-testid="button-back"
         >
           <ArrowLeft /> Voltar
         </PrimaryButton>
@@ -72,10 +74,11 @@ export function Step3({
           type="submit"
           onClick={handleNextStep}
           disabled={loading}
+          data-testid="button-submit"
         >
           {loading ? (
             <>
-              Carregando <Spinner />
+              Carregando <Spinner data-testid="spinner" />
             </>
           ) : (
             `${isMedicalInfoFilled ? `Cadastrar` : `Pular e Cadastrar`}`

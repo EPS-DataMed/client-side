@@ -10,6 +10,7 @@ interface SelectConfigProps {
   handleValueChange: (newValue: string) => void
   defaultValue?: string
   hasError?: boolean
+  dataTestId?: string
 }
 
 export function SelectConfig({
@@ -17,13 +18,18 @@ export function SelectConfig({
   handleValueChange,
   defaultValue,
   hasError = false,
+  dataTestId,
 }: SelectConfigProps) {
   return (
     <Select.Root
       defaultValue={defaultValue || undefined}
       onValueChange={handleValueChange}
     >
-      <Select.Trigger className="SelectTrigger" hasError={hasError}>
+      <Select.Trigger
+        data-testid={dataTestId}
+        className="SelectTrigger"
+        hasError={hasError}
+      >
         <Select.Value placeholder="Selecione..." />
         <Select.Icon style={{ marginTop: '4px' }} className="SelectIcon">
           <Select.ChevronDownIcon />

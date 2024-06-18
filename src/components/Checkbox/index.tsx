@@ -27,11 +27,9 @@ const StyledCheckbox = styled.div<{ checked: boolean }>`
   transition: all 150ms;
   cursor: pointer;
   border: 1px solid ${(props) => props.theme.colors.neutral400};
-
   ${HiddenCheckbox}:focus + & {
     box-shadow: 0 0 0 3px ${(props) => props.theme.colors.blue440};
   }
-
   ${(props) =>
     props.checked &&
     `
@@ -74,6 +72,7 @@ const Checkbox: React.FC<CheckboxProps> = ({ checked, onChange, label }) => (
       onChange={(e) => {
         onChange(e)
       }}
+      data-testid="hidden-checkbox"
     />
     <StyledCheckbox
       checked={checked}
@@ -82,6 +81,7 @@ const Checkbox: React.FC<CheckboxProps> = ({ checked, onChange, label }) => (
           target: { checked: !checked },
         } as React.ChangeEvent<HTMLInputElement>)
       }
+      data-testid="styled-checkbox"
     />
     <CheckboxLabel
       onClick={() =>
@@ -89,6 +89,7 @@ const Checkbox: React.FC<CheckboxProps> = ({ checked, onChange, label }) => (
           target: { checked: !checked },
         } as React.ChangeEvent<HTMLInputElement>)
       }
+      data-testid="checkbox-label"
     >
       {label}
     </CheckboxLabel>

@@ -51,6 +51,7 @@ export const TextFieldArea: React.FC<TextAreaComponentProps> = ({
           {...field}
           placeholder={placeholder}
           hasError={!!error}
+          data-testid={`text-field-${name}`}
         />
       )}
 

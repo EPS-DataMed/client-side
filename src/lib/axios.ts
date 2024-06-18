@@ -1,11 +1,11 @@
 import axios from 'axios'
 import { ErrorToast } from '../components/Toast'
 
-const BASE_URL = import.meta.env.VITE_BASE_URL
-const UPLOAD_URL = import.meta.env.VITE_UPLOAD_URL
-const TERM_URL = import.meta.env.VITE_TERM_URL
-export const PUBLIC_KEY = import.meta.env.VITE_PUBLIC_KEY
-export const PRIVATE_KEY = import.meta.env.VITE_PRIVATE_KEY
+const BASE_URL = process.env.VITE_BASE_URL
+const UPLOAD_URL = process.env.VITE_UPLOAD_URL
+const TERM_URL = process.env.VITE_TERM_URL
+export const PUBLIC_KEY = process.env.VITE_PUBLIC_KEY
+export const PRIVATE_KEY = process.env.VITE_PRIVATE_KEY
 
 export const api = axios.create({
   baseURL: BASE_URL,

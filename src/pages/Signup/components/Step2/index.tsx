@@ -6,55 +6,18 @@ import * as S from '../../styles'
 import Checkbox, { PrivacyLink } from '../../../../components/Checkbox'
 import { ArrowLeft, ArrowRight } from '../../../../assets/icons'
 import { Input } from '../../../../components/Input'
-import { generatePrivacy, generateTerms } from '../../services'
-import { ErrorToast } from '../../../../components/Toast'
+import { useFileGenerator } from './hooks/useFileGenerator'
 
 export function Step2({ control, errors, setStep }: StepProps) {
-  const handleTermsOfUseClick = async () => {
-    const projectName = 'Datamed'
-    const contactEmail = 'datamedoficial@gmail.com'
-
-    try {
-      const data = await generateTerms({ projectName, contactEmail })
-      const url = window.URL.createObjectURL(data)
-      const a = document.createElement('a')
-      a.href = url
-      a.download = `${projectName.toLowerCase()}_terms.pdf`
-      document.body.appendChild(a)
-      a.click()
-      a.remove()
-    } catch (error) {
-      ErrorToast('Erro ao gerar os termos, tente novamente mais tarde.')
-    }
-  }
-
-  const handlePrivacyClick = async () => {
-    const projectName = 'Datamed'
-    const contactEmail = 'datamedoficial@gmail.com'
-
-    try {
-      const data = await generatePrivacy({ projectName, contactEmail })
-      const url = window.URL.createObjectURL(data)
-      const a = document.createElement('a')
-      a.href = url
-      a.download = `${projectName.toLowerCase()}_privacy.pdf`
-      document.body.appendChild(a)
-      a.click()
-      a.remove()
-    } catch (error) {
-      ErrorToast(
-        'Erro ao gerar os termos de privacidade, tente novamente mais tarde.',
-      )
-    }
-  }
+  const { handleGenerateFile } = useFileGenerator()
 
   return (
     <>
-      <S.SignupInstruction>
+      <S.SignupInstruction data-testid="signup-instruction">
         Por favor, preencha sua <b>senha</b> para acessar a plataforma e
         aproveitar todos os recursos disponíveis.
       </S.SignupInstruction>
-      <S.SignupFieldsForm>
+      <S.SignupFieldsForm data-testid="signup-fields-form">
         <InputField
           label="Senha"
           name="password"
@@ -62,6 +25,7 @@ export function Step2({ control, errors, setStep }: StepProps) {
           control={control}
           description="Deve conter pelo menos oito caracteres, com letras e números."
           required
+          data-testid="input-password"
         />
 
         <InputField
@@ -71,6 +35,7 @@ export function Step2({ control, errors, setStep }: StepProps) {
           type="password"
           description="Confirme sua senha definida no campo acima."
           required
+          data-testid="input-confirmPassword"
         />
 
         <Controller
@@ -79,23 +44,30 @@ export function Step2({ control, errors, setStep }: StepProps) {
           render={({ field }) => (
             <Checkbox
               checked={field.value}
-              onChange={(e) => {
-                field.onChange(e.target.checked)
-              }}
+              onChange={(e) => field.onChange(e.target.checked)}
               label={
                 <>
                   Eu aceito os{' '}
-                  <PrivacyLink onClick={handlePrivacyClick}>
+                  <PrivacyLink
+                    onClick={() =>
+                      handleGenerateFile(
+                        'privacy',
+                        'Erro ao gerar os termos de privacidade, tente novamente mais tarde.',
+                      )
+                    }
+                    data-testid="link-privacy"
+                  >
                     Termos de Privacidade
                   </PrivacyLink>
                 </>
               }
+              data-testid="checkbox-privacy"
             />
           )}
         />
         {errors.termsOfPrivacy && (
           <Input.ErrorMessageRoot>
-            <Input.ErrorMessage>
+            <Input.ErrorMessage data-testid="error-termsOfPrivacy">
               {errors.termsOfPrivacy.message}
             </Input.ErrorMessage>
           </Input.ErrorMessageRoot>
@@ -107,23 +79,32 @@ export function Step2({ control, errors, setStep }: StepProps) {
           render={({ field }) => (
             <Checkbox
               checked={field.value}
-              onChange={(e) => {
-                field.onChange(e.target.checked)
-              }}
+              onChange={(e) => field.onChange(e.target.checked)}
               label={
                 <>
                   Eu aceito os{' '}
-                  <PrivacyLink onClick={handleTermsOfUseClick}>
+                  <PrivacyLink
+                    onClick={() =>
+                      handleGenerateFile(
+                        'terms',
+                        'Erro ao gerar os termos, tente novamente mais tarde.',
+                      )
+                    }
+                    data-testid="link-terms"
+                  >
                     Termos de Uso
                   </PrivacyLink>
                 </>
               }
+              data-testid="checkbox-terms"
             />
           )}
         />
         {errors.termsOfUse && (
           <Input.ErrorMessageRoot>
-            <Input.ErrorMessage>{errors.termsOfUse.message}</Input.ErrorMessage>
+            <Input.ErrorMessage data-testid="error-termsOfUse">
+              {errors.termsOfUse.message}
+            </Input.ErrorMessage>
           </Input.ErrorMessageRoot>
         )}
       </S.SignupFieldsForm>
@@ -133,10 +114,15 @@ export function Step2({ control, errors, setStep }: StepProps) {
           variant="secondary"
           type="button"
           onClick={() => setStep(1)}
+          data-testid="button-back"
         >
           <ArrowLeft /> Voltar
         </PrimaryButton>
-        <PrimaryButton type="button" onClick={() => setStep(3)}>
+        <PrimaryButton
+          type="button"
+          onClick={() => setStep(3)}
+          data-testid="button-next"
+        >
           Avançar <ArrowRight />
         </PrimaryButton>
       </S.ForwardButtonWrapper>

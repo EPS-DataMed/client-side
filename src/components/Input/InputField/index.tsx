@@ -70,7 +70,7 @@ const InputField: React.FC<InputFieldProps> = ({
 
   if (isLoading) {
     return (
-      <Container>
+      <Container data-testid="input-loading">
         <SkeletonLabel width={width} />
         <SkeletonInput width={width} />
       </Container>
@@ -78,7 +78,7 @@ const InputField: React.FC<InputFieldProps> = ({
   }
 
   return (
-    <Input.Root style={style}>
+    <Input.Root style={style} data-testid={`input-${name}`}>
       <Input.Label htmlFor={name}>
         {label}
         {required && (
