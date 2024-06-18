@@ -17,7 +17,10 @@ export function ProfileButton() {
   const isUserExists = hasObjectValidKeys(user)
 
   return (
-    <S.ProfileCircle onClick={handleNavigateToProfile}>
+    <S.ProfileCircle
+      data-testid="profile-button"
+      onClick={handleNavigateToProfile}
+    >
       {!isListUserInfoLoading && isUserExists ? (
         <p>{user?.full_name[0]}</p>
       ) : (

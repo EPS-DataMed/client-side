@@ -35,8 +35,17 @@ export function Empty({
   return (
     <>
       <S.Container>
-        <S.Animation ref={container} hasFullHeight={hasFullHeight} />
-        <S.NotFoundText hasFullHeight={hasFullHeight}>{text}</S.NotFoundText>
+        <S.Animation
+          ref={container}
+          hasFullHeight={hasFullHeight}
+          data-testid="animation-container"
+        />
+        <S.NotFoundText
+          hasFullHeight={hasFullHeight}
+          data-testid="not-found-text"
+        >
+          {text}
+        </S.NotFoundText>
       </S.Container>
     </>
   )
