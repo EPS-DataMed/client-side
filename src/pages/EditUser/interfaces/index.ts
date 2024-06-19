@@ -11,8 +11,9 @@ export interface GetUserResponse {
 }
 
 export interface EditPasswordPayload {
-  
-  password: string
+  newPassword: string,
+  password: string,
+  confirmNewPassword: string
 }
   
 export interface DeleteResponse{

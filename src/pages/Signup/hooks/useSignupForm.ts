@@ -5,6 +5,7 @@ import useNavigation from '../../../hooks/useNavigation'
 import { SignupFormData, SignupSchema } from '../schema'
 import { createDoctor, createUser } from '../services'
 import { ErrorToast, SuccessToast } from '../../../components/Toast'
+import { formatDate } from '../utils'
 
 export const useSignupForm = () => {
   const navigateTo = useNavigation()
@@ -62,8 +63,8 @@ export const useSignupForm = () => {
   const onSubmit: SubmitHandler<SignupFormData> = async (data) => {
     setLoading(true)
     try {
-      //const formattedDateOfBirth = formatDate(data.dateOfBirth)
-      const formattedDateOfBirth = data.dateOfBirth
+      const formattedDateOfBirth = formatDate(data.dateOfBirth)
+      //const formattedDateOfBirth = data.dateOfBirth
       const userPayload = {
         full_name: data.name,
         email: data.email,

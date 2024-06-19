@@ -14,7 +14,7 @@ import { Padlock } from './assets/padlock'
 import { deleteAccount, editPassword, getUser } from './services'
 import { useCallback, useEffect, useState } from 'react'
 import { useDialogItemToRender } from './hooks/dialogItemToRender'
-
+import { useUserContext } from '../../contexts/UserContext'
 import {
     DialogControlled,
     useDialogControlled,
@@ -34,6 +34,8 @@ import { useLogout } from '../../hooks/useLogout'
 export function EditUser(){
     
     const navigateTo = useNavigation()
+
+    const { user, isDoctor } = useUserContext()
     
     const [passwordData, setPasswordData] = useState({} as EditFormData)
 
@@ -41,8 +43,12 @@ export function EditUser(){
 
     const [loadingDeleteAccount, setLoadingDeleteAccount] = useState(false)
 
-    const handleOpenPasswordDialog = useCallback(() => {
+    const { handleUpdateDialogControlled, isDialogControlledOpen } = useDialogControlled()
+    const { handleUpdateDialogControlled: dialogLogout, isDialogControlledOpen: isDialogLogout } = useDialogControlled()
+    
+    const [dialogSubmissionStep, setDialogSubmissionStep] = useState<DialogStep>('')
 
+    const handleOpenPasswordDialog = useCallback(() => {
         handleUpdateDialogControlled(true)
         setDialogSubmissionStep('change_password')
 
@@ -62,17 +68,24 @@ export function EditUser(){
     const handleSubmitChangePassword = useCallback(async () => {
         const { userId } = getUserId()
         
+
         setLoadingPasswordData(true)
-        console.log("aqui")
+        console.log(passwordData)
         try {
             const response = await editPassword(userId, passwordData)
-            
-            if(response){
+            console.log(response)
+            if(response.status_code === 200){
                 SuccessToast('Senha atualizada com sucesso!')
+            }
+            else{
+                ErrorToast(
+                    'Verifique suas informações novamente! Ou tente novamente mais tarde.',
+                )
             }
             
 
         } catch (error) {
+            console.log(error)
             ErrorToast(
                 'Verifique suas informações novamente! Ou tente novamente mais tarde.',
             )
@@ -83,9 +96,7 @@ export function EditUser(){
 
     }, [])
 
-    const { handleUpdateDialogControlled, isDialogControlledOpen } = useDialogControlled()
     
-    const [dialogSubmissionStep, setDialogSubmissionStep] = useState<DialogStep>('')
 
     const handleSubmitDeleteAccount = useCallback(async () => {
 
@@ -124,15 +135,16 @@ export function EditUser(){
 
     
 
-    const [user, setUser] = useState({
-        content:{
-            full_name: '',
-            email: '',
-            birth_date: '',
-            biological_sex: '',
-        }
-    })
+    // const [user, setUser] = useState({
+    //     content:{
+    //         full_name: '',
+    //         email: '',
+    //         birth_date: '',
+    //         biological_sex: '',
+    //     }
+    // })
 
+    
    
     function openDeleteAccountDialog(){
         handleUpdateDialogControlled(true)
@@ -141,7 +153,7 @@ export function EditUser(){
     }
 
     const onSubmit: SubmitHandler<DeleteAccData> = async () => {
-        
+       
         openDeleteAccountDialog()
         
     }
@@ -160,15 +172,15 @@ export function EditUser(){
     })
 
 
-    useEffect(() =>{
-        const fetchData = async () =>{
-            const { userId } = getUserId()
-            const userData = await getUser(userId)
-            setUser(userData)
-        }
+    // useEffect(() =>{
+    //     const fetchData = async () =>{
+    //         const { userId } = getUserId()
+    //         const userData = await getUser(userId)
+    //         setUser(userData)
+    //     }
 
-        fetchData()
-    }, [])
+    //     fetchData()
+    // }, [])
 
     
 
@@ -185,7 +197,7 @@ export function EditUser(){
     }
 
     const { handleOpenLogoutDialog, logoutConfig } = useLogout({
-        handleOpenDialog: (value) => handleUpdateDialogControlled(value),
+        handleOpenDialog: (value) => dialogLogout(value),
     })
     
     return (
@@ -234,7 +246,7 @@ export function EditUser(){
                                     cursor="not-allowed"
                                     disabled={true}
                                     readOnly
-                                    value={user.content.full_name}
+                                    value={user.full_name}
                                 />
                                 
                             </Input.Root>
@@ -245,7 +257,7 @@ export function EditUser(){
                                 <Input.Input
                                     cursor="not-allowed"
                                     readOnly
-                                    value={user.content.email}
+                                    value={user.email}
                                     disabled={true}
                                 />
                                 
@@ -257,7 +269,7 @@ export function EditUser(){
                                     cursor="not-allowed"
                                     readOnly
                                     disabled={true}
-                                    value={user.content.biological_sex === 'M' ? 'Masculino' : 'Feminino'}
+                                    value={user.biological_sex === 'M' ? 'Masculino' : 'Feminino'}
                                 />
                                 
                             </Input.Root>
@@ -268,10 +280,42 @@ export function EditUser(){
                                     cursor="not-allowed"
                                     readOnly
                                     disabled={true}
-                                    value={getFormattedDate(user.content.birth_date)}
+                                    value={getFormattedDate(user.birth_date)}
                                 />
                                 
                             </Input.Root>
+                            { isDoctor &&
+                                <>
+                                    <Input.Root>
+                                        <Input.Label>CRM *</Input.Label>
+                                        <Input.Input
+                                            cursor="not-allowed"
+                                            readOnly
+                                            disabled={true}
+                                            value={user.doctor.crm}
+                                        />
+                                    
+                                    </Input.Root>
+
+                                    <Input.Root>
+                                        <Input.Label>Especialidade *</Input.Label>
+                                        <Input.Input
+                                            cursor="not-allowed"
+                                            readOnly
+                                            disabled={true}
+                                            value={user.doctor.specialty}
+                                        />
+                                    
+                                    </Input.Root>
+                                </>
+                                
+
+
+                            }
+                            
+
+
+
 
                         </S.UserDataInputs>
                     </S.Section>
@@ -326,8 +370,8 @@ export function EditUser(){
             </GenericPage.Root>
         
             <DialogControlled
-                isDialogControlledOpen={isDialogControlledOpen}
-                handleUpdateDialogControlled={handleUpdateDialogControlled}
+                isDialogControlledOpen={isDialogLogout}
+                handleUpdateDialogControlled={dialogLogout}
                 dialogItemToRender={logoutConfig}
                 isLoadingRequisition={false}
             />
