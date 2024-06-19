@@ -26,9 +26,9 @@ export const EditSchema = z.object({
 export type EditFormData = z.infer<typeof EditSchema>
 
 export const DeleteAccSchema = z.object({
-    userId: z.number(),
+    
   
-    password: z
+    currentPassword: z
       .string()
       .min(8, 'Deve conter no mínimo 8 caracteres')
       .regex(/[a-zA-Z]/, 'Deve conter letras')
@@ -38,7 +38,7 @@ export const DeleteAccSchema = z.object({
     confirmPassword: z.string().min(1, 'Confirmação de senha é obrigatória'),
     
 })
-.refine((data) => data.password === data.confirmPassword, {
+.refine((data) => data.currentPassword === data.confirmPassword, {
     message: 'As senhas estão diferentes',
     path: ['confirmPassword'],
 })

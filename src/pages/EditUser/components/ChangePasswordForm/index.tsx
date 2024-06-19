@@ -2,9 +2,6 @@
 import InputField from '../../../../components/Input/InputField'
 import { EditFormData, EditSchema } from '../../schema'
 import { useForm, SubmitHandler } from 'react-hook-form'
-import { useState } from 'react'
-import useNavigation from '../../../../hooks/useNavigation'
-import { ErrorToast, SuccessToast } from '../../../../components/Toast'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as S from './styles'
 import { GenericPage } from '../../../../components/GenericPage'
@@ -19,8 +16,7 @@ interface ChangePasswordProps{
 
 export function ChangePasswordForm({onOpenDialog, onSavePasswordData}:ChangePasswordProps){
 
-    const navigateTo = useNavigation()
-    const [loading, setLoading] = useState(false)
+    
     
     const onSubmit: SubmitHandler<EditFormData> = async (data) => {
         

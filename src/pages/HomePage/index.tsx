@@ -22,9 +22,7 @@ export function HomePage() {
     navigateTo('/manager/users')
   }
 
-  const navigateToUserData = () =>{
-    navigateTo('/edituser')
-  }
+  
 
   // const firstName = user.name.split(' ')[0]
   // const greeting = user.sex === 'Masculino' ? 'Bem vindo' : 'Bem vinda '

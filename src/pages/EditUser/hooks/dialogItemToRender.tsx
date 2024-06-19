@@ -1,18 +1,20 @@
 import { DialogConfig } from '../../../components/DialogControlled/interfaces'
 import { defaultTheme } from '../../../styles/themes/default'
 import { DialogStep } from '../interfaces/dialogStep'
-import { EditFormData } from '../schema'
+
 
 interface DialogItemToRenderProps {
   dialogSubmissionStep: DialogStep
   handleUpdateDialogControlled: (open: boolean) => void
   onSubmitChangePassword: () => void
+  onSubmitDeleteUser: () => void
 }
 
 export function useDialogItemToRender({
   handleUpdateDialogControlled,
   dialogSubmissionStep,
-  onSubmitChangePassword
+  onSubmitChangePassword,
+  onSubmitDeleteUser
 }: DialogItemToRenderProps) {
   
 
@@ -57,6 +59,7 @@ export function useDialogItemToRender({
           label: 'Excluir',
           variant: 'primary',
           action: () => {
+            onSubmitDeleteUser()
             handleUpdateDialogControlled(false)
           },
           backgroundColor: defaultTheme.colors.red500,

@@ -1,10 +1,7 @@
-import { useState } from 'react'
+
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import useNavigation from '../../../hooks/useNavigation'
 import { EditFormData, EditSchema } from '../schema/index'
-import { editPassword } from '../services'
-import { ErrorToast, SuccessToast } from '../../../components/Toast'
 
 export const useEditUserForm = () => {
   
@@ -15,8 +12,6 @@ export const useEditUserForm = () => {
     control,
     handleSubmit,
     formState: { errors },
-    trigger,
-    watch,
   } = useForm<EditFormData>({
     resolver: zodResolver(EditSchema),
     defaultValues: {
@@ -45,32 +40,32 @@ export const useEditUserForm = () => {
   //   return null
   // }
 
-  const onSubmit: SubmitHandler<any> = async (data, openEditDialog) => {
-    setLoading(true)
-    try {
-      openEditDialog()
-      console.log(data)
-      const newPasswordPayload = {
-        full_name: data.full_name,
-        email: data.email,
-        birth_date: data.birth_date,
-        biological_sex: data.biological_sex,
-        password: data.newPassword,
-      }
+  const onSubmit: SubmitHandler<any> = async () => {
+    // setLoading(true)
+    // try {
+    //   openEditDialog()
+    //   console.log(data)
+    //   const newPasswordPayload = {
+    //     full_name: data.full_name,
+    //     email: data.email,
+    //     birth_date: data.birth_date,
+    //     biological_sex: data.biological_sex,
+    //     password: data.newPassword,
+    //   }
 
-      const userResponse = await editPassword(data.userId, newPasswordPayload)
+    //   const userResponse = await editPassword(data.userId, newPasswordPayload)
 
       
 
-      SuccessToast('Senha alterada com sucesso!')
-      console.log("deu ceeto")
-      navigateTo('/', { replace: true })
-    } catch (error) {
-      ErrorToast('Erro mudar senha. Tente novamente mais tarde.')
-      console.error('Erro mudar senha:', error)
-    } finally {
-      setLoading(false)
-    }
+    //   SuccessToast('Senha alterada com sucesso!')
+    //   console.log("deu ceeto")
+    //   navigateTo('/', { replace: true })
+    // } catch (error) {
+    //   ErrorToast('Erro mudar senha. Tente novamente mais tarde.')
+    //   console.error('Erro mudar senha:', error)
+    // } finally {
+    //   setLoading(false)
+    // }
   }
 
   
@@ -79,7 +74,6 @@ export const useEditUserForm = () => {
     control,
     handleSubmit,
     errors,
-    loading,
     onSubmit,
   }
 }

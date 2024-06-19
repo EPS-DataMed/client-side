@@ -24,7 +24,7 @@ export const deleteAccount = async (userId: number | null): Promise<DeleteRespon
 
   const response = await api.delete(`/user/users/${userId}`,  {
     headers: {
-      Authorization: `Bearer${token}`
+      Authorization: `Bearer ${token}`
     },
   })
 

@@ -3,7 +3,6 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import useNavigation from '../../../hooks/useNavigation'
 import { SignupFormData, SignupSchema } from '../schema'
-import { formatDate } from '../utils'
 import { createDoctor, createUser } from '../services'
 import { ErrorToast, SuccessToast } from '../../../components/Toast'
 

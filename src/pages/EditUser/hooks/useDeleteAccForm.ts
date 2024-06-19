@@ -1,27 +1,23 @@
-import { useState } from 'react'
-import { useForm, SubmitHandler } from 'react-hook-form'
+
+import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import useNavigation from '../../../hooks/useNavigation'
 import { DeleteAccData, DeleteAccSchema } from '../schema/index'
-import { deleteAccount } from '../services'
-import { ErrorToast, SuccessToast } from '../../../components/Toast'
+
 
 
 export const useDeleteAccForm = () => {
-  const navigateTo = useNavigation()
-  const [loading, setLoading] = useState(false)
+  
+  
   
 
   const {
     control,
     handleSubmit,
     formState: { errors },
-    trigger,
-    watch,
   } = useForm<DeleteAccData>({
     resolver: zodResolver(DeleteAccSchema),
     defaultValues: {
-      password: '',
+      currentPassword: '',
       confirmPassword: ''
     },
   })
@@ -45,27 +41,7 @@ export const useDeleteAccForm = () => {
 //     return null
 //   }
 
-  const onSubmit: SubmitHandler<DeleteAccData> = async (data) => {
-    setLoading(true)
-    try {
-      
-
-      
-
-      const userResponse = await deleteAccount(data.userId)
-
-      
-
-      SuccessToast('Conta apagada com sucesso !')
-
-      navigateTo('/', { replace: true })
-    } catch (error) {
-      ErrorToast('Erro ao apagar conta. Tente novamente mais tarde.')
-      console.error('Erro ao apagar conta:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
+  
 
   
 
@@ -73,7 +49,5 @@ export const useDeleteAccForm = () => {
     control,
     handleSubmit,
     errors,
-    loading,
-    onSubmit,
   }
 }

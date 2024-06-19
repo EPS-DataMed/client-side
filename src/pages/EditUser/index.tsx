@@ -4,14 +4,14 @@ import * as S from './styles'
 import { Pen } from '../../assets/icons/pen'
 import { Logout } from '../../assets/icons/logout'
 import InputField from '../../components/Input/InputField'
-import { EditFormData, EditSchema, DeleteAccData, DeleteAccSchema } from './schema'
+import { EditFormData, DeleteAccData, DeleteAccSchema } from './schema'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Input } from '../../components/Input'
 import { Breadcrumb } from '../../components/Breadcrumb'
 import { useBreadcrumbs } from './hooks/useBreadCrumbs'
 import { Padlock } from './assets/padlock'
-import { editPassword, getUser } from './services'
+import { deleteAccount, editPassword, getUser } from './services'
 import { useCallback, useEffect, useState } from 'react'
 import { useDialogItemToRender } from './hooks/dialogItemToRender'
 
@@ -25,33 +25,28 @@ import {
 
 import { DialogStep } from './interfaces/dialogStep'
 import { getUserId } from '../../utils/getUserId'
-import { useDeleteAccForm } from './hooks/useDeleteAccForm'
 import { ErrorToast, SuccessToast } from '../../components/Toast'
 import { ChangePasswordForm } from './components/ChangePasswordForm'
+import useNavigation from '../../hooks/useNavigation'
+
 export function EditUser(){
     
-    
-    // const {
-        
-        
-    //     loading,
-    //     onSubmit,
-        
-    // } = useEditUserForm()
-
-
+    const navigateTo = useNavigation()
     
     const [passwordData, setPasswordData] = useState({} as EditFormData)
 
     const [loadingPasswordData, setLoadingPasswordData] = useState(false)
 
-    
+    const [loadingDeleteAccount, setLoadingDeleteAccount] = useState(false)
+
     const handleOpenPasswordDialog = useCallback(() => {
 
         handleUpdateDialogControlled(true)
         setDialogSubmissionStep('change_password')
 
     }, [])
+
+    
 
     const handleSavePasswordData = useCallback((data: EditFormData) => {
 
@@ -70,7 +65,10 @@ export function EditUser(){
         try {
             const response = await editPassword(userId, passwordData)
             
-            SuccessToast('Senha atualizada com sucesso!')
+            if(response){
+                SuccessToast('Senha atualizada com sucesso!')
+            }
+            
 
         } catch (error) {
             ErrorToast(
@@ -87,19 +85,42 @@ export function EditUser(){
     
     const [dialogSubmissionStep, setDialogSubmissionStep] = useState<DialogStep>('')
 
+    const handleSubmitDeleteAccount = useCallback(async () => {
+
+        setLoadingDeleteAccount(true)
+        
+        try {
+          
+    
+            const { userId } = getUserId()
+      
+            const userResponse = await deleteAccount(userId)
+      
+            if(userResponse){
+              SuccessToast('Conta apagada com sucesso !')
+              navigateTo('/', { replace: true })
+            }
+      
+            
+      
+            
+        } catch (error) {
+            ErrorToast('Erro ao apagar conta. Tente novamente mais tarde.')
+            console.error('Erro ao apagar conta:', error)
+        } finally {
+            setLoadingDeleteAccount(false)
+        }
+
+    }, [])
+
     const { dialogItemToRender } = useDialogItemToRender({
         handleUpdateDialogControlled,
         dialogSubmissionStep,
-        onSubmitChangePassword: handleSubmitChangePassword
+        onSubmitChangePassword: handleSubmitChangePassword,
+        onSubmitDeleteUser:handleSubmitDeleteAccount
     })
 
-    const {
-        
-        
-        loading: loadingDel,
-        onSubmit: onSubmitDel,
-        
-    } = useDeleteAccForm()
+    
 
     const [user, setUser] = useState({
         content:{
@@ -111,16 +132,26 @@ export function EditUser(){
     })
 
    
+    function openDeleteAccountDialog(){
+        handleUpdateDialogControlled(true)
+        setDialogSubmissionStep('delete_account')
 
+    }
+
+    const onSubmit: SubmitHandler<DeleteAccData> = async () => {
+        
+        openDeleteAccountDialog()
+        
+    }
     
-
+    
     const BREADCRUMBS = useBreadcrumbs()
     
 
     const { control:controlDel, handleSubmit: handleSubmitDel} = useForm<DeleteAccData>({
         resolver: zodResolver(DeleteAccSchema),
         defaultValues: {
-            password: '',
+            currentPassword: '',
             confirmPassword: ''
 
         },
@@ -139,11 +170,7 @@ export function EditUser(){
 
     
 
-    function openDeleteAccount(){
-        handleUpdateDialogControlled(true)
-        setDialogSubmissionStep('delete_account')
-
-    }
+    
 
     function handleCloseDialog() {
         setDialogSubmissionStep('')
@@ -164,7 +191,7 @@ export function EditUser(){
                     handleUpdateDialogControlled={handleUpdateDialogControlled}
                     dialogItemToRender={dialogItemToRender}
                     onClose={handleCloseDialog}
-                    isLoadingRequisition={loadingPasswordData}
+                    isLoadingRequisition={loadingPasswordData || loadingDeleteAccount}
                 />
             )}
             <GenericPage.Root>
@@ -261,7 +288,9 @@ export function EditUser(){
                         <S.SectionTitle>Apagar conta</S.SectionTitle>
                         <S.SectionDescription>Se quiser, você pode apagar sua conta, você perderá todas as suas informações.</S.SectionDescription>
                         <GenericPage.Divider/>
-                        <S.DeleAccForm>
+                        <S.DeleAccForm 
+                            onSubmit={handleSubmitDel(onSubmit)}
+                        >
                             <InputField
                                 label="Senha atual"
                                 name="currentPassword"
@@ -284,7 +313,7 @@ export function EditUser(){
                             <S.ButtonWrapper>
                                 <PrimaryButton 
                                     variant="red"
-                                    onClick={handleSubmitDel(onSubmitDel)}
+                                    type="submit"
                                 >
                                     <Padlock />
                                     <p>Apagar</p>
