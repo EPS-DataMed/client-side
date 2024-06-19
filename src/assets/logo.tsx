@@ -16,6 +16,7 @@ export const LogoSVG: React.FC<LogoSVGProps> = ({
     <svg
       width={width}
       height={height}
+      data-testid="logo-icon"
       viewBox="0 0 61 57"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
