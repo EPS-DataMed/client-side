@@ -36,7 +36,7 @@ export function useDialogItemToRender({
           variant: 'primary',
           action: () => {
             onSubmitChangePassword()
-            //handleUpdateDialogControlled(false)
+            handleUpdateDialogControlled(false)
           },
           backgroundColor: defaultTheme.colors.red500,
           color: defaultTheme.colors.neutral,
