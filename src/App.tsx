@@ -80,7 +80,7 @@ export function App() {
                   }
                 />
                 <Route path="*" element={<Login />} />
-                <Route path="/editUser" element={<EditUser/>} />
+                <Route path="/editUser" element={<EditUser />} />
               </Routes>
             </SubmissionTestProvider>
           </UserProvider>

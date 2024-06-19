@@ -4,6 +4,7 @@ import { Searchbar } from '../..'
 import { HighlightQuery } from '../HighlightQuery'
 import { OptionProps } from '../../hooks/useSearchbarQuery'
 import { WrraperDelete } from './styles'
+import { truncateLabel } from '../../../../utils/truncate'
 
 type Props = ComponentProps<typeof Searchbar.Root>
 
@@ -29,13 +30,12 @@ export function SearchbarConfiguration({
 }: SearchbarConfigurationProps) {
   const [filteredOptions, setFilteredOptions] = useState<OptionProps[]>([])
   const [isFocused, setIsFocused] = useState(false)
-  const [isHovered, setIsHovered] = useState(false)
+  const [isHovered, setIsHovered] = useState<OptionProps | null>(null)
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const userInput = e.currentTarget.value
-    const filtered = options.filter(
-      (option) =>
-        option.name.toLowerCase().indexOf(userInput.toLowerCase()) > -1,
+    const filtered = options.filter((option) =>
+      option.name.toLowerCase().includes(userInput.toLowerCase()),
     )
 
     setFilteredOptions(filtered)
@@ -51,13 +51,6 @@ export function SearchbarConfiguration({
     setTimeout(() => {
       setIsFocused(false)
     }, 150)
-  }
-
-  const truncateLabel = (label: string, maxLength: number) => {
-    if (label.length > maxLength) {
-      return label.slice(0, maxLength) + '...'
-    }
-    return label
   }
 
   const hasQuery = Boolean(query)
@@ -90,6 +83,9 @@ export function SearchbarConfiguration({
           data-testid="search-input"
         />
       </Input.Root>
+      {isRequisitionLoading && (
+        <div data-testid="loading-indicator">loading...</div>
+      )}
       {hasQuery && !isRequisitionLoading && (
         <Searchbar.RoundCloseIconStyled
           onClick={handleClearSearch}
@@ -105,13 +101,13 @@ export function SearchbarConfiguration({
             {filteredOptions.map((option) => (
               <Searchbar.OptionItem
                 optionsCount={optionsCount}
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
+                onMouseEnter={() => setIsHovered(option)}
+                onMouseLeave={() => setIsHovered(null)}
                 key={option.id}
                 onClick={() => handleChooseOption(option)}
                 data-testid={`option-item-${option.id}`}
               >
-                {isHovered ? (
+                {isHovered === option ? (
                   truncateLabel(option.name, 28)
                 ) : (
                   <HighlightQuery

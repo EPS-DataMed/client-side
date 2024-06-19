@@ -11,6 +11,7 @@ interface InputProps {
   variant?: 'searchbar'
   cursor?: string
   edit?: boolean
+  width?: string
 }
 
 const InputComponent = styled.input<InputProps>`
@@ -55,12 +56,7 @@ const InputComponent = styled.input<InputProps>`
       border: 1px solid ${theme.colors.red500};
     `}
 
-  ${(props) =>
-    props.cursor == 'not-allowed' &&
-    css`
-      cursor: not-allowed;
-    `
-  }
+  
 
   
   ${(props) =>
@@ -89,6 +85,17 @@ const InputComponent = styled.input<InputProps>`
 
       &:not([value='']) {
         border-color: ${({ theme }) => theme.colors.blue500};
+      }
+    `}
+
+
+    ${({ cursor }) =>
+    cursor === 'not-allowed' &&
+    css`
+      cursor: not-allowed;
+
+      &:hover {
+        border-color: ${({ theme }) => theme.colors.neutral400};
       }
     `}
 `

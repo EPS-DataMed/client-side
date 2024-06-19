@@ -1,10 +1,10 @@
-import { styled } from 'styled-components'
+import styled from 'styled-components'
 
-export const Section = styled.div`
+export const DeleteSection = styled.div`
   display: flex;
   flex-direction: column;
   border-radius: 4px;
-  border: solid 1px ${({ theme }) => theme.colors.neutral400};
+  border: solid 1px ${({ theme }) => theme.colors.red500};
   padding: ${({ theme }) => theme.space[4]};
   gap: ${({ theme }) => theme.space[2]};
   height: 191px;
@@ -17,7 +17,7 @@ export const SectionDescription = styled.h4`
   font-weight: normal;
 `
 
-export const FormChangePassword = styled.form`
+export const DeleAccForm = styled.form`
   display: flex;
   position: relative;
   gap: ${({ theme }) => theme.space[4]};

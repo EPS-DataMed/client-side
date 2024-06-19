@@ -1,13 +1,8 @@
-
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { EditFormData, EditSchema } from '../schema/index'
 
 export const useEditUserForm = () => {
-  
-  
-  
-
   const {
     control,
     handleSubmit,
@@ -17,13 +12,13 @@ export const useEditUserForm = () => {
     defaultValues: {
       password: '',
       newPassword: '',
-      confirmNewPassword: ''
+      confirmNewPassword: '',
     },
   })
 
-//   const crm = watch('crm')
-//   const specialty = watch('specialty')
-//   const isMedicalInfoFilled = !!crm && !!specialty
+  //   const crm = watch('crm')
+  //   const specialty = watch('specialty')
+  //   const isMedicalInfoFilled = !!crm && !!specialty
 
   // const findEditPasswordError = async () => {
   //   const fields = [
@@ -52,11 +47,7 @@ export const useEditUserForm = () => {
     //     biological_sex: data.biological_sex,
     //     password: data.newPassword,
     //   }
-
     //   const userResponse = await editPassword(data.userId, newPasswordPayload)
-
-      
-
     //   SuccessToast('Senha alterada com sucesso!')
     //   console.log("deu ceeto")
     //   navigateTo('/', { replace: true })
@@ -67,8 +58,6 @@ export const useEditUserForm = () => {
     //   setLoading(false)
     // }
   }
-
-  
 
   return {
     control,

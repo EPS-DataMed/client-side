@@ -24,7 +24,7 @@ export function ProfileButton() {
       {!isListUserInfoLoading && isUserExists ? (
         <p>{user?.full_name[0]}</p>
       ) : (
-        <S.SkeletonProfileCircle />
+        <S.SkeletonProfileCircle data-testid="skeleton-profile-circle" />
       )}
     </S.ProfileCircle>
   )

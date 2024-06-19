@@ -64,7 +64,7 @@ export const useSignupForm = () => {
     setLoading(true)
     try {
       const formattedDateOfBirth = formatDate(data.dateOfBirth)
-      //const formattedDateOfBirth = data.dateOfBirth
+      // const formattedDateOfBirth = data.dateOfBirth
       const userPayload = {
         full_name: data.name,
         email: data.email,
