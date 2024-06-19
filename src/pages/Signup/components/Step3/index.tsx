@@ -28,7 +28,8 @@ export function Step3({
           label="CRM"
           name="crm"
           control={control}
-          description="Informe o CRM/ESTADO."
+          description="Informe o ESTADO/CRM."
+          mask="aa/999999"
         />
 
         <Controller
