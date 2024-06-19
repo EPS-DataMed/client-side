@@ -41,9 +41,6 @@ const Content = styled(SelectRadix.Content)`
     0px 10px 20px -15px rgba(22, 23, 24, 0.2);
 `
 
-const Label = styled(SelectRadix.Label)`
-  font-size: ${({ theme }) => theme.fontSizes.sm};
-`
 const Item = styled(SelectRadix.Item)`
   font-family: ${({ theme }) => theme.fonts.primary};
   font-size: ${({ theme }) => theme.fontSizes.sm};
@@ -83,7 +80,6 @@ export const Select = {
   Group: SelectRadix.Group,
   Content,
   Viewport: SelectRadix.Viewport,
-  Label,
   Item,
   ItemText,
   ChevronDownIcon,

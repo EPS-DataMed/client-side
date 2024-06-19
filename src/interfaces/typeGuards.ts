@@ -24,8 +24,8 @@ export function isErrorInstance(value: unknown): value is Error {
   return value instanceof Error
 }
 
-export function hasObjectValidKeys(obj: object): boolean {
-  return Object.keys(obj).length > 0
+export function hasObjectValidKeys(obj: object | null | undefined): boolean {
+  return obj ? Object.keys(obj).length > 0 : false
 }
 
 export function isJSXElement(element: unknown): element is JSX.Element {

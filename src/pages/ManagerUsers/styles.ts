@@ -1,6 +1,7 @@
 import { css, styled } from 'styled-components'
 import { lightenColor } from '../../utils/colors'
 import { PrimaryButton } from '../../components/PrimaryButton'
+import { Skeleton } from '../../components/Skeleton'
 
 export const WrapperLogoAndLogoTitle = styled.div`
   display: flex;
@@ -172,4 +173,27 @@ export const WrapperButton = styled.div`
   margin-left: auto;
   gap: 8px;
   margin-right: 24px;
+`
+
+export const SkeletonButton = styled(Skeleton)`
+  height: 35px;
+  width: 104px;
+  border-radius: 4px;
+`
+
+export const SkeletonTitle = styled(Skeleton)`
+  height: 49px;
+  width: 28%;
+  border-radius: 4px;
+`
+
+export const SkeletonDescription = styled(Skeleton)`
+  height: 21.5px;
+  width: 80%;
+  border-radius: 4px;
+`
+export const SkeletonBreadcrumbs = styled(Skeleton)`
+  height: 19px;
+  width: 20%;
+  border-radius: 4px;
 `

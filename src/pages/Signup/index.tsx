@@ -36,21 +36,27 @@ export function Signup() {
   const CurrentStep = steps[step]
 
   return (
-    <Page.Background>
+    <Page.Background data-testid="signup-component">
       <Page.Content>
         <Page.WrapperLogoAndText>
-          <LogoSVG height="91px" width="98px" />
+          <LogoSVG height="91px" width="98px" data-testid="logo-svg" />
           <Page.LogoTitle>
-            <TypingEffect text="Daatamed" />
+            <TypingEffect text="Datamed" dataTestId="typing-effect-title" />
           </Page.LogoTitle>
           <Page.Slogan>
-            <TypingEffect text="Teenha seus dados de saúde ao seu alcance." />
+            <TypingEffect
+              text="Tenha seus dados de saúde ao seu alcance."
+              dataTestId="typing-effect-slogan"
+            />
           </Page.Slogan>
         </Page.WrapperLogoAndText>
 
-        <StatusIndicator currentStep={step} />
+        <StatusIndicator currentStep={step} data-testid="status-indicator" />
 
-        <S.SignupForm onSubmit={handleSubmit(onSubmit)}>
+        <S.SignupForm
+          onSubmit={handleSubmit(onSubmit)}
+          data-testid="signup-form"
+        >
           <CurrentStep
             control={control}
             errors={errors}
@@ -58,6 +64,7 @@ export function Signup() {
             loading={loading}
             handleNextStep={handleNextStep}
             isMedicalInfoFilled={isMedicalInfoFilled}
+            data-testid={`step${step}-component`}
           />
           <S.RegisterArea>
             <S.RegisterPhrase>
@@ -66,6 +73,7 @@ export function Signup() {
                 onClick={() => {
                   navigateTo('/')
                 }}
+                data-testid="navigate-login"
               >
                 Ir para o login
               </S.Link>
@@ -73,12 +81,18 @@ export function Signup() {
           </S.RegisterArea>
         </S.SignupForm>
       </Page.Content>
-      {!imageLoaded && <Skeleton style={{ width: '50vw', height: '100%' }} />}
+      {!imageLoaded && (
+        <Skeleton
+          style={{ width: '50vw', height: '100%' }}
+          data-testid="skeleton-loader"
+        />
+      )}
       <Page.Image
         alt="Doctor"
         src="https://github.com/EPS-DataMed/client-side/blob/r1/src/pages/HomePage/assets/signup.png?raw=true"
         onLoad={() => setImageLoaded(true)}
         style={{ display: imageLoaded ? 'block' : 'none' }}
+        data-testid="signup-image"
       />
     </Page.Background>
   )

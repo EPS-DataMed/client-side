@@ -47,6 +47,7 @@ export const Title = styled.div`
 
 export const Description = styled.span`
   font-size: ${({ theme }) => theme.fontSizes.md};
+  text-align: justify;
 `
 
 export const LogoTitle = styled.span`
@@ -58,10 +59,11 @@ export const LogoTitle = styled.span`
 
 type LogoutButtonProps = {
   action: () => void
+  dataTestId?: string
 }
 
-const LogoutButton: React.FC<LogoutButtonProps> = ({ action }) => (
-  <PrimaryButton variant="red" onClick={action}>
+const LogoutButton: React.FC<LogoutButtonProps> = ({ action, dataTestId }) => (
+  <PrimaryButton variant="red" onClick={action} data-testid={dataTestId}>
     <Logout />
     <p>Sair</p>
   </PrimaryButton>

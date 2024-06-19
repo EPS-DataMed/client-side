@@ -81,7 +81,7 @@ describe('Login Component', () => {
 
     await waitFor(() => {
       expect(ErrorToast).toHaveBeenCalledWith(
-        'Verifique suas informações novamente! Ou tente novamente mais tarde.',
+        'Verifique suas credenciais! Ou tente novamente mais tarde.',
       )
     })
   })

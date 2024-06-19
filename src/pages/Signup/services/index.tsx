@@ -1,4 +1,4 @@
-import { api } from '../../../lib/axios'
+import { api, termApi } from '../../../lib/axios'
 
 interface CreateUserPayload {
   full_name: string
@@ -29,5 +29,50 @@ export const createDoctor = async (payload: CreateDoctorPayload) => {
       'Content-Type': 'application/json',
     },
   })
+  return response.data
+}
+
+interface GenerateTermsPayload {
+  projectName: string
+  contactEmail: string
+}
+
+export const generateTerms = async ({
+  contactEmail,
+  projectName,
+}: GenerateTermsPayload) => {
+  const response = await termApi.post(
+    '/term/generate',
+    new URLSearchParams({
+      project_name: projectName,
+      contact_email: contactEmail,
+    }),
+    {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      responseType: 'blob',
+    },
+  )
+  return response.data
+}
+
+export const generatePrivacy = async ({
+  contactEmail,
+  projectName,
+}: GenerateTermsPayload) => {
+  const response = await api.post(
+    '/privacy/generate',
+    new URLSearchParams({
+      project_name: projectName,
+      contact_email: contactEmail,
+    }),
+    {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      responseType: 'blob',
+    },
+  )
   return response.data
 }

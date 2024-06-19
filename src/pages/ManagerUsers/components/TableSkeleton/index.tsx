@@ -5,8 +5,6 @@ export function TableSkeleton() {
 
   return (
     <S.Container>
-      <S.HeaderTableSkeleton />
-
       {Array.from({ length: numberOfRows }, (_, index) => (
         <S.RowTableSkeleton key={index} />
       ))}

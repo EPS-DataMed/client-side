@@ -12,6 +12,7 @@ import { Skeleton } from '../../components/Skeleton'
 import { ChangePasswordFormData, ChangePasswordSchema } from './schema'
 import { ErrorToast, SuccessToast } from '../../components/Toast'
 import { useNavigate } from 'react-router-dom'
+import { Spinner } from '../../components/Spinner'
 
 export function ChangePassword() {
   const [loading, setLoading] = useState(false)
@@ -54,7 +55,7 @@ export function ChangePassword() {
         <Page.WrapperLogoAndText>
           <LargeLogo />
           <Page.LogoTitle>
-            <TypingEffect text="Daatamed" />
+            <TypingEffect text="Datamed" />
           </Page.LogoTitle>
           <S.Slogan>Por favor, informe sua nova senha e confirme.</S.Slogan>
         </Page.WrapperLogoAndText>
@@ -79,7 +80,14 @@ export function ChangePassword() {
 
           <S.WrapperButtonAndLink>
             <PrimaryButton type="submit" disabled={loading}>
-              {loading ? 'Carregando...' : 'Enviar'} <ArrowRight />
+              {loading ? (
+                <>
+                  Carregando <Spinner />
+                </>
+              ) : (
+                'Enviar'
+              )}
+              <ArrowRight />
             </PrimaryButton>
           </S.WrapperButtonAndLink>
         </S.Form>

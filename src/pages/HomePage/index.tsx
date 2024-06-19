@@ -8,6 +8,8 @@ import {
 } from '../../components/DialogControlled'
 import { useLogout } from '../../hooks/useLogout'
 import { ProfileButton } from '../../components/ProfileButton'
+import { useWelcomeMessage } from './hooks/useWelcomeMessage'
+import { useUserContext } from '../../contexts/UserContext'
 
 export type HomePageDialog = 'logout' | ''
 
@@ -22,13 +24,9 @@ export function HomePage() {
     navigateTo('/manager/users')
   }
 
-  
+  const { welcomeMessageText } = useWelcomeMessage()
+  const { isDoctor } = useUserContext()
 
-  // const firstName = user.name.split(' ')[0]
-  // const greeting = user.sex === 'Masculino' ? 'Bem vindo' : 'Bem vinda '
-  // const title = user.crm ? 'Dr. ' : ''
-  // const welcomeMessageText = `${greeting}, ${title} ${firstName}!`
-  // const firstLetter = user.name[0]
   const [imageManagerTestLoaded, setImageManagerTestLoaded] = useState(false)
   const [imageManagerPatientLoaded, setImageManagerPatientLoaded] =
     useState(false)
@@ -42,59 +40,98 @@ export function HomePage() {
 
   return (
     <>
-      <GenericPage.Root hasNoScrollbar>
-        <S.Header>
-          <S.WrapperLogoAndLogoTitle>
-            <GenericPage.Logo />
+      <GenericPage.Root hasNoScrollbar data-testid="generic-page-root">
+        <S.Header data-testid="header">
+          <S.WrapperLogoAndLogoTitle data-testid="logo-wrapper">
+            <GenericPage.Logo data-testid="logo-icon" />
             <GenericPage.LogoTitle>DataMed</GenericPage.LogoTitle>
           </S.WrapperLogoAndLogoTitle>
 
-          <GenericPage.HeaderOptions>
-            <ProfileButton letter="D" />
-            <GenericPage.LogoutButton action={handleOpenLogoutDialog} />
+          <GenericPage.HeaderOptions data-testid="header-options">
+            <ProfileButton data-testid="profile-button" />
+            <GenericPage.LogoutButton
+              dataTestId="logout-button"
+              action={handleOpenLogoutDialog}
+            />
           </GenericPage.HeaderOptions>
         </S.Header>
 
-        <GenericPage.Divider />
-        <S.MainContent>
-          <S.WelcomeText>Bem vindo! </S.WelcomeText>
-          <S.WelcomeQuestion>O que deseja acessar hoje?</S.WelcomeQuestion>
+        <GenericPage.Divider data-testid="divider-top" />
+        <S.MainContent data-testid="main-content">
+          {welcomeMessageText ? (
+            <S.WelcomeText data-testid="welcome-text">
+              {welcomeMessageText}
+            </S.WelcomeText>
+          ) : (
+            <S.SkeletonWelcomeText data-testid="skeleton-welcome-text" />
+          )}
+          <S.WelcomeQuestion data-testid="welcome-question">
+            O que deseja acessar hoje?
+          </S.WelcomeQuestion>
 
-          <S.Options>
-            <S.HomepageOption onClick={handleNavigationToSubmission}>
-              <S.OptionTitle>Gerenciar Exames</S.OptionTitle>
-              <S.OptionDescription>
-                Envie seus exames e extraia seus dados de saúde.
-              </S.OptionDescription>
-              <S.ImageWrapper>
-                {!imageManagerTestLoaded && <S.SkeletonImage />}
-                <S.Image
-                  src="https://github.com/EPS-DataMed/client-side/blob/r1/src/pages/HomePage/assets/BlueCircleAndDoctor.png?raw=true"
-                  onLoad={() => setImageManagerTestLoaded(true)}
-                  style={{ display: imageManagerTestLoaded ? 'block' : 'none' }}
-                />
-              </S.ImageWrapper>
-            </S.HomepageOption>
+          <S.Options data-testid="options">
+            {welcomeMessageText ? (
+              <S.HomepageOption
+                data-testid="homepage-option-submission"
+                onClick={handleNavigationToSubmission}
+              >
+                <S.OptionTitle data-testid="option-title-submission">
+                  Gerenciar Exames
+                </S.OptionTitle>
+                <S.OptionDescription data-testid="option-description-submission">
+                  Envie seus exames e extraia seus dados de saúde.
+                </S.OptionDescription>
+                <S.ImageWrapper data-testid="image-wrapper-submission">
+                  {!imageManagerTestLoaded && (
+                    <S.SkeletonImage data-testid="skeleton-image-submission" />
+                  )}
+                  <S.Image
+                    data-testid="image-submission"
+                    src="https://github.com/EPS-DataMed/client-side/blob/r1/src/pages/HomePage/assets/BlueCircleAndDoctor.png?raw=true"
+                    onLoad={() => setImageManagerTestLoaded(true)}
+                    style={{
+                      display: imageManagerTestLoaded ? 'block' : 'none',
+                    }}
+                  />
+                </S.ImageWrapper>
+              </S.HomepageOption>
+            ) : (
+              <S.HomepageOptionSkeleton data-testid="homepage-option-skeleton-submission" />
+            )}
 
-            <S.HomepageOption onClick={handleNavigationToManagerUsers}>
-              <S.OptionTitle>Gerenciar Pacientes</S.OptionTitle>
-              <S.OptionDescription>
-                Adicione e gerencie os exames do seu paciente.
-              </S.OptionDescription>
-              <S.ImageWrapper>
-                {!imageManagerPatientLoaded && <S.SkeletonImage />}
-                <S.Image
-                  src="https://github.com/EPS-DataMed/client-side/blob/r1/src/pages/HomePage/assets/BlueCircleAndExam.png?raw=true"
-                  onLoad={() => setImageManagerPatientLoaded(true)}
-                  style={{
-                    display: imageManagerPatientLoaded ? 'block' : 'none',
-                  }}
-                />
-              </S.ImageWrapper>
-            </S.HomepageOption>
+            {welcomeMessageText ? (
+              <S.HomepageOption
+                data-testid="homepage-option-manager"
+                onClick={handleNavigationToManagerUsers}
+              >
+                <S.OptionTitle data-testid="option-title-manager">
+                  {isDoctor ? 'Gerenciar Pacientes' : 'Gerenciar Dependentes'}
+                </S.OptionTitle>
+                <S.OptionDescription data-testid="option-description-manager">
+                  {isDoctor
+                    ? 'Adicione e gerencie os exames do seu paciente.'
+                    : 'Adicione e gerencie os exames dos seus dependentes.'}
+                </S.OptionDescription>
+                <S.ImageWrapper data-testid="image-wrapper-manager">
+                  {!imageManagerPatientLoaded && (
+                    <S.SkeletonImage data-testid="skeleton-image-manager" />
+                  )}
+                  <S.Image
+                    data-testid="image-manager"
+                    src="https://github.com/EPS-DataMed/client-side/blob/r1/src/pages/HomePage/assets/BlueCircleAndExam.png?raw=true"
+                    onLoad={() => setImageManagerPatientLoaded(true)}
+                    style={{
+                      display: imageManagerPatientLoaded ? 'block' : 'none',
+                    }}
+                  />
+                </S.ImageWrapper>
+              </S.HomepageOption>
+            ) : (
+              <S.HomepageOptionSkeleton data-testid="homepage-option-skeleton-manager" />
+            )}
           </S.Options>
         </S.MainContent>
-        <GenericPage.Divider />
+        <GenericPage.Divider data-testid="divider-bottom" />
       </GenericPage.Root>
 
       <DialogControlled

@@ -55,3 +55,6 @@ export const MEDICAL_SPECIALTIES = [
   'Medicina Paliativa',
   'Medicina do Adolescente',
 ]
+
+export const PROJECT_NAME = 'Datamed'
+export const CONTACT_EMAIL = 'datamedoficial@gmail.com'

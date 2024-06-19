@@ -202,7 +202,7 @@ export function EditUser(){
                     </S.WrapperLogoAndLogoTitle>
 
                     <GenericPage.HeaderOptions>
-                        <GenericPage.ProfileButton letter="D" />
+                        <GenericPage.ProfileButton/>
                        
 
                         <PrimaryButton>

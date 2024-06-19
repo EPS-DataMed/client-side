@@ -10,16 +10,17 @@ import InputField from '../../../../components/Input/InputField'
 export function Step1({ control, errors, setStep }: StepProps) {
   return (
     <>
-      <S.SignupInstruction>
-        Preencha suas <b>informações básicas</b> e avance para a proxima etapa.
+      <S.SignupInstruction data-testid="signup-instruction">
+        Preencha suas <b>informações básicas</b> e avance para a próxima etapa.
       </S.SignupInstruction>
-      <S.SignupFieldsForm>
+      <S.SignupFieldsForm data-testid="signup-fields-form">
         <InputField
           label="Nome Completo"
           name="name"
           control={control}
           description="Informe o seu nome completo, sem abreviações."
           required
+          data-testid="input-name"
         />
 
         <InputField
@@ -28,6 +29,7 @@ export function Step1({ control, errors, setStep }: StepProps) {
           control={control}
           description="Informe o seu e-mail pessoal."
           required
+          data-testid="input-email"
         />
 
         <InputField
@@ -36,7 +38,9 @@ export function Step1({ control, errors, setStep }: StepProps) {
           control={control}
           description="Informe sua data de nascimento."
           required
-          type="date"
+          type="text"
+          mask="99/99/9999"
+          data-testid="input-dateOfBirth"
         />
 
         <Controller
@@ -54,10 +58,13 @@ export function Step1({ control, errors, setStep }: StepProps) {
                 hasError={!!errors.sex?.message}
                 handleValueChange={field.onChange}
                 defaultValue={field.value}
+                data-testid="select-sex"
               />
               {errors.sex && (
                 <Input.ErrorMessageRoot>
-                  <Input.ErrorMessage>{errors.sex.message}</Input.ErrorMessage>
+                  <Input.ErrorMessage data-testid="error-sex">
+                    {errors.sex.message}
+                  </Input.ErrorMessage>
                 </Input.ErrorMessageRoot>
               )}
             </Input.Root>
@@ -66,7 +73,11 @@ export function Step1({ control, errors, setStep }: StepProps) {
       </S.SignupFieldsForm>
 
       <S.ForwardButtonWrapper>
-        <PrimaryButton type="button" onClick={() => setStep(2)}>
+        <PrimaryButton
+          type="button"
+          onClick={() => setStep(2)}
+          data-testid="button-next"
+        >
           Avançar <ArrowRight />
         </PrimaryButton>
       </S.ForwardButtonWrapper>

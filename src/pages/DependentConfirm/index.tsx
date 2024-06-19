@@ -14,7 +14,7 @@ export function DependentConfirm() {
         <Page.WrapperLogoAndText>
           <LargeLogo />
           <Page.LogoTitle>
-            <TypingEffect text="Daatamed" />
+            <TypingEffect text="Datamed" />
           </Page.LogoTitle>
           <Page.Slogan>
             Confirme se você é um dependente <br /> de Fernando Silva Pereira.

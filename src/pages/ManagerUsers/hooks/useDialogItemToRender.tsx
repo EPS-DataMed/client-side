@@ -1,5 +1,6 @@
 import { ManagerUsersDialog } from '..'
 import { DialogConfig } from '../../../components/DialogControlled/interfaces'
+import { useUserContext } from '../../../contexts/UserContext'
 import { defaultTheme } from '../../../styles/themes/default'
 import { AddDependentDialog } from '../components/AddDependentDialog'
 
@@ -18,11 +19,13 @@ export function useDialogItemToRender({
   dialogManagerUsersStep,
   logoutConfig,
 }: DialogItemToRenderProps) {
+  const { isDoctor } = useUserContext()
   const dialogConfig: DialogConfig = {
     delete: {
-      title: 'Excluir dependente',
-      description:
-        'Tem certeza de que deseja o dependente Gustavo Lima? Esta ação é irreversível e não será possível desfazê-la.',
+      title: isDoctor ? 'Excluir paciente' : 'Excluir dependente',
+      description: `Tem certeza de que deseja excluir o ${
+        isDoctor ? 'paciente' : 'dependente'
+      } Gustavo Lima? Esta ação é irreversível e não será possível desfazê-la.`,
       width: '28rem',
       buttonConfig: [
         {
@@ -49,10 +52,11 @@ export function useDialogItemToRender({
     },
     logout: logoutConfig,
     add_dependent: {
-      title: 'Dependente',
+      title: isDoctor ? 'Paciente' : 'Dependente',
       component: <AddDependentDialog />,
-      description:
-        'Informe o e-mail do seu dependente para que possamos cadastrá-lo para você.',
+      description: `Informe o e-mail do seu ${
+        isDoctor ? 'paciente' : 'dependente'
+      } para que possamos cadastrá-lo para você.`,
       width: '27.6rem',
     },
   }

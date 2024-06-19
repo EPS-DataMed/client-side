@@ -14,6 +14,7 @@ import { login } from './services'
 import { saveCookie } from '../../utils/cookies'
 import { ErrorToast } from '../../components/Toast'
 import { useNavigate } from 'react-router-dom'
+import { Spinner } from '../../components/Spinner'
 
 export function Login() {
   const [loading, setLoading] = useState(false)
@@ -36,9 +37,7 @@ export function Login() {
       saveCookie('access_token', response.content.access_token, 30)
       navigate(`/home`)
     } catch (error) {
-      ErrorToast(
-        'Verifique suas informações novamente! Ou tente novamente mais tarde.',
-      )
+      ErrorToast('Verifique suas credenciais! Ou tente novamente mais tarde.')
     } finally {
       setLoading(false)
     }
@@ -63,10 +62,10 @@ export function Login() {
         <Page.WrapperLogoAndText data-testid="logo-and-text">
           <LargeLogo />
           <Page.LogoTitle>
-            <TypingEffect text="Daatamed" />
+            <TypingEffect text="Datamed" />
           </Page.LogoTitle>
           <Page.Slogan>
-            <TypingEffect text="Teenha seus dados de saúde ao seu alcance." />
+            <TypingEffect text="Tenha seus dados de saúde ao seu alcance." />
           </Page.Slogan>
         </Page.WrapperLogoAndText>
 
@@ -94,8 +93,17 @@ export function Login() {
               disabled={loading}
               data-testid="submit-button"
             >
-              {loading ? 'Carregando...' : 'Entrar'} <ArrowRight />
+              {loading ? (
+                <>
+                  Carregando <Spinner />
+                </>
+              ) : (
+                <>
+                  Entrar <ArrowRight />
+                </>
+              )}
             </PrimaryButton>
+
             <S.Link
               onClick={() => {
                 navigate('/recover')
