@@ -28,6 +28,8 @@ import { getUserId } from '../../utils/getUserId'
 import { ErrorToast, SuccessToast } from '../../components/Toast'
 import { ChangePasswordForm } from './components/ChangePasswordForm'
 import useNavigation from '../../hooks/useNavigation'
+import { ProfileButton } from '../../components/ProfileButton'
+import { useLogout } from '../../hooks/useLogout'
 
 export function EditUser(){
     
@@ -182,6 +184,9 @@ export function EditUser(){
         return `${split_date[2]}/${split_date[1]}/${split_date[0]}`
     }
 
+    const { handleOpenLogoutDialog, logoutConfig } = useLogout({
+        handleOpenDialog: (value) => handleUpdateDialogControlled(value),
+    })
     
     return (
         <>
@@ -202,19 +207,11 @@ export function EditUser(){
                     </S.WrapperLogoAndLogoTitle>
 
                     <GenericPage.HeaderOptions>
-                        <GenericPage.ProfileButton/>
-                       
-
-                        <PrimaryButton>
-                            <Pen />
-                            <p>Paciente</p>
-                        </PrimaryButton>
-
-                        <PrimaryButton variant="red">
-                            <Logout />
-                            <p>Sair</p>
-                        </PrimaryButton>
-
+                        <ProfileButton data-testid="profile-button" />
+                        <GenericPage.LogoutButton
+                            dataTestId="logout-button"
+                            action={handleOpenLogoutDialog}
+                        />
                     </GenericPage.HeaderOptions>
                     
                 </S.Header>
@@ -328,7 +325,12 @@ export function EditUser(){
 
             </GenericPage.Root>
         
-        
+            <DialogControlled
+                isDialogControlledOpen={isDialogControlledOpen}
+                handleUpdateDialogControlled={handleUpdateDialogControlled}
+                dialogItemToRender={logoutConfig}
+                isLoadingRequisition={false}
+            />
         </>
 
 
