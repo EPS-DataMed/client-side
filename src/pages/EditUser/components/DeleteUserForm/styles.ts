@@ -7,7 +7,6 @@ export const DeleteSection = styled.div`
   border: solid 1px ${({ theme }) => theme.colors.red500};
   padding: ${({ theme }) => theme.space[4]};
   gap: ${({ theme }) => theme.space[2]};
-  height: 191px;
 `
 
 export const SectionTitle = styled.h2`
@@ -26,4 +25,10 @@ export const DeleAccForm = styled.form`
 export const ButtonWrapper = styled.div`
   position: relative;
   margin-top: 22px;
+`
+
+export const InputWrapper = styled.div`
+  display: flex;
+  flex-direction: column;  
+  gap: ${({ theme }) => theme.space[2]};
 `

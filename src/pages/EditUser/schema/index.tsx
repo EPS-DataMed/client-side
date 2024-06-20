@@ -15,6 +15,9 @@ export const EditSchema = z
       .regex(/\d/, 'Deve conter números'),
 
     confirmNewPassword: z.string().min(1, 'Confirmação de senha é obrigatória'),
+    seePassword: z.boolean(),
+    seeNewPassword: z.boolean(),
+    seeConfirmPassword: z.boolean()
   })
   .refine((data) => data.newPassword === data.confirmNewPassword, {
     message: 'As senhas estão diferentes',
@@ -32,6 +35,8 @@ export const DeleteAccSchema = z
       .regex(/\d/, 'Deve conter números'),
 
     confirmPassword: z.string().min(1, 'Confirmação de senha é obrigatória'),
+    seePassword: z.boolean(),
+    seeConfirmPassword: z.boolean()
   })
   .refine((data) => data.currentPassword === data.confirmPassword, {
     message: 'As senhas estão diferentes',
