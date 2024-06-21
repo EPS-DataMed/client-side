@@ -14,6 +14,8 @@ interface InputProps {
   width?: string
 }
 
+
+
 const InputComponent = styled.input<InputProps>`
   height: 35px;
   background-color: inherit;
