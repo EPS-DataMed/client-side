@@ -12,6 +12,7 @@ import { UserProvider } from './contexts/UserContext'
 import { UserForm } from './pages/UserForm'
 import { Login } from './pages/Login'
 import { Signup } from './pages/Signup'
+import { EditUser } from './pages/EditUser'
 import { ManagerUsers } from './pages/ManagerUsers'
 import { DependentConfirm } from './pages/DependentConfirm'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -79,6 +80,7 @@ export function App() {
                   }
                 />
                 <Route path="*" element={<Login />} />
+                <Route path="/editUser" element={<EditUser />} />
               </Routes>
             </SubmissionTestProvider>
           </UserProvider>

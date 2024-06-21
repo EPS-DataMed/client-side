@@ -1,14 +1,13 @@
-import { render, screen, fireEvent } from '@testing-library/react'
-import '@testing-library/jest-dom'
-import { ThemeProvider } from 'styled-components'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { SearchbarConfiguration, SearchbarConfigurationProps } from './'
-import { defaultTheme } from '../../../../styles/themes/default'
+import AppProviders from '../../../AppProviders'
 
 const mockOptions = [
   { id: '1', name: 'Option 1' },
   { id: '2', name: 'Option 2' },
   { id: '3', name: 'Option 3' },
   { id: '4', name: 'Option 4' },
+  { id: '5', name: 'Option 5' },
 ]
 
 const renderComponent = (props: Partial<SearchbarConfigurationProps> = {}) => {
@@ -24,9 +23,9 @@ const renderComponent = (props: Partial<SearchbarConfigurationProps> = {}) => {
     ...props,
   }
   return render(
-    <ThemeProvider theme={defaultTheme}>
+    <AppProviders>
       <SearchbarConfiguration {...defaultProps} />
-    </ThemeProvider>,
+    </AppProviders>,
   )
 }
 
@@ -36,9 +35,11 @@ describe('SearchbarConfiguration', () => {
     expect(screen.getByTestId('searchbar-root')).toBeInTheDocument()
   })
 
-  it('displays the search input', () => {
+  it('displays the search input with correct placeholder', () => {
     renderComponent()
-    expect(screen.getByTestId('search-input')).toBeInTheDocument()
+    const input = screen.getByTestId('search-input')
+    expect(input).toBeInTheDocument()
+    expect(input).toHaveAttribute('placeholder', 'Digite para buscar...')
   })
 
   it('updates query on input change', () => {
@@ -58,6 +59,18 @@ describe('SearchbarConfiguration', () => {
     fireEvent.focus(input)
 
     expect(screen.getByTestId('options-container')).toBeInTheDocument()
+  })
+
+  it('hides options when input is blurred', async () => {
+    renderComponent()
+
+    const input = screen.getByTestId('search-input')
+    fireEvent.focus(input)
+    fireEvent.blur(input)
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('options-container')).not.toBeInTheDocument()
+    })
   })
 
   it('filters options based on input value', () => {
@@ -110,5 +123,62 @@ describe('SearchbarConfiguration', () => {
 
     expect(setQuery).toHaveBeenCalledWith('Option 1')
     expect(setSelectedOption).toHaveBeenCalledWith(mockOptions[0])
+  })
+
+  it('does not display options when not focused', () => {
+    renderComponent()
+
+    expect(screen.queryByTestId('options-container')).toBeNull()
+  })
+
+  it('shows loading state when isRequisitionLoading is true', () => {
+    renderComponent({ isRequisitionLoading: true })
+
+    expect(screen.getByTestId('loading-indicator')).toBeInTheDocument()
+  })
+
+  it('does not display clear icon when query is empty', () => {
+    renderComponent({ query: '' })
+
+    expect(screen.queryByTestId('clear-icon')).toBeNull()
+  })
+
+  it('handles hover state on option item', () => {
+    renderComponent()
+
+    const input = screen.getByTestId('search-input')
+    fireEvent.focus(input)
+
+    const optionItem = screen.getByTestId('option-item-1')
+    fireEvent.mouseEnter(optionItem)
+    fireEvent.mouseLeave(optionItem)
+  })
+
+  it('highlights query in option item', () => {
+    renderComponent({ query: 'Option' })
+
+    const input = screen.getByTestId('search-input')
+    fireEvent.focus(input)
+
+    const optionItem = screen.getByTestId('option-item-1')
+    const nonBoldText = optionItem.querySelector(
+      '[data-testid="non-bold-text"]',
+    )
+
+    expect(nonBoldText).toBeInTheDocument()
+    expect(nonBoldText).toHaveTextContent('Option')
+  })
+
+  it('calculates optionsCount correctly', () => {
+    renderComponent({ query: 'Option' })
+
+    const input = screen.getByTestId('search-input')
+    fireEvent.focus(input)
+
+    const optionsContainer = screen.getByTestId('options-container')
+    expect(optionsContainer).toHaveAttribute('optionscount', 'fourOrMore')
+
+    fireEvent.change(input, { target: { value: 'Option 1' } })
+    expect(optionsContainer).toHaveAttribute('optionscount', 'lessThanFour')
   })
 })

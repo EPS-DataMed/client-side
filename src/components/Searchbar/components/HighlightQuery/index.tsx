@@ -16,7 +16,9 @@ export const HighlightQuery = ({ option, query }: HighlightQueryProps) => {
   return (
     <>
       {beforeQuery}
-      <Searchbar.NonBoldText>{matchedQuery}</Searchbar.NonBoldText>
+      <Searchbar.NonBoldText data-testid="non-bold-text">
+        {matchedQuery}
+      </Searchbar.NonBoldText>
       {afterQuery}
     </>
   )

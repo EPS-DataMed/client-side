@@ -9,7 +9,12 @@ const Root = styled.div`
 interface InputProps {
   hasError?: boolean
   variant?: 'searchbar'
+  cursor?: string
+  edit?: boolean
+  width?: string
 }
+
+
 
 const InputComponent = styled.input<InputProps>`
   height: 35px;
@@ -23,7 +28,6 @@ const InputComponent = styled.input<InputProps>`
   font-weight: ${({ theme }) => theme.fontWeights.regular};
   box-sizing: border-box;
   border: 1px solid ${({ theme }) => theme.colors.neutral400};
-
   padding: 0 ${({ theme }) => theme.space[4]};
   transition: all 0.3s;
   &:focus {
@@ -45,6 +49,7 @@ const InputComponent = styled.input<InputProps>`
       cursor: not-allowed;
       borborder: 1px solid ${({ theme }) => theme.colors.neutral400};
       background-color: ${({ theme }) => theme.colors.neutral100};
+      color: ${({ theme }) => theme.colors.neutral400};
     `}
 
   ${({ hasError, theme }) =>
@@ -53,6 +58,9 @@ const InputComponent = styled.input<InputProps>`
       border: 1px solid ${theme.colors.red500};
     `}
 
+  
+
+  
   ${(props) =>
     props.variant === 'searchbar' &&
     css`
@@ -79,6 +87,17 @@ const InputComponent = styled.input<InputProps>`
 
       &:not([value='']) {
         border-color: ${({ theme }) => theme.colors.blue500};
+      }
+    `}
+
+
+    ${({ cursor }) =>
+    cursor === 'not-allowed' &&
+    css`
+      cursor: not-allowed;
+
+      &:hover {
+        border-color: ${({ theme }) => theme.colors.neutral400};
       }
     `}
 `
