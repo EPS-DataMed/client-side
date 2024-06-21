@@ -19,7 +19,7 @@ export function listExamsRepository() {
     setFilesUploaded(response)
   }
 
-  const { isFetching: isListExamsLoading } = useQuery(
+  const { isLoading: isListExamsLoading } = useQuery(
     [`exames-${1}`],
     fetchListExams,
     {
