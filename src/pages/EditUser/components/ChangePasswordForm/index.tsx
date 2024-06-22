@@ -1,13 +1,12 @@
 import InputField from '../../../../components/Input/InputField'
 import { EditFormData, EditSchema } from '../../schema'
-import { useForm, SubmitHandler } from 'react-hook-form'
+import { useForm, SubmitHandler, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as S from './styles'
 import { GenericPage } from '../../../../components/GenericPage'
 import { PrimaryButton } from '../../../../components/PrimaryButton'
 import { Padlock } from '../../assets/padlock'
 import { useUserContext } from '../../../../contexts/UserContext'
-import { Controller } from 'react-hook-form'
 import Checkbox from '../../../../components/Checkbox'
 import { useState } from 'react'
 
@@ -20,9 +19,8 @@ export function ChangePasswordForm({ onOpenDialog }: ChangePasswordProps) {
   const [changePassword, setChangePassword] = useState({
     showPassword: false,
     showNewPassword: false,
-    showConfirmPassword: false
+    showConfirmPassword: false,
   })
-
 
   const onSubmit: SubmitHandler<EditFormData> = async (data) => {
     onOpenDialog(data)
@@ -51,9 +49,8 @@ export function ChangePasswordForm({ onOpenDialog }: ChangePasswordProps) {
             name="password"
             control={control}
             description=""
-            type={changePassword.showPassword ? "text" : "password"}
+            type={changePassword.showPassword ? 'text' : 'password'}
             required
-            
             isLoading={!isUserExists}
           />
           <Controller
@@ -63,18 +60,18 @@ export function ChangePasswordForm({ onOpenDialog }: ChangePasswordProps) {
               <Checkbox
                 checked={field.value}
                 onChange={(e) => {
-                    field.onChange(e.target.checked)
-                    setChangePassword({...changePassword, showPassword:e.target.checked});
-                  }
-                }
+                  field.onChange(e.target.checked)
+                  setChangePassword({
+                    ...changePassword,
+                    showPassword: e.target.checked,
+                  })
+                }}
                 label="Ver senha"
                 data-testid="checkbox-password"
               />
             )}
           />
-
         </S.InputWrapper>
-        
 
         <S.InputWrapper>
           <InputField
@@ -82,9 +79,8 @@ export function ChangePasswordForm({ onOpenDialog }: ChangePasswordProps) {
             name="newPassword"
             control={control}
             description=""
-            type={changePassword.showNewPassword ? "text" : "password"}
+            type={changePassword.showNewPassword ? 'text' : 'password'}
             required
-            
             isLoading={!isUserExists}
           />
 
@@ -95,29 +91,27 @@ export function ChangePasswordForm({ onOpenDialog }: ChangePasswordProps) {
               <Checkbox
                 checked={field.value}
                 onChange={(e) => {
-                  
-                    field.onChange(e.target.checked)
-                    setChangePassword({...changePassword, showNewPassword: e.target.checked})
-
-                  }
-                }
+                  field.onChange(e.target.checked)
+                  setChangePassword({
+                    ...changePassword,
+                    showNewPassword: e.target.checked,
+                  })
+                }}
                 label="Ver senha"
                 data-testid="checkbox-password"
               />
             )}
           />
-
         </S.InputWrapper>
-        
+
         <S.InputWrapper>
           <InputField
             label="Confirmar senha"
             name="confirmNewPassword"
             control={control}
             description=""
-            type={changePassword.showConfirmPassword ? "text" : "password"}
+            type={changePassword.showConfirmPassword ? 'text' : 'password'}
             required
-            
             isLoading={!isUserExists}
           />
 
@@ -128,20 +122,18 @@ export function ChangePasswordForm({ onOpenDialog }: ChangePasswordProps) {
               <Checkbox
                 checked={field.value}
                 onChange={(e) => {
-
-                    field.onChange(e.target.checked)
-                    setChangePassword({...changePassword, showConfirmPassword: e.target.checked})
-                  }
-                  
-                }
+                  field.onChange(e.target.checked)
+                  setChangePassword({
+                    ...changePassword,
+                    showConfirmPassword: e.target.checked,
+                  })
+                }}
                 label="Ver senha"
                 data-testid="checkbox-password"
               />
             )}
           />
-
         </S.InputWrapper>
-        
 
         <S.ButtonWrapper>
           <PrimaryButton type="submit">

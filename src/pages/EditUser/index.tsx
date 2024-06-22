@@ -17,7 +17,6 @@ import * as S from './styles'
 import { UserPersonalInformations } from './components/UserPersonalInformations'
 import { isNotUndefined } from '../../interfaces/typeGuards'
 
-
 export function EditUser() {
   const [passwordData, setPasswordData] = useState({} as EditFormData)
   const {

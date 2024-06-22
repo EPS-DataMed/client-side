@@ -29,6 +29,6 @@ export const ButtonWrapper = styled.div`
 
 export const InputWrapper = styled.div`
   display: flex;
-  flex-direction: column;  
+  flex-direction: column;
   gap: ${({ theme }) => theme.space[2]};
 `
