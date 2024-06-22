@@ -16,7 +16,12 @@ export function useSubmitHandlers() {
       const { userId } = getUserId()
       setLoadingPasswordData(true)
       try {
-        const response = await editPassword(userId, passwordData)
+
+        const payload = {
+          old_password: passwordData.password,
+          new_password: passwordData.newPassword
+        }
+        const response = await editPassword(userId, payload)
         if (response.status_code === 200) {
           SuccessToast('Senha atualizada com sucesso!')
         } else {

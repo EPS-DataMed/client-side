@@ -2,6 +2,7 @@ import { api } from '../../../lib/axios'
 import { GetUserResponse, DeleteResponse } from '../interfaces/index'
 import { getCookie } from '../../../utils/cookies'
 import { EditFormData } from '../schema'
+import { string } from 'zod'
 
 export const getUser = async (
   userId: number | null,
@@ -33,21 +34,24 @@ export const deleteAccount = async (
   return response.data
 }
 
+interface EditPasswordPayload {
+  old_password: string
+  new_password: string
+}
 export const editPassword = async (
   userId: number | null,
-  payload: EditFormData,
+  payload: EditPasswordPayload,
 ): Promise<any> => {
   console.log('payload ', payload)
   const token = getCookie('access_token')
 
   const response = await api.patch(
-    `/user/users/${userId}`,
+    `/user/users/${userId}/password`,
+    null,
     {
-      password: payload.newPassword,
-    },
-    {
+      params:payload,
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`
       },
     },
   )

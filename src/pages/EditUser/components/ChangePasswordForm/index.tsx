@@ -34,6 +34,9 @@ export function ChangePasswordForm({ onOpenDialog }: ChangePasswordProps) {
       password: '',
       newPassword: '',
       confirmNewPassword: '',
+      seePassword: false,
+      seeNewPassword: false,
+      seeConfirmPassword: false
     },
   })
 
