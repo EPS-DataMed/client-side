@@ -17,10 +17,11 @@ import * as S from './styles'
 import { UserPersonalInformations } from './components/UserPersonalInformations'
 import { isNotUndefined } from '../../interfaces/typeGuards'
 
-
 export function EditUser() {
   const [passwordData, setPasswordData] = useState({} as EditFormData)
-  const [deletePasswordData, setDeletePasswordData] = useState({} as DeleteAccData)
+  const [deletePasswordData, setDeletePasswordData] = useState(
+    {} as DeleteAccData,
+  )
   const {
     loadingPasswordData,
     loadingDeleteAccount,

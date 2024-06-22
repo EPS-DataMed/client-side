@@ -18,7 +18,7 @@ export function DeleteUserForm({ onOpenDialog }: DeleteUserFormProps) {
   const { isUserExists } = useUserContext()
   const [deleteAccount, setDeleteAccount] = useState({
     showPassword: false,
-    showConfirmPassword: false
+    showConfirmPassword: false,
   })
 
   const onSubmit: SubmitHandler<DeleteAccData> = async (data) => {
@@ -31,7 +31,7 @@ export function DeleteUserForm({ onOpenDialog }: DeleteUserFormProps) {
         currentPassword: '',
         confirmPassword: '',
         seePassword: false,
-        seeConfirmPassword: false
+        seeConfirmPassword: false,
       },
     })
 
@@ -50,7 +50,7 @@ export function DeleteUserForm({ onOpenDialog }: DeleteUserFormProps) {
             name="currentPassword"
             control={controlDel}
             description=""
-            type={deleteAccount.showPassword ? "text": "password"}
+            type={deleteAccount.showPassword ? 'text' : 'password'}
             required
             width="225px"
             isLoading={!isUserExists}
@@ -63,24 +63,26 @@ export function DeleteUserForm({ onOpenDialog }: DeleteUserFormProps) {
               <Checkbox
                 checked={field.value}
                 onChange={(e) => {
-                    field.onChange(e.target.checked)
-                    setDeleteAccount({...deleteAccount, showPassword:e.target.checked});
-                  }
-                }
+                  field.onChange(e.target.checked)
+                  setDeleteAccount({
+                    ...deleteAccount,
+                    showPassword: e.target.checked,
+                  })
+                }}
                 label="Ver senha"
                 data-testid="checkbox-password"
               />
             )}
           />
         </S.InputWrapper>
-        
+
         <S.InputWrapper>
           <InputField
             label="Confirmar senha"
             name="confirmPassword"
             control={controlDel}
             description=""
-            type={deleteAccount.showConfirmPassword ? "text" : "password"}
+            type={deleteAccount.showConfirmPassword ? 'text' : 'password'}
             required
             width="225px"
             isLoading={!isUserExists}
@@ -93,17 +95,18 @@ export function DeleteUserForm({ onOpenDialog }: DeleteUserFormProps) {
               <Checkbox
                 checked={field.value}
                 onChange={(e) => {
-                    field.onChange(e.target.checked)
-                    setDeleteAccount({...deleteAccount, showConfirmPassword:e.target.checked});
-                  }
-                }
+                  field.onChange(e.target.checked)
+                  setDeleteAccount({
+                    ...deleteAccount,
+                    showConfirmPassword: e.target.checked,
+                  })
+                }}
                 label="Ver senha"
                 data-testid="checkbox-confirm-password"
               />
             )}
           />
         </S.InputWrapper>
-        
 
         <S.ButtonWrapper>
           <PrimaryButton variant="red" type="submit">

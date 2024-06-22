@@ -16,10 +16,9 @@ export function useSubmitHandlers() {
       const { userId } = getUserId()
       setLoadingPasswordData(true)
       try {
-
         const payload = {
           old_password: passwordData.password,
-          new_password: passwordData.newPassword
+          new_password: passwordData.newPassword,
         }
         const response = await editPassword(userId, payload)
         if (response.status_code === 200) {
@@ -38,33 +37,34 @@ export function useSubmitHandlers() {
     [],
   )
 
-  const handleSubmitDeleteAccount = useCallback(async (passwordData: DeleteAccData) => {
-    setLoadingDeleteAccount(true)
-    try {
-      const payload = {
-        password: passwordData.currentPassword
-      }
-      const { userId } = getUserId()
-      const isValid = await deleteAccount(userId, false, payload)
-
-      if (isValid) {
-
-        const deleteResponse = await deleteAccount(userId, true, payload)
-
-        if(deleteResponse){
-          SuccessToast('Conta apagada com sucesso!')
-          navigateTo('/', { replace: true })
+  const handleSubmitDeleteAccount = useCallback(
+    async (passwordData: DeleteAccData) => {
+      setLoadingDeleteAccount(true)
+      try {
+        const payload = {
+          password: passwordData.currentPassword,
         }
-        
-      } else {
-        throw new Error()
+        const { userId } = getUserId()
+        const isValid = await deleteAccount(userId, false, payload)
+
+        if (isValid) {
+          const deleteResponse = await deleteAccount(userId, true, payload)
+
+          if (deleteResponse) {
+            SuccessToast('Conta apagada com sucesso!')
+            navigateTo('/', { replace: true })
+          }
+        } else {
+          throw new Error()
+        }
+      } catch (error) {
+        ErrorToast('Erro ao apagar conta. Tente novamente mais tarde.')
+      } finally {
+        setLoadingDeleteAccount(false)
       }
-    } catch (error) {
-      ErrorToast('Erro ao apagar conta. Tente novamente mais tarde.')
-    } finally {
-      setLoadingDeleteAccount(false)
-    }
-  }, [navigateTo])
+    },
+    [navigateTo],
+  )
 
   return {
     loadingPasswordData,

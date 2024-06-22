@@ -1,8 +1,7 @@
 import { api } from '../../../lib/axios'
 import { GetUserResponse, DeleteResponse } from '../interfaces/index'
 import { getCookie } from '../../../utils/cookies'
-import { EditFormData } from '../schema'
-import { string } from 'zod'
+
 
 export const getUser = async (
   userId: number | null,
@@ -26,36 +25,30 @@ interface DeleteAccountPayload {
 export const deleteAccount = async (
   userId: number | null,
   sendDeleteRequest: boolean,
-  payload: DeleteAccountPayload
+  payload: DeleteAccountPayload,
 ): Promise<DeleteResponse> => {
   const token = getCookie('access_token')
 
-  var url = null
+  let url = null
+  let response = null
 
-  if(sendDeleteRequest){
+  if (sendDeleteRequest) {
     url = `/user/users/${userId}`
 
-    var response = await api.delete(url, {
+    response = await api.delete(url, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
-
-  }
-  else{
+  } else {
     url = `/auth/users/${userId}/compare-password`
 
-    var response = await api.post(url, 
-      payload,  
-      {
-        headers: {
-          Accept: 'application/json',
-        },
-      })
-
+    response = await api.post(url, payload, {
+      headers: {
+        Accept: 'application/json',
+      },
+    })
   }
-  
-  
 
   return response.data
 }
@@ -71,15 +64,11 @@ export const editPassword = async (
   console.log('payload ', payload)
   const token = getCookie('access_token')
 
-  const response = await api.patch(
-    `/user/users/${userId}/password`,
-    payload,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`
-      },
+  const response = await api.patch(`/user/users/${userId}/password`, payload, {
+    headers: {
+      Authorization: `Bearer ${token}`,
     },
-  )
+  })
 
   return response.data
 }
