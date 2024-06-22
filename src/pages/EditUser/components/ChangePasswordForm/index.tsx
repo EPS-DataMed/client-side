@@ -32,6 +32,9 @@ export function ChangePasswordForm({ onOpenDialog }: ChangePasswordProps) {
       password: '',
       newPassword: '',
       confirmNewPassword: '',
+      seePassword: false,
+      seeNewPassword: false,
+      seeConfirmPassword: false,
     },
   })
 
@@ -39,7 +42,9 @@ export function ChangePasswordForm({ onOpenDialog }: ChangePasswordProps) {
     <S.Section>
       <S.SectionTitle>Senha</S.SectionTitle>
       <S.SectionDescription>
-        Se quiser, você pode alterar sua senha
+        Para alterar sua senha, siga as etapas abaixo: insira sua senha atual no
+        campo correspondente e, em seguida, preencha a nova senha que deseja
+        utilizar nos campos indicados.
       </S.SectionDescription>
       <GenericPage.Divider />
       <S.FormChangePassword onSubmit={handleSubmit(onSubmit)}>

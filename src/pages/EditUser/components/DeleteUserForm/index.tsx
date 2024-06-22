@@ -1,4 +1,4 @@
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { GenericPage } from '../../../../components/GenericPage'
 import InputField from '../../../../components/Input/InputField'
 import { PrimaryButton } from '../../../../components/PrimaryButton'
@@ -11,7 +11,7 @@ import { useState } from 'react'
 import Checkbox from '../../../../components/Checkbox'
 
 interface DeleteUserFormProps {
-  onOpenDialog: () => void
+  onOpenDialog: (data: DeleteAccData) => void
 }
 
 export function DeleteUserForm({ onOpenDialog }: DeleteUserFormProps) {
@@ -20,12 +20,18 @@ export function DeleteUserForm({ onOpenDialog }: DeleteUserFormProps) {
     showPassword: false,
     showConfirmPassword: false,
   })
+
+  const onSubmit: SubmitHandler<DeleteAccData> = async (data) => {
+    onOpenDialog(data)
+  }
   const { control: controlDel, handleSubmit: handleSubmitDel } =
     useForm<DeleteAccData>({
       resolver: zodResolver(DeleteAccSchema),
       defaultValues: {
         currentPassword: '',
         confirmPassword: '',
+        seePassword: false,
+        seeConfirmPassword: false,
       },
     })
 
@@ -33,11 +39,12 @@ export function DeleteUserForm({ onOpenDialog }: DeleteUserFormProps) {
     <S.DeleteSection>
       <S.SectionTitle>Apagar conta</S.SectionTitle>
       <S.SectionDescription>
-        Se quiser, você pode apagar sua conta, você perderá todas as suas
-        informações.
+        Para apagar sua conta, siga as etapas abaixo: insira sua senha atual no
+        campo correspondente e confirme sua decisão de excluir a conta. Tenha em
+        mente que esta ação é irreversível.
       </S.SectionDescription>
       <GenericPage.Divider />
-      <S.DeleAccForm onSubmit={handleSubmitDel(onOpenDialog)}>
+      <S.DeleAccForm onSubmit={handleSubmitDel(onSubmit)}>
         <S.InputWrapper>
           <InputField
             label="Senha atual"
