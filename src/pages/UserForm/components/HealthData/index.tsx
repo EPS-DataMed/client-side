@@ -9,12 +9,15 @@ import {
 import * as S from './styles'
 import InputField from '../../../../components/Input/InputField'
 import { useUserContext } from '../../../../contexts/UserContext'
+import { useSubmissionTestContext } from '../../../../contexts/SubmissionTestContext'
 
 interface HealthDataProps {
   control: Control<any>
 }
 const HealthData: React.FC<HealthDataProps> = ({ control }) => {
   const { isUserExists } = useUserContext()
+  const { formUserFields, hasFormData } = useSubmissionTestContext()
+  const isLoading = !isUserExists && !hasFormData
 
   return (
     <Section hasVerticalOrientation title="Seção 02: Dados de saúde">
@@ -30,7 +33,11 @@ const HealthData: React.FC<HealthDataProps> = ({ control }) => {
             control={control}
             required={field.required}
             width="225px"
-            isLoading={!isUserExists}
+            isLoading={isLoading}
+            defaultValue={
+              formUserFields?.hemogram.find((info) => info.name === field.name)
+                ?.value
+            }
           />
         ))}
       </S.Container>
@@ -47,7 +54,12 @@ const HealthData: React.FC<HealthDataProps> = ({ control }) => {
             control={control}
             required={field.required}
             width="225px"
-            isLoading={!isUserExists}
+            isLoading={isLoading}
+            defaultValue={
+              formUserFields?.hepaticFunction.find(
+                (info) => info.name === field.name,
+              )?.value
+            }
           />
         ))}
       </S.Container>
@@ -65,7 +77,12 @@ const HealthData: React.FC<HealthDataProps> = ({ control }) => {
             control={control}
             required={field.required}
             width="225px"
-            isLoading={!isUserExists}
+            isLoading={isLoading}
+            defaultValue={
+              formUserFields?.renalFunction.find(
+                (info) => info.name === field.name,
+              )?.value
+            }
           />
         ))}
       </S.Container>

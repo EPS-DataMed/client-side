@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Breadcrumb } from '../../components/Breadcrumb'
 import { GenericPage } from '../../components/GenericPage'
 import { useSubmissionTestContext } from '../../contexts/SubmissionTestContext'
@@ -28,26 +28,28 @@ import { useParams } from 'react-router-dom'
 import { useLogout } from '../../hooks/useLogout'
 import { listExamsRepository } from './repositories/listExamsRepository'
 import { SkeletonContainer } from './components/StepBox/styles'
+import { getUserId } from '../../utils/getUserId'
+import useNavigation from '../../hooks/useNavigation'
+import { useUserContext } from '../../contexts/UserContext'
+import { getDependents, processExams } from './services'
+import { getCookie } from '../../utils/cookies'
+import { ErrorToast } from '../../components/Toast'
 
 export function Submission() {
   const [isLoadingSubmissionTest, setIsLoadingSubmissionTest] = useState(false)
   const { getInputProps, getRootProps, loadingFiles } = useFileUpload()
   const { filesUploaded, setOptionToDelete, queryHook } =
     useSubmissionTestContext()
-
   const { handleUpdateDialogControlled, isDialogControlledOpen } =
     useDialogControlled()
   const [dialogSubmissionStep, setDialogSubmissionStep] =
     useState<DialogStep>('')
-
-  const { path } = useParams()
+  const { path, dependentId } = useParams()
+  const { userId } = getUserId()
+  const token = getCookie('access_token')
+  const navigateTo = useNavigation()
 
   const BREADCRUMBS = useBreadcrumbs({ path: path as string })
-
-  function handleSubmissionTest() {
-    setIsLoadingSubmissionTest(true)
-  }
-
   const hasFiles = isArrayNotEmpty(filesUploaded)
   const hasNoFiles = isArrayEmpty(filesUploaded)
 
@@ -57,12 +59,10 @@ export function Submission() {
     return 'SUCCESS'
   }, [hasNoFiles, loadingFiles])
 
-  const formattedFiles = filesUploaded.map((file) => {
-    return {
-      name: file.test_name,
-      id: file.id,
-    }
-  })
+  const formattedFiles = filesUploaded.map((file) => ({
+    name: file.test_name,
+    id: file.id,
+  }))
 
   const selectedOptionEnabledFormatted = SUBMIT_EXAM_OPTIONS[statusSubmitting]
 
@@ -88,7 +88,61 @@ export function Submission() {
     logoutConfig,
   })
 
+  const { isUserExists } = useUserContext()
+  const isLoadingRequests = isLoadingSubmissionTest || !isUserExists
+
+  const renderBreadcrumbs = () =>
+    isLoadingRequests ? (
+      <S.SkeletonBreadcrumbs />
+    ) : (
+      <Breadcrumb items={BREADCRUMBS} />
+    )
+
   const { isListExamsLoading } = listExamsRepository()
+
+  console.log('isListExamsLoading: ', isListExamsLoading)
+
+  async function handleSubmissionTest() {
+    setIsLoadingSubmissionTest(true)
+
+    const examIndexes = filesUploaded.map((file) => file.id)
+    try {
+      if (dependentId !== 'null') {
+        const dependentResponse = await getDependents({
+          token: token as string,
+          userId: userId as number,
+          dependentId: dependentId as string,
+        })
+
+        if (dependentResponse.confirmed) {
+          await processExams({
+            examIndexes,
+            token: token as string,
+            userId: Number(dependentId) as number,
+          })
+          navigateTo(`/form/${dependentId}`)
+        } else {
+          navigateTo('/', { replace: true })
+        }
+      } else {
+        await processExams({
+          examIndexes,
+          token: token as string,
+          userId: userId as number,
+        })
+        navigateTo('/form/null')
+      }
+    } catch (err) {
+      ErrorToast('Falha ao processar dados, tente novamente mais tarde!')
+    } finally {
+      setIsLoadingSubmissionTest(false)
+    }
+  }
+
+  useEffect(() => {
+    if (Number(dependentId) === Number(userId))
+      navigateTo('/submission/home/null', { replace: true })
+  }, [dependentId, navigateTo, userId])
 
   return (
     <>
@@ -105,7 +159,7 @@ export function Submission() {
               <GenericPage.LogoutButton action={handleOpenLogoutDialog} />
             </GenericPage.HeaderOptions>
           </GenericPage.Header>
-          <Breadcrumb items={BREADCRUMBS} />
+          {renderBreadcrumbs()}
         </S.WrapperHeaderAndBreadcrumb>
 
         <GenericPage.Divider />

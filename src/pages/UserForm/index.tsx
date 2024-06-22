@@ -18,13 +18,23 @@ import {
 import { hasObjectValidKeys, isNotUndefined } from '../../interfaces/typeGuards'
 import { useDialogItemToRender } from './hooks/useDialogItemToRender'
 import { DialogStep, User } from './interfaces'
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect, useCallback } from 'react'
 import useNavigation from '../../hooks/useNavigation'
 import { PAGE_PRINT_STYLE } from './constants'
 import DatamedCard from './DatamedCard'
 import useRemoveSpecificSvg from './hooks/useRemoveSpecificSvg'
 import { schema } from './schema'
 import { useLogout } from '../../hooks/useLogout'
+import { useSubmissionTestContext } from '../../contexts/SubmissionTestContext'
+import { listFormRepository } from './repositories/listFormRepository'
+import { updateForm } from './services'
+import { convertUserToForm } from './utils'
+import { ErrorToast } from '../../components/Toast'
+import { getUserId } from '../../utils/getUserId'
+import { getCookie } from '../../utils/cookies'
+import { Spinner } from '../../components/Spinner'
+import { getDependents } from '../Submission/services'
+import { useParams } from 'react-router-dom'
 
 type FormData = z.infer<typeof schema>
 
@@ -32,25 +42,59 @@ export function UserForm() {
   const [dialogSubmissionStep, setDialogSubmissionStep] =
     useState<DialogStep>('')
   const [userInfoFilled, setUserInfoFilled] = useState({} as User)
+  const [isLoadingSubmission, setIsLoadingSubmission] = useState(false)
 
-  const { handleSubmit, control, setValue } = useForm<FormData>({
+  const { formData } = useSubmissionTestContext()
+
+  const initializeDefaultValues = useCallback(
+    (data: Partial<User>) => ({
+      weight: data.weight || '',
+      height: data.height || '',
+      bmi: data.bmi || '',
+      bloodType: data.bloodType || '',
+      abdominalCircumference: data.abdominalCircumference || '',
+      hemoglobin: data.hemoglobin || '',
+      redBloodCell: data.redBloodCell || '',
+      ast: data.ast || '',
+      alt: data.alt || '',
+      urea: data.urea || '',
+      creatinine: data.creatinine || '',
+      hematocrit: data.hematocrit || '',
+      glycatedHemoglobin: data.glycatedHemoglobin || '',
+      allergies: data.allergies || '',
+      diseases: data.diseases || '',
+      medications: data.medications || '',
+      familyHistory: data.familyHistory || '',
+      importantNotes: data.importantNotes || '',
+      imageReports: data.imageReports || '',
+    }),
+    [],
+  )
+
+  const { handleSubmit, control, setValue, reset } = useForm<FormData>({
     resolver: zodResolver(schema),
+    defaultValues: initializeDefaultValues({}),
   })
+
+  useEffect(() => {
+    if (formData) {
+      reset(initializeDefaultValues(formData))
+    }
+  }, [formData, reset, initializeDefaultValues])
 
   const { handleUpdateDialogControlled, isDialogControlledOpen } =
     useDialogControlled()
-
   const healthDataRef = useRef<HTMLDivElement | null>(null)
   const navigateTo = useNavigation()
 
-  const handleNavigationToSubmission = () => {
+  const handleNavigationToSubmission = useCallback(() => {
     navigateTo('/submission', { replace: true })
-  }
+  }, [navigateTo])
 
   const handleHealthDataPrint = useReactToPrint({
     content: () => healthDataRef.current,
     pageStyle: PAGE_PRINT_STYLE,
-    documentTitle: 'graficos_exportados',
+    documentTitle: 'datamed_card',
     onAfterPrint: () => setUserInfoFilled({} as User),
   })
 
@@ -68,9 +112,9 @@ export function UserForm() {
     logoutConfig,
   })
 
-  function handleCloseDialog() {
+  const handleCloseDialog = useCallback(() => {
     setDialogSubmissionStep('')
-  }
+  }, [])
 
   const weight = useWatch({
     control,
@@ -93,18 +137,62 @@ export function UserForm() {
     }
   }, [weight, height, setValue])
 
-  const onSubmit: SubmitHandler<FormData> = (data) => {
-    handleUpdateDialogControlled(true)
-    const USER_TO_PUT_IN_GRAPH: User = {
-      ...data,
-      name: 'Elvis Presley',
-      age: 40,
-    }
-    setDialogSubmissionStep('save_form')
-    setUserInfoFilled({ ...USER_TO_PUT_IN_GRAPH })
-  }
+  const { userId } = getUserId()
+  const token = getCookie('access_token')
+  const { dependentId } = useParams<{ dependentId: string }>()
+
+  const onSubmit: SubmitHandler<FormData> = useCallback(
+    async (data) => {
+      try {
+        setIsLoadingSubmission(true)
+
+        const dataFormated = { ...data, formStatus: 'Filled' } as User
+
+        if (dependentId !== 'null') {
+          const dependentResponse = await getDependents({
+            token: token as string,
+            userId: userId as number,
+            dependentId: dependentId as string,
+          })
+
+          if (dependentResponse.confirmed) {
+            await updateForm({
+              userId: Number(dependentId),
+              token: token as string,
+              formData: convertUserToForm(dataFormated),
+            })
+          } else {
+            navigateTo('/', { replace: true })
+          }
+        } else {
+          await updateForm({
+            userId: userId as number,
+            token: token as string,
+            formData: convertUserToForm(dataFormated),
+          })
+        }
+
+        handleUpdateDialogControlled(true)
+        const USER_TO_PUT_IN_GRAPH: User = {
+          ...data,
+          name: formData?.name as string,
+          age: formData?.age as number,
+        }
+
+        setDialogSubmissionStep('save_form')
+        setUserInfoFilled({ ...USER_TO_PUT_IN_GRAPH })
+      } catch {
+        ErrorToast('Erro ao salvar formulário. Tente novamente mais tarde.')
+      } finally {
+        setIsLoadingSubmission(false)
+      }
+    },
+    [userId, token, formData, handleUpdateDialogControlled],
+  )
 
   useRemoveSpecificSvg()
+  listFormRepository()
+
   const BREADCRUMBS = useBreadcrumbs()
 
   return (
@@ -155,7 +243,15 @@ export function UserForm() {
               >
                 <ArrowLeft /> Voltar
               </PrimaryButton>
-              <S.ButtonStyled type="submit">Finalizar</S.ButtonStyled>
+              <S.ButtonStyled type="submit">
+                {isLoadingSubmission ? (
+                  <>
+                    Carregando <Spinner />
+                  </>
+                ) : (
+                  'Finalizar'
+                )}
+              </S.ButtonStyled>
             </S.WrapperButton>
 
             <GenericPage.Divider />
@@ -167,7 +263,7 @@ export function UserForm() {
           isDialogControlledOpen={isDialogControlledOpen}
           handleUpdateDialogControlled={handleUpdateDialogControlled}
           dialogItemToRender={dialogItemToRender}
-          isLoadingRequisition={false}
+          isLoadingRequisition={isLoadingSubmission}
           onClose={handleCloseDialog}
         />
       )}

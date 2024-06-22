@@ -56,7 +56,7 @@ export function App() {
                   }
                 />
                 <Route
-                  path="/submission/:path"
+                  path="/submission/:path/:dependentId"
                   element={
                     <ProtectedRoute>
                       <Submission />
@@ -64,7 +64,7 @@ export function App() {
                   }
                 />
                 <Route
-                  path="/form"
+                  path="/form/:dependentId"
                   element={
                     <ProtectedRoute>
                       <UserForm />

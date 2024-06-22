@@ -13,6 +13,10 @@ export function isNull(value: unknown): value is null {
   return value === null
 }
 
+export function isNotNull<T>(value: T | null): value is T {
+  return value !== null
+}
+
 export function isArrayNotEmpty<T>(arr: T[] | undefined | null): boolean {
   return arr !== undefined && arr !== null && arr.length > 0
 }

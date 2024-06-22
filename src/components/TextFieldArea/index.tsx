@@ -10,6 +10,7 @@ interface TextAreaComponentProps {
   description: string
   placeholder: string
   isLoading?: boolean
+  defaultValue?: string
 }
 
 export const TextFieldArea: React.FC<TextAreaComponentProps> = ({
@@ -20,6 +21,7 @@ export const TextFieldArea: React.FC<TextAreaComponentProps> = ({
   description,
   placeholder,
   isLoading = false,
+  defaultValue = '',
 }) => {
   const {
     field,
@@ -27,7 +29,7 @@ export const TextFieldArea: React.FC<TextAreaComponentProps> = ({
   } = useController({
     name,
     control,
-    defaultValue: '',
+    defaultValue,
   })
 
   return (

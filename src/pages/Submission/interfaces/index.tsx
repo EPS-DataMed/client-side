@@ -28,3 +28,22 @@ export interface DeleteResponse {
   message: string
   data: Exam[]
 }
+
+export interface FormUserFieldProps {
+  personalInfo: {
+    name: string
+    value: string
+  }[]
+  hemogram: {
+    name: string
+    value: string
+  }[]
+  hepaticFunction: {
+    name: string
+    value: string
+  }[]
+  renalFunction: {
+    name: string
+    value: string
+  }[]
+}

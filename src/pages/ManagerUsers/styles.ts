@@ -2,6 +2,7 @@ import { css, styled } from 'styled-components'
 import { lightenColor } from '../../utils/colors'
 import { PrimaryButton } from '../../components/PrimaryButton'
 import { Skeleton } from '../../components/Skeleton'
+import { FormStatus } from './interfaces'
 
 export const WrapperLogoAndLogoTitle = styled.div`
   display: flex;
@@ -66,15 +67,18 @@ export const WrapperStatusIndicator = styled.div`
 `
 
 interface StatusIndicatorProps {
-  status: 'uninitiated' | 'concluded'
+  status: FormStatus
 }
 
 const STATUS_STYLES = {
-  uninitiated: css`
+  [FormStatus.NotStarted]: css`
     background-color: ${({ theme }) => theme.colors.red500};
   `,
-  concluded: css`
+  [FormStatus.Filled]: css`
     background-color: ${({ theme }) => theme.colors.green500};
+  `,
+  [FormStatus.InProgress]: css`
+    background-color: ${({ theme }) => theme.colors.yellow500};
   `,
 }
 

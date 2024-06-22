@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { EditFormData } from '../schema'
+import { DeleteAccData, EditFormData } from '../schema'
 import { getUserId } from '../../../utils/getUserId'
 import { deleteAccount, editPassword } from '../services'
 import { ErrorToast, SuccessToast } from '../../../components/Toast'
@@ -16,12 +16,12 @@ export function useSubmitHandlers() {
       const { userId } = getUserId()
       setLoadingPasswordData(true)
       try {
-        const response = await editPassword(userId, passwordData)
-        if (response.status_code === 200) {
-          SuccessToast('Senha atualizada com sucesso!')
-        } else {
-          throw new Error()
+        const payload = {
+          old_password: passwordData.password,
+          new_password: passwordData.newPassword,
         }
+        await editPassword(userId, payload)
+        SuccessToast('Senha atualizada com sucesso!')
       } catch (error) {
         ErrorToast(
           'Verifique suas informações novamente! Ou tente novamente mais tarde.',
@@ -33,23 +33,32 @@ export function useSubmitHandlers() {
     [],
   )
 
-  const handleSubmitDeleteAccount = useCallback(async () => {
-    setLoadingDeleteAccount(true)
-    try {
-      const { userId } = getUserId()
-      const userResponse = await deleteAccount(userId)
-      if (userResponse) {
-        SuccessToast('Conta apagada com sucesso!')
-        navigateTo('/', { replace: true })
-      } else {
-        throw new Error()
+  const handleSubmitDeleteAccount = useCallback(
+    async (passwordData: DeleteAccData) => {
+      setLoadingDeleteAccount(true)
+      try {
+        const payload = {
+          password: passwordData.currentPassword,
+        }
+        const { userId } = getUserId()
+        const isValid = await deleteAccount(userId, false, payload)
+
+        if (isValid) {
+          const deleteResponse = await deleteAccount(userId, true, payload)
+
+          if (deleteResponse) {
+            SuccessToast('Conta apagada com sucesso!')
+            navigateTo('/', { replace: true })
+          }
+        }
+      } catch (error) {
+        ErrorToast('Erro ao apagar conta. Tente novamente mais tarde.')
+      } finally {
+        setLoadingDeleteAccount(false)
       }
-    } catch (error) {
-      ErrorToast('Erro ao apagar conta. Tente novamente mais tarde.')
-    } finally {
-      setLoadingDeleteAccount(false)
-    }
-  }, [navigateTo])
+    },
+    [navigateTo],
+  )
 
   return {
     loadingPasswordData,

@@ -20,7 +20,6 @@ export const FormChangePassword = styled.form`
   display: flex;
   position: relative;
   gap: ${({ theme }) => theme.space[4]};
-  
 `
 
 export const ButtonWrapper = styled.div`
@@ -30,7 +29,7 @@ export const ButtonWrapper = styled.div`
 
 export const InputWrapper = styled.div`
   display: flex;
-  flex-direction: column;  
+  flex-direction: column;
   width: 100%;
   gap: ${({ theme }) => theme.space[2]};
 `

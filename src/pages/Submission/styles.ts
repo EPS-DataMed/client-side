@@ -1,6 +1,7 @@
 import { styled } from 'styled-components'
 import { PrimaryButton } from '../../components/PrimaryButton'
 import { fadeInAnimation } from '../../styles/animations'
+import { Skeleton } from '../../components/Skeleton'
 
 export const WrapperLogoAndLogoTitle = styled.div`
   display: flex;
@@ -77,4 +78,10 @@ export const AdvanceButton = styled(PrimaryButton)`
   align-self: flex-end;
   z-index: 2;
   background-color: ${({ theme }) => theme.colors.green500};
+`
+
+export const SkeletonBreadcrumbs = styled(Skeleton)`
+  height: 19px;
+  width: 20%;
+  border-radius: 4px;
 `

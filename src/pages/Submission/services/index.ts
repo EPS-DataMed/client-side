@@ -7,6 +7,8 @@ import {
   RequestExams,
   RequestUploadProps,
 } from '../interfaces'
+import { Dependent } from '../../ManagerUsers/interfaces'
+import { FormAndLatestTests } from '../../UserForm/interfaces'
 
 export const uploadFiles = async ({
   files,
@@ -61,4 +63,47 @@ export const getExams = async ({
   })
 
   return response.data.data || response.data.content.data
+}
+
+export const getDependents = async ({
+  token,
+  userId,
+  dependentId,
+}: {
+  token: string
+  userId: number
+  dependentId: string
+}): Promise<Dependent> => {
+  const headers: Record<string, string> = {
+    Authorization: `Bearer ${token}`,
+    Accept: 'application/json',
+  }
+
+  const response: AxiosResponse<{ content: Dependent }> = await api.get(
+    `/user/dependents/${userId}/${dependentId}`,
+    { headers },
+  )
+
+  return response.data.content
+}
+
+export const processExams = async ({
+  token,
+  userId,
+  examIndexes,
+}: {
+  token: string
+  userId: number
+  examIndexes: number[]
+}): Promise<FormAndLatestTests> => {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+    Authorization: `Bearer ${token}`,
+  }
+
+  const response: AxiosResponse<{ content: { data: FormAndLatestTests } }> =
+    await api.post(`/data/tests-processing/${userId}`, examIndexes, { headers })
+
+  return response.data.content.data
 }

@@ -22,6 +22,32 @@ export interface User {
   familyHistory: string
   importantNotes?: string
   imageReports?: string
+  formStatus?: string
+}
+
+export interface FormAndLatestTests {
+  weight: number | null
+  height: number | null
+  bmi: number | null
+  blood_type: string | null
+  abdominal_circumference: number | null
+  allergies: string | null
+  diseases: string | null
+  medications: string | null
+  family_history: string | null
+  important_notes: string | null
+  images_reports: string | null
+  form_status?: string
+  latest_red_blood_cell: string
+  latest_hemoglobin: string
+  latest_hematocrit: string
+  latest_glycated_hemoglobin: string
+  latest_ast: string
+  latest_alt: string
+  latest_urea: string
+  latest_creatinine: string
+  age: number
+  name: string
 }
 
 interface HGraphDatum {

@@ -42,6 +42,7 @@ interface InputFieldProps {
   mask?: string
   width?: string
   isLoading?: boolean
+  defaultValue?: any
 }
 
 const InputField: React.FC<InputFieldProps> = ({
@@ -56,6 +57,7 @@ const InputField: React.FC<InputFieldProps> = ({
   disabled = false,
   width,
   isLoading = false,
+  defaultValue = '',
 }) => {
   const {
     field,
@@ -63,7 +65,7 @@ const InputField: React.FC<InputFieldProps> = ({
   } = useController({
     name,
     control,
-    defaultValue: '',
+    defaultValue,
   })
 
   const style = width ? { width } : undefined

@@ -17,7 +17,7 @@ export function HomePage() {
   const navigateTo = useNavigation()
 
   const handleNavigationToSubmission = () => {
-    navigateTo('/submission/home')
+    navigateTo('/submission/home/null')
   }
 
   const handleNavigationToManagerUsers = () => {

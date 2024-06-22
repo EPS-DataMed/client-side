@@ -13,7 +13,11 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>
 
-export function AddDependentDialog() {
+export function AddDependentDialog({
+  onCloseDialog,
+}: {
+  onCloseDialog: () => void
+}) {
   const { control, handleSubmit } = useForm<FormData>({
     resolver: zodResolver(schema),
   })
@@ -52,7 +56,11 @@ export function AddDependentDialog() {
         </S.MessagePhrase>
       </S.MessageArea>
       <S.WrapperButtons>
-        <PrimaryButton variant="secondary" type="button">
+        <PrimaryButton
+          onClick={onCloseDialog}
+          variant="secondary"
+          type="button"
+        >
           Voltar
         </PrimaryButton>
         <PrimaryButton type="submit">Adicionar</PrimaryButton>

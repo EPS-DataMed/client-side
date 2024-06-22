@@ -10,16 +10,18 @@ import { ChangePasswordForm } from './components/ChangePasswordForm'
 import { useLogout } from '../../hooks/useLogout'
 import { useDialogItemToRender } from './hooks/useDialogItemToRender'
 import { useBreadcrumbs } from './hooks/useBreadCrumbs'
-import { EditFormData } from './schema'
+import { DeleteAccData, EditFormData } from './schema'
 import { DialogStep } from './interfaces/dialogStep'
 import { DeleteUserForm } from './components/DeleteUserForm'
 import * as S from './styles'
 import { UserPersonalInformations } from './components/UserPersonalInformations'
 import { isNotUndefined } from '../../interfaces/typeGuards'
 
-
 export function EditUser() {
   const [passwordData, setPasswordData] = useState({} as EditFormData)
+  const [deletePasswordData, setDeletePasswordData] = useState(
+    {} as DeleteAccData,
+  )
   const {
     loadingPasswordData,
     loadingDeleteAccount,
@@ -42,9 +44,10 @@ export function EditUser() {
     [handleUpdateDialogControlled],
   )
 
-  const handleOpenDeleteAccountDialog = () => {
+  const handleOpenDeleteAccountDialog = (data: DeleteAccData) => {
     handleUpdateDialogControlled(true)
     setDialogSubmissionStep('delete_account')
+    setDeletePasswordData(data)
   }
 
   const { handleOpenLogoutDialog, logoutConfig } = useLogout({
@@ -56,7 +59,7 @@ export function EditUser() {
     handleUpdateDialogControlled,
     dialogSubmissionStep,
     onSubmitChangePassword: () => handleSubmitChangePassword(passwordData),
-    onSubmitDeleteUser: handleSubmitDeleteAccount,
+    onSubmitDeleteUser: () => handleSubmitDeleteAccount(deletePasswordData),
     logoutConfig,
   })
 

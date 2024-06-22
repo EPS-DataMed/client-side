@@ -5,7 +5,10 @@ import {
   SearchbarQueryHookReturnType,
   useSearchbarQuery,
 } from '../components/Searchbar/hooks/useSearchbarQuery'
-import { Exam } from '../pages/Submission/interfaces'
+import { Exam, FormUserFieldProps } from '../pages/Submission/interfaces'
+import { FormAndLatestTests, User } from '../pages/UserForm/interfaces'
+import { convertFormToUser, divideUserFields } from '../pages/UserForm/utils'
+import { hasObjectValidKeys, isNotNull } from '../interfaces/typeGuards'
 
 interface SubmissionTestContextType {
   filesUploaded: Exam[]
@@ -14,6 +17,12 @@ interface SubmissionTestContextType {
   handleDeleteFileUpload: () => void
   optionToDelete: OptionProps
   queryHook: SearchbarQueryHookReturnType
+  formData: User | null
+  formUserFields: FormUserFieldProps | null
+  hasFormData: boolean
+  setProcessFormData: React.Dispatch<
+    React.SetStateAction<FormAndLatestTests | null>
+  >
 }
 
 interface SubmissionTestProviderProps {
@@ -28,6 +37,8 @@ export function SubmissionTestProvider({
   children,
 }: SubmissionTestProviderProps) {
   const [filesUploaded, setFilesUploaded] = useState<Exam[]>([])
+  const [processFormData, setProcessFormData] =
+    useState<FormAndLatestTests | null>(null)
   const [optionToDelete, setOptionToDelete] = useState<OptionProps>(
     {} as OptionProps,
   )
@@ -44,6 +55,15 @@ export function SubmissionTestProvider({
     setQuery('')
   }, [optionToDelete.id, setQuery, setSelectedOption])
 
+  const formData = isNotNull(processFormData)
+    ? convertFormToUser(processFormData)
+    : null
+  const formUserFields = isNotNull(processFormData)
+    ? divideUserFields(formData as User)
+    : null
+
+  const hasFormData = hasObjectValidKeys(processFormData)
+
   return (
     <SubmissionTestContext.Provider
       value={{
@@ -53,6 +73,10 @@ export function SubmissionTestProvider({
         handleDeleteFileUpload,
         queryHook,
         optionToDelete,
+        formData,
+        setProcessFormData,
+        formUserFields,
+        hasFormData,
       }}
     >
       {children}

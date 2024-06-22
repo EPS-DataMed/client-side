@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import useNavigation from '../../../hooks/useNavigation'
+import { useUserContext } from '../../../contexts/UserContext'
 
 export interface BreadcrumbItem {
   label: string
@@ -8,6 +9,7 @@ export interface BreadcrumbItem {
 }
 
 export function useBreadcrumbs({ path }: { path: string }) {
+  const { isDoctor } = useUserContext()
   const navigateTo = useNavigation()
 
   const BREADCRUMBS: BreadcrumbItem[] = useMemo(() => {
@@ -24,13 +26,13 @@ export function useBreadcrumbs({ path }: { path: string }) {
 
     if (path === 'manager') {
       breadcrumbs.splice(1, 0, {
-        label: 'Gerenciar dependentes',
+        label: isDoctor ? 'Gerenciar pacientes' : 'Gerenciar dependentes',
         action: () => navigateTo('/manager/users'),
       })
     }
 
     return breadcrumbs
-  }, [navigateTo, path])
+  }, [isDoctor, navigateTo, path])
 
   return BREADCRUMBS
 }

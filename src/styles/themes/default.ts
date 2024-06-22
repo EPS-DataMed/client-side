@@ -14,6 +14,7 @@ export const defaultTheme = {
     blue440: '#34CDFF',
     green500: '#3fd255',
     red500: '#FF0000',
+    yellow500: '#FFE500',
   },
   fontSizes: {
     xxs: '0.625rem',

@@ -2,9 +2,11 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { useSubmissionTestContext } from '../../../../../contexts/SubmissionTestContext'
 import { ErrorToast, SuccessToast } from '../../../../../components/Toast'
-import { uploadFiles } from '../../../services'
+import { getDependents, uploadFiles } from '../../../services'
 import { getUserId } from '../../../../../utils/getUserId'
 import { getCookie } from '../../../../../utils/cookies'
+import { useParams } from 'react-router-dom'
+import useNavigation from '../../../../../hooks/useNavigation'
 
 type VariantFile = 'valid' | 'invalid'
 
@@ -12,7 +14,9 @@ export function useFileUpload() {
   const [loadingFiles, setLoadingFiles] = useState(false)
   const firstRender = useRef(true)
   const { userId } = getUserId()
+  const { dependentId } = useParams<{ dependentId: string }>()
   const token = getCookie('access_token')
+  const navigateTo = useNavigation()
 
   const { setFilesUploaded, filesUploaded } = useSubmissionTestContext()
 
@@ -34,17 +38,41 @@ export function useFileUpload() {
       }
 
       try {
-        const uploadResponse = await uploadFiles({
-          token: token as string,
-          files: acceptedFiles,
-          userId: userId as number,
-        })
-        SuccessToast('Arquivos enviados com sucesso')
+        if (dependentId !== 'null') {
+          const dependentResponse = await getDependents({
+            token: token as string,
+            userId: userId as number,
+            dependentId: dependentId as string,
+          })
 
-        const newFiles = Array.isArray(uploadResponse.data)
-          ? uploadResponse.data
-          : [uploadResponse.data]
-        setFilesUploaded((prev) => [...prev, ...newFiles])
+          if (dependentResponse.confirmed) {
+            const uploadResponse = await uploadFiles({
+              token: token as string,
+              files: acceptedFiles,
+              userId: Number(dependentId),
+            })
+            SuccessToast('Arquivos enviados com sucesso')
+
+            const newFiles = Array.isArray(uploadResponse.data)
+              ? uploadResponse.data
+              : [uploadResponse.data]
+            setFilesUploaded((prev) => [...prev, ...newFiles])
+          } else {
+            navigateTo('/', { replace: true })
+          }
+        } else {
+          const uploadResponse = await uploadFiles({
+            token: token as string,
+            files: acceptedFiles,
+            userId: userId as number,
+          })
+          SuccessToast('Arquivos enviados com sucesso')
+
+          const newFiles = Array.isArray(uploadResponse.data)
+            ? uploadResponse.data
+            : [uploadResponse.data]
+          setFilesUploaded((prev) => [...prev, ...newFiles])
+        }
       } catch (error) {
         ErrorToast('Não foi possível enviar o arquivo!')
       } finally {

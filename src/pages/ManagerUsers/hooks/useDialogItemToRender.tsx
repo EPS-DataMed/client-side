@@ -1,15 +1,20 @@
+import { useCallback } from 'react'
 import { ManagerUsersDialog } from '..'
 import { DialogConfig } from '../../../components/DialogControlled/interfaces'
 import { useUserContext } from '../../../contexts/UserContext'
 import { defaultTheme } from '../../../styles/themes/default'
 import { AddDependentDialog } from '../components/AddDependentDialog'
+import { Dependent } from '../interfaces'
 
 interface DialogItemToRenderProps {
   handleUpdateDialogControlled: (open: boolean) => void
   deleteDependentDialog: () => void
-  setDialogManagerUsersStep: any
+  setDialogManagerUsersStep: React.Dispatch<
+    React.SetStateAction<ManagerUsersDialog>
+  >
   dialogManagerUsersStep: ManagerUsersDialog
   logoutConfig: any
+  dependentToDelete: Dependent | null
 }
 
 export function useDialogItemToRender({
@@ -18,14 +23,31 @@ export function useDialogItemToRender({
   setDialogManagerUsersStep,
   dialogManagerUsersStep,
   logoutConfig,
+  dependentToDelete,
 }: DialogItemToRenderProps) {
   const { isDoctor } = useUserContext()
+
+  const handleBackInDialog = useCallback(() => {
+    handleUpdateDialogControlled(false)
+    setDialogManagerUsersStep('')
+  }, [handleUpdateDialogControlled, setDialogManagerUsersStep])
+
+  const getDeleteDescription = () => {
+    if (!dependentToDelete) return ''
+    return (
+      <div>
+        Tem certeza de que deseja excluir o{' '}
+        {isDoctor ? 'paciente' : 'dependente'}{' '}
+        <strong>{dependentToDelete.user_full_name}</strong>? Esta ação é
+        irreversível e não será possível desfazê-la.
+      </div>
+    )
+  }
+
   const dialogConfig: DialogConfig = {
     delete: {
       title: isDoctor ? 'Excluir paciente' : 'Excluir dependente',
-      description: `Tem certeza de que deseja excluir o ${
-        isDoctor ? 'paciente' : 'dependente'
-      } Gustavo Lima? Esta ação é irreversível e não será possível desfazê-la.`,
+      description: getDeleteDescription(),
       width: '28rem',
       buttonConfig: [
         {
@@ -33,8 +55,7 @@ export function useDialogItemToRender({
           label: 'Voltar',
           variant: 'secondary',
           action: () => {
-            handleUpdateDialogControlled(false)
-            setDialogManagerUsersStep('')
+            handleBackInDialog()
           },
         },
         {
@@ -53,7 +74,7 @@ export function useDialogItemToRender({
     logout: logoutConfig,
     add_dependent: {
       title: isDoctor ? 'Paciente' : 'Dependente',
-      component: <AddDependentDialog />,
+      component: <AddDependentDialog onCloseDialog={handleBackInDialog} />,
       description: `Informe o e-mail do seu ${
         isDoctor ? 'paciente' : 'dependente'
       } para que possamos cadastrá-lo para você.`,
