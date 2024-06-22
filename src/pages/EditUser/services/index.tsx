@@ -19,17 +19,43 @@ export const getUser = async (
   return response.data
 }
 
+interface DeleteAccountPayload {
+  password: string
+}
+
 export const deleteAccount = async (
   userId: number | null,
+  sendDeleteRequest: boolean,
+  payload: DeleteAccountPayload
 ): Promise<DeleteResponse> => {
   const token = getCookie('access_token')
 
-  const response = await api.delete(`/user/users/${userId}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: 'application/json',
-    },
-  })
+  var url = null
+
+  if(sendDeleteRequest){
+    url = `/user/users/${userId}`
+
+    var response = await api.delete(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+
+  }
+  else{
+    url = `/auth/users/${userId}/compare-password`
+
+    var response = await api.post(url, 
+      payload,  
+      {
+        headers: {
+          Accept: 'application/json',
+        },
+      })
+
+  }
+  
+  
 
   return response.data
 }
@@ -47,9 +73,8 @@ export const editPassword = async (
 
   const response = await api.patch(
     `/user/users/${userId}/password`,
-    null,
+    payload,
     {
-      params:payload,
       headers: {
         Authorization: `Bearer ${token}`
       },

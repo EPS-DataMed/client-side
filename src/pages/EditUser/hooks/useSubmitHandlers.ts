@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { EditFormData } from '../schema'
+import { DeleteAccData, EditFormData } from '../schema'
 import { getUserId } from '../../../utils/getUserId'
 import { deleteAccount, editPassword } from '../services'
 import { ErrorToast, SuccessToast } from '../../../components/Toast'
@@ -38,14 +38,24 @@ export function useSubmitHandlers() {
     [],
   )
 
-  const handleSubmitDeleteAccount = useCallback(async () => {
+  const handleSubmitDeleteAccount = useCallback(async (passwordData: DeleteAccData) => {
     setLoadingDeleteAccount(true)
     try {
+      const payload = {
+        password: passwordData.currentPassword
+      }
       const { userId } = getUserId()
-      const userResponse = await deleteAccount(userId)
-      if (userResponse) {
-        SuccessToast('Conta apagada com sucesso!')
-        navigateTo('/', { replace: true })
+      const isValid = await deleteAccount(userId, false, payload)
+
+      if (isValid) {
+
+        const deleteResponse = await deleteAccount(userId, true, payload)
+
+        if(deleteResponse){
+          SuccessToast('Conta apagada com sucesso!')
+          navigateTo('/', { replace: true })
+        }
+        
       } else {
         throw new Error()
       }
