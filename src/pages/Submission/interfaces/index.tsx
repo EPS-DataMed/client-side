@@ -46,4 +46,8 @@ export interface FormUserFieldProps {
     name: string
     value: string
   }[]
+  additionalInfo: {
+    name: string
+    value: string
+  }[]
 }

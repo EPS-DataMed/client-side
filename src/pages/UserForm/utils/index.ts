@@ -1,4 +1,5 @@
 import {
+  ADDITIONAL_INFO_FIELDS,
   FIELD_CONFIG,
   HEMOGRAM_FIELDS,
   HEPATIC_FUNCTION_FIELDS,
@@ -130,5 +131,6 @@ export function divideUserFields(user: User) {
     hemogram: extractFieldNames(HEMOGRAM_FIELDS, user),
     hepaticFunction: extractFieldNames(HEPATIC_FUNCTION_FIELDS, user),
     renalFunction: extractFieldNames(RENAL_FUNCTION_FIELDS, user),
+    additionalInfo: extractFieldNames(ADDITIONAL_INFO_FIELDS, user),
   }
 }

@@ -1,4 +1,3 @@
-import { useReactToPrint } from 'react-to-print'
 import AdditionalInfo from './components/AdditionalInfo'
 import PersonalInfo from './components/PersonalInfo'
 import HealthData from './components/HealthData'
@@ -11,9 +10,7 @@ import { ArrowLeft } from '../../assets/icons'
 import { DialogControlled } from '../../components/DialogControlled'
 import { hasObjectValidKeys, isNotUndefined } from '../../interfaces/typeGuards'
 import { useDialogItemToRender } from './hooks/useDialogItemToRender'
-import { DialogStep, User } from './interfaces'
-import { useRef } from 'react'
-import { PAGE_PRINT_STYLE } from './constants'
+import { DialogStep } from './interfaces'
 import DatamedCard from './DatamedCard'
 import useRemoveSpecificSvg from './hooks/useRemoveSpecificSvg'
 import { useLogout } from '../../hooks/useLogout'
@@ -22,10 +19,9 @@ import { listFormRepository } from './repositories/listFormRepository'
 import { Spinner } from '../../components/Spinner'
 
 import { useSubmitForm } from './hooks/useSubmitForm'
+import { usePrintGraph } from './hooks/usePrintGraph'
 
 export function UserForm() {
-  const healthDataRef = useRef<HTMLDivElement | null>(null)
-
   const {
     setUserInfoFilled,
     handleUpdateDialogControlled,
@@ -41,11 +37,8 @@ export function UserForm() {
     control,
   } = useSubmitForm()
 
-  const handleHealthDataPrint = useReactToPrint({
-    content: () => healthDataRef.current,
-    pageStyle: PAGE_PRINT_STYLE,
-    documentTitle: 'datamed_card',
-    onAfterPrint: () => setUserInfoFilled({} as User),
+  const { handleHealthDataPrint, healthDataRef } = usePrintGraph({
+    setUserInfoFilled,
   })
 
   const { handleOpenLogoutDialog, logoutConfig } = useLogout({

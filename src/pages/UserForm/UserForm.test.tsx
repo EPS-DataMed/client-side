@@ -65,6 +65,7 @@ describe('UserForm', () => {
         hemogram: [],
         hepaticFunction: [],
         renalFunction: [],
+        additionalInfo: [],
       },
       hasFormData: true,
       setProcessFormData: jest.fn(),

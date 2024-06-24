@@ -34,7 +34,7 @@ export const TextFieldArea: React.FC<TextAreaComponentProps> = ({
 
   return (
     <S.FormGroup>
-      <Input.Label data-test-id={`label-${name}`}>
+      <Input.Label data-testid={`label-${name}`}>
         {label}
         {required && (
           <Input.RequiredText variant={error ? 'error' : ''}>
@@ -43,7 +43,7 @@ export const TextFieldArea: React.FC<TextAreaComponentProps> = ({
         )}
       </Input.Label>
 
-      <Input.Description data-test-id={`description-${name}`}>
+      <Input.Description data-testid={`description-${name}`}>
         {description}
       </Input.Description>
 
@@ -55,12 +55,12 @@ export const TextFieldArea: React.FC<TextAreaComponentProps> = ({
           {...field}
           placeholder={placeholder}
           hasError={!!error}
-          data-test-id={`text-field-${name}`}
+          data-testid={`text-field-${name}`}
         />
       )}
 
       {error && (
-        <Input.ErrorMessageRoot data-test-id={`error-${name}`}>
+        <Input.ErrorMessageRoot data-testid={`error-${name}`}>
           <Input.ErrorMessage>{error.message}</Input.ErrorMessage>
         </Input.ErrorMessageRoot>
       )}

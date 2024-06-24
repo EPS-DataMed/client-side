@@ -28,7 +28,7 @@ const AdditionalInfo: React.FC<AdditionalInfoProps> = ({ control }) => {
           placeholder={field.placeholder}
           isLoading={isLoading}
           defaultValue={
-            formUserFields?.renalFunction.find(
+            formUserFields?.additionalInfo.find(
               (info) => info.name === field.name,
             )?.value
           }

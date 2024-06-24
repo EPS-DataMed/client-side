@@ -272,16 +272,13 @@ describe('ManagerUsers Component', () => {
       isDeleting: false,
     })
 
-    // Render the component
     renderComponent()
 
-    // Simulate the delete action
     fireEvent.click(screen.getByTestId('action-button-excluir-1'))
 
-    // Assertions
     expect(handleUpdateDialogControlled).toHaveBeenCalledWith(true)
     expect(setDependentToDelete).toHaveBeenCalledWith(dependents[0])
-    expect(screen.getByText('Dependente')).toBeInTheDocument() // Verifica se o texto "Dependente" está na tela quando isDoctor é false
+    expect(screen.getByText('Dependente')).toBeInTheDocument()
   })
   it('should render DialogControlled when isDialogControlledOpen is true and dialogItemToRender is defined', async () => {
     const handleUpdateDialogControlled = jest.fn()
