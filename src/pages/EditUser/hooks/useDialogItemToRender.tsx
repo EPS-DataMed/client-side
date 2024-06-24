@@ -5,8 +5,8 @@ import { DialogStep } from '../interfaces/dialogStep'
 interface DialogItemToRenderProps {
   dialogSubmissionStep: DialogStep
   handleUpdateDialogControlled: (open: boolean) => void
-  onSubmitChangePassword: () => void
-  onSubmitDeleteUser: () => void
+  onSubmitChangePassword: any
+  onSubmitDeleteUser: any
   logoutConfig: any
 }
 

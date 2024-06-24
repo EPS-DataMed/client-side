@@ -7,7 +7,7 @@ import { Dependent, ManagerUsersDialog } from '../interfaces'
 
 interface DialogItemToRenderProps {
   handleUpdateDialogControlled: (open: boolean) => void
-  deleteDependentDialog: () => void
+  deleteDependentDialog: any
   setDialogManagerUsersStep: React.Dispatch<
     React.SetStateAction<ManagerUsersDialog>
   >

@@ -58,10 +58,8 @@ export function EditUser() {
   const { dialogItemToRender } = useDialogItemToRender({
     handleUpdateDialogControlled,
     dialogSubmissionStep,
-    onSubmitChangePassword: async () =>
-      await handleSubmitChangePassword(passwordData),
-    onSubmitDeleteUser: async () =>
-      await handleSubmitDeleteAccount(deletePasswordData),
+    onSubmitChangePassword: () => handleSubmitChangePassword(passwordData),
+    onSubmitDeleteUser: () => handleSubmitDeleteAccount(deletePasswordData),
     logoutConfig,
   })
 

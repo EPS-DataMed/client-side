@@ -52,7 +52,7 @@ export function ManagerUsers() {
 
   const { dialogItemToRender } = useDialogItemToRender({
     handleUpdateDialogControlled,
-    deleteDependentDialog: async () => await deleteDependentDialog(),
+    deleteDependentDialog,
     dialogManagerUsersStep,
     setDialogManagerUsersStep,
     logoutConfig,
