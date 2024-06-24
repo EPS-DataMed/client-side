@@ -7,7 +7,7 @@ import { Dependent } from '../interfaces'
 import { ErrorToast, SuccessToast } from '../../../components/Toast'
 import { useUserContext } from '../../../contexts/UserContext'
 
-export function listDependentsRepository() {
+export function useListDependentsRepository() {
   const [isDeleting, setIsDeleting] = useState(false)
   const [dependentToDelete, setDependentToDelete] = useState<Dependent | null>(
     null,

@@ -17,12 +17,12 @@ import { useLogoutHook } from './hooks/useLogoutHook'
 import { useSubmissionTestHook } from './hooks/useSubmissionTestHook'
 import { useUserContext } from '../../contexts/UserContext'
 import { isNotUndefined } from '../../interfaces/typeGuards'
-import { listExamsRepository } from './repositories/listExamsRepository'
+import { useListExamsRepository } from './repositories/useListExamsRepository'
 import { useDialogItemToRender } from './hooks/useDialogItemToRender'
 
 export function Submission() {
   const BREADCRUMBS = useBreadcrumbsHook()
-  const { isListExamsLoading } = listExamsRepository()
+  const { isListExamsLoading } = useListExamsRepository()
   const {
     getInputProps,
     getRootProps,

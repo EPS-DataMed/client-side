@@ -2,22 +2,22 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import { ProfileButton } from '.'
 import { useUserContext } from '../../contexts/UserContext'
 import useNavigation from '../../hooks/useNavigation'
-import { listUserInfoRepository } from './repositories/listUserInfoRepository'
+import { useListUserInfoRepository } from './repositories/useListUserInfoRepository'
 import AppProviders from '../AppProviders'
 
 jest.mock('../../contexts/UserContext')
 jest.mock('../../hooks/useNavigation')
-jest.mock('./repositories/listUserInfoRepository')
+jest.mock('./repositories/useListUserInfoRepository')
 
 const mockUseUserContext = useUserContext as jest.Mock
 const mockUseNavigation = useNavigation as jest.Mock
-const mockListUserInfoRepository = listUserInfoRepository as jest.Mock
+const mockuseListUserInfoRepository = useListUserInfoRepository as jest.Mock
 
 describe('ProfileButton', () => {
   beforeEach(() => {
     mockUseUserContext.mockReturnValue({ user: { full_name: 'John Doe' } })
     mockUseNavigation.mockReturnValue(jest.fn())
-    mockListUserInfoRepository.mockReturnValue({ isListUserInfoLoading: false })
+    mockuseListUserInfoRepository.mockReturnValue({ isListUserInfoLoading: false })
   })
 
   it('should render the component', () => {
@@ -57,7 +57,7 @@ describe('ProfileButton', () => {
   })
 
   it('should display the skeleton when loading user info', () => {
-    mockListUserInfoRepository.mockReturnValueOnce({
+    mockuseListUserInfoRepository.mockReturnValueOnce({
       isListUserInfoLoading: true,
     })
 

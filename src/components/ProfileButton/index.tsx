@@ -1,7 +1,7 @@
 import { useUserContext } from '../../contexts/UserContext'
 import useNavigation from '../../hooks/useNavigation'
 import { hasObjectValidKeys } from '../../interfaces/typeGuards'
-import { listUserInfoRepository } from './repositories/listUserInfoRepository'
+import { useListUserInfoRepository } from './repositories/useListUserInfoRepository'
 import * as S from './styles'
 
 export function ProfileButton() {
@@ -13,7 +13,7 @@ export function ProfileButton() {
     navigateTo('/editUser')
   }
 
-  const { isListUserInfoLoading } = listUserInfoRepository()
+  const { isListUserInfoLoading } = useListUserInfoRepository()
   const isUserExists = hasObjectValidKeys(user)
 
   return (

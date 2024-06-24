@@ -14,7 +14,7 @@ import { DialogStep } from './interfaces'
 import DatamedCard from './DatamedCard'
 import useRemoveSpecificSvg from './hooks/useRemoveSpecificSvg'
 import { useLogout } from '../../hooks/useLogout'
-import { listFormRepository } from './repositories/listFormRepository'
+import { useListFormRepository } from './repositories/useListFormRepository'
 
 import { Spinner } from '../../components/Spinner'
 
@@ -56,7 +56,7 @@ export function UserForm() {
   })
 
   useRemoveSpecificSvg()
-  listFormRepository()
+  useListFormRepository()
 
   const BREADCRUMBS = useBreadcrumbs()
 

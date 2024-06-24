@@ -4,7 +4,7 @@ import { getCookie } from '../../../utils/cookies'
 import { getUserWithDoctor } from '../services'
 import { useUserContext } from '../../../contexts/UserContext'
 
-export function listUserInfoRepository() {
+export function useListUserInfoRepository() {
   const { userId } = getUserId()
   const token = getCookie('access_token')
   const { setUser } = useUserContext()

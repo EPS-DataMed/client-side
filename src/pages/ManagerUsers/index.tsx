@@ -18,7 +18,7 @@ import useNavigation from '../../hooks/useNavigation'
 import { Dependent, FormStatus } from './interfaces'
 import { useLogout } from '../../hooks/useLogout'
 import { useUserContext } from '../../contexts/UserContext'
-import { listDependentsRepository } from './repositories/listDependentsRepository'
+import { useListDependentsRepository } from './repositories/useListDependentsRepository'
 import { calculateAge } from '../../utils/calculateAge'
 
 export type ManagerUsersDialog = 'delete' | 'logout' | 'add_dependent' | ''
@@ -34,7 +34,7 @@ export function ManagerUsers() {
     dependentToDelete,
     setDependentToDelete,
     isDeleting,
-  } = listDependentsRepository()
+  } = useListDependentsRepository()
   const navigateTo = useNavigation()
   const { isUserExists, isDoctor } = useUserContext()
 

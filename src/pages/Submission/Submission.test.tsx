@@ -7,7 +7,7 @@ import { useDialogHook } from './hooks/useDialogHook'
 import { useLogoutHook } from './hooks/useLogoutHook'
 import { useSubmissionTestHook } from './hooks/useSubmissionTestHook'
 import { useUserContext } from '../../contexts/UserContext'
-import { listExamsRepository } from './repositories/listExamsRepository'
+import { useListExamsRepository } from './repositories/useListExamsRepository'
 import { useDialogItemToRender } from './hooks/useDialogItemToRender'
 import useNavigation from '../../hooks/useNavigation'
 
@@ -24,7 +24,7 @@ jest.mock('./hooks/useDialogHook')
 jest.mock('./hooks/useLogoutHook')
 jest.mock('./hooks/useSubmissionTestHook')
 jest.mock('../../contexts/UserContext')
-jest.mock('./repositories/listExamsRepository')
+jest.mock('./repositories/useListExamsRepository')
 jest.mock('./hooks/useDialogItemToRender')
 jest.mock('../../hooks/useNavigation')
 
@@ -34,7 +34,7 @@ const mockUseDialogHook = useDialogHook as jest.Mock
 const mockUseLogoutHook = useLogoutHook as jest.Mock
 const mockUseSubmissionTestHook = useSubmissionTestHook as jest.Mock
 const mockUseUserContext = useUserContext as jest.Mock
-const mockListExamsRepository = listExamsRepository as jest.Mock
+const mockuseListExamsRepository = useListExamsRepository as jest.Mock
 const mockUseDialogItemToRender = useDialogItemToRender as jest.Mock
 const mockUseNavigation = useNavigation as jest.Mock
 
@@ -71,7 +71,7 @@ describe('Submission', () => {
     mockUseUserContext.mockReturnValue({
       isUserExists: true,
     })
-    mockListExamsRepository.mockReturnValue({
+    mockuseListExamsRepository.mockReturnValue({
       isListExamsLoading: false,
     })
     mockUseDialogItemToRender.mockReturnValue({
@@ -97,7 +97,7 @@ describe('Submission', () => {
   })
 
   it('renders the skeleton when exams are loading', () => {
-    mockListExamsRepository.mockReturnValue({
+    mockuseListExamsRepository.mockReturnValue({
       isListExamsLoading: true,
     })
 

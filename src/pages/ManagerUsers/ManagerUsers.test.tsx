@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { ManagerUsers } from '.'
 import { useUserContext } from '../../contexts/UserContext'
-import { listDependentsRepository } from './repositories/listDependentsRepository'
+import { useListDependentsRepository } from './repositories/useListDependentsRepository'
 import { useDialogControlled } from '../../components/DialogControlled'
 import { useLogout } from '../../hooks/useLogout'
 import { useDialogItemToRender } from './hooks/useDialogItemToRender'
@@ -19,7 +19,7 @@ jest.mock('lottie-web', () => ({
 }))
 
 jest.mock('../../contexts/UserContext')
-jest.mock('./repositories/listDependentsRepository')
+jest.mock('./repositories/useListDependentsRepository')
 jest.mock('../../components/DialogControlled')
 jest.mock('../../hooks/useLogout')
 jest.mock('./hooks/useDialogItemToRender')
@@ -31,7 +31,7 @@ jest.mock('./services')
 jest.mock('../../components/Toast')
 
 const mockUseUserContext = useUserContext as jest.Mock
-const mockListDependentsRepository = listDependentsRepository as jest.Mock
+const mockuseListDependentsRepository = useListDependentsRepository as jest.Mock
 const mockUseDialogControlled = useDialogControlled as jest.Mock
 const mockUseLogout = useLogout as jest.Mock
 const mockUseDialogItemToRender = useDialogItemToRender as jest.Mock
@@ -44,7 +44,7 @@ const mockDeleteUserDependent = deleteUserDependent as jest.Mock
 describe('ManagerUsers Component', () => {
   beforeEach(() => {
     mockUseUserContext.mockReturnValue({ isUserExists: true, isDoctor: false })
-    mockListDependentsRepository.mockReturnValue({
+    mockuseListDependentsRepository.mockReturnValue({
       dependents: [],
       isListDependentsLoading: false,
       setDependents: jest.fn(),
@@ -84,7 +84,7 @@ describe('ManagerUsers Component', () => {
   })
 
   it('should display skeleton loaders when loading', () => {
-    mockListDependentsRepository.mockReturnValue({
+    mockuseListDependentsRepository.mockReturnValue({
       dependents: [],
       isListDependentsLoading: true,
       setDependents: jest.fn(),
@@ -98,7 +98,7 @@ describe('ManagerUsers Component', () => {
   })
 
   it('should display empty state when no dependents', () => {
-    mockListDependentsRepository.mockReturnValue({
+    mockuseListDependentsRepository.mockReturnValue({
       dependents: [],
       isListDependentsLoading: false,
       setDependents: jest.fn(),
@@ -121,7 +121,7 @@ describe('ManagerUsers Component', () => {
   it('should handle navigation on exame action', () => {
     const navigateTo = jest.fn()
     mockUseNavigation.mockReturnValue(navigateTo)
-    mockListDependentsRepository.mockReturnValue({
+    mockuseListDependentsRepository.mockReturnValue({
       dependents: [
         {
           dependent_id: 1,
@@ -139,7 +139,7 @@ describe('ManagerUsers Component', () => {
   })
 
   it('should render "Dependente" when isDoctor is false', () => {
-    mockListDependentsRepository.mockReturnValue({
+    mockuseListDependentsRepository.mockReturnValue({
       dependents: [
         {
           dependent_id: 1,
@@ -156,7 +156,7 @@ describe('ManagerUsers Component', () => {
   })
 
   it('should render "Paciente" when isDoctor is true', () => {
-    mockListDependentsRepository.mockReturnValue({
+    mockuseListDependentsRepository.mockReturnValue({
       dependents: [
         {
           dependent_id: 1,
@@ -173,7 +173,7 @@ describe('ManagerUsers Component', () => {
   })
 
   it('should render title "Dependentes" when isDoctor is false', () => {
-    mockListDependentsRepository.mockReturnValue({
+    mockuseListDependentsRepository.mockReturnValue({
       dependents: [
         {
           dependent_id: 1,
@@ -190,7 +190,7 @@ describe('ManagerUsers Component', () => {
   })
 
   it('should render title "Pacientes" when isDoctor is true', () => {
-    mockListDependentsRepository.mockReturnValue({
+    mockuseListDependentsRepository.mockReturnValue({
       dependents: [
         {
           dependent_id: 1,
@@ -207,7 +207,7 @@ describe('ManagerUsers Component', () => {
   })
 
   it('should render description with "dependentes" when isDoctor is false', () => {
-    mockListDependentsRepository.mockReturnValue({
+    mockuseListDependentsRepository.mockReturnValue({
       dependents: [
         {
           dependent_id: 1,
@@ -226,7 +226,7 @@ describe('ManagerUsers Component', () => {
   })
 
   it('should render description with "pacientes" when isDoctor is true', () => {
-    mockListDependentsRepository.mockReturnValue({
+    mockuseListDependentsRepository.mockReturnValue({
       dependents: [
         {
           dependent_id: 1,
@@ -262,7 +262,7 @@ describe('ManagerUsers Component', () => {
       isDialogControlledOpen: false,
     })
 
-    mockListDependentsRepository.mockReturnValue({
+    mockuseListDependentsRepository.mockReturnValue({
       dependents,
       isListDependentsLoading: false,
       setDependents: jest.fn(),
@@ -317,7 +317,7 @@ describe('ManagerUsers Component', () => {
       },
     ]
 
-    mockListDependentsRepository.mockReturnValue({
+    mockuseListDependentsRepository.mockReturnValue({
       dependents,
       isListDependentsLoading: false,
       setDependents: jest.fn(),
