@@ -4,12 +4,45 @@ import { getUserId } from '../../../utils/getUserId'
 import { deleteAccount, editPassword } from '../services'
 import { ErrorToast, SuccessToast } from '../../../components/Toast'
 import useNavigation from '../../../hooks/useNavigation'
+import { useDialogControlled } from '../../../components/DialogControlled'
+import { DialogStep } from '../interfaces/dialogStep'
+import { useLogout } from '../../../hooks/useLogout'
 
 export function useSubmitHandlers() {
   const [loadingPasswordData, setLoadingPasswordData] = useState(false)
   const [loadingDeleteAccount, setLoadingDeleteAccount] = useState(false)
+  const [passwordData, setPasswordData] = useState({} as EditFormData)
+  const [deletePasswordData, setDeletePasswordData] = useState(
+    {} as DeleteAccData,
+  )
 
   const navigateTo = useNavigation()
+
+  const { handleUpdateDialogControlled, isDialogControlledOpen } =
+    useDialogControlled()
+
+  const [dialogSubmissionStep, setDialogSubmissionStep] =
+    useState<DialogStep>('')
+
+  const handleOpenPasswordDialog = useCallback(
+    (data: EditFormData) => {
+      handleUpdateDialogControlled(true)
+      setDialogSubmissionStep('change_password')
+      setPasswordData(data)
+    },
+    [handleUpdateDialogControlled],
+  )
+
+  const handleOpenDeleteAccountDialog = (data: DeleteAccData) => {
+    handleUpdateDialogControlled(true)
+    setDialogSubmissionStep('delete_account')
+    setDeletePasswordData(data)
+  }
+
+  const { handleOpenLogoutDialog, logoutConfig } = useLogout({
+    handleOpenDialog: (value) => handleUpdateDialogControlled(value),
+    handleStep: (value: DialogStep) => setDialogSubmissionStep(value),
+  })
 
   const handleSubmitChangePassword = useCallback(
     async (passwordData: EditFormData) => {
@@ -65,5 +98,15 @@ export function useSubmitHandlers() {
     loadingDeleteAccount,
     handleSubmitChangePassword,
     handleSubmitDeleteAccount,
+    handleOpenLogoutDialog,
+    handleOpenDeleteAccountDialog,
+    logoutConfig,
+    handleOpenPasswordDialog,
+    passwordData,
+    deletePasswordData,
+    isDialogControlledOpen,
+    dialogSubmissionStep,
+    handleUpdateDialogControlled,
+    setDialogSubmissionStep,
   }
 }

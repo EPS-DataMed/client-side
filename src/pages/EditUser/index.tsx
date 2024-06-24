@@ -1,59 +1,32 @@
-import { useState, useCallback } from 'react'
 import { GenericPage } from '../../components/GenericPage'
 import { Breadcrumb } from '../../components/Breadcrumb'
-import {
-  DialogControlled,
-  useDialogControlled,
-} from '../../components/DialogControlled'
+import { DialogControlled } from '../../components/DialogControlled'
 import { useSubmitHandlers } from './hooks/useSubmitHandlers'
 import { ChangePasswordForm } from './components/ChangePasswordForm'
-import { useLogout } from '../../hooks/useLogout'
 import { useDialogItemToRender } from './hooks/useDialogItemToRender'
 import { useBreadcrumbs } from './hooks/useBreadCrumbs'
-import { DeleteAccData, EditFormData } from './schema'
-import { DialogStep } from './interfaces/dialogStep'
 import { DeleteUserForm } from './components/DeleteUserForm'
 import * as S from './styles'
 import { UserPersonalInformations } from './components/UserPersonalInformations'
 import { isNotUndefined } from '../../interfaces/typeGuards'
 
 export function EditUser() {
-  const [passwordData, setPasswordData] = useState({} as EditFormData)
-  const [deletePasswordData, setDeletePasswordData] = useState(
-    {} as DeleteAccData,
-  )
   const {
     loadingPasswordData,
     loadingDeleteAccount,
     handleSubmitChangePassword,
     handleSubmitDeleteAccount,
+    handleOpenLogoutDialog,
+    handleOpenDeleteAccountDialog,
+    logoutConfig,
+    handleOpenPasswordDialog,
+    passwordData,
+    deletePasswordData,
+    isDialogControlledOpen,
+    dialogSubmissionStep,
+    handleUpdateDialogControlled,
+    setDialogSubmissionStep,
   } = useSubmitHandlers()
-
-  const { handleUpdateDialogControlled, isDialogControlledOpen } =
-    useDialogControlled()
-
-  const [dialogSubmissionStep, setDialogSubmissionStep] =
-    useState<DialogStep>('')
-
-  const handleOpenPasswordDialog = useCallback(
-    (data: EditFormData) => {
-      handleUpdateDialogControlled(true)
-      setDialogSubmissionStep('change_password')
-      setPasswordData(data)
-    },
-    [handleUpdateDialogControlled],
-  )
-
-  const handleOpenDeleteAccountDialog = (data: DeleteAccData) => {
-    handleUpdateDialogControlled(true)
-    setDialogSubmissionStep('delete_account')
-    setDeletePasswordData(data)
-  }
-
-  const { handleOpenLogoutDialog, logoutConfig } = useLogout({
-    handleOpenDialog: (value) => handleUpdateDialogControlled(value),
-    handleStep: (value: DialogStep) => setDialogSubmissionStep(value),
-  })
 
   const { dialogItemToRender } = useDialogItemToRender({
     handleUpdateDialogControlled,
@@ -71,42 +44,55 @@ export function EditUser() {
 
   return (
     <>
-      <S.Container>
-        <S.WrapperHeaderAndBreadcrumb>
+      <S.Container data-test-id="edit-user-container">
+        <S.WrapperHeaderAndBreadcrumb data-test-id="header-and-breadcrumb">
           <GenericPage.Header>
             <S.WrapperLogoAndLogoTitle>
-              <GenericPage.Logo />
-              <GenericPage.LogoTitle>DataMed</GenericPage.LogoTitle>
+              <GenericPage.Logo data-test-id="logo" />
+              <GenericPage.LogoTitle data-test-id="logo-title">
+                DataMed
+              </GenericPage.LogoTitle>
             </S.WrapperLogoAndLogoTitle>
 
             <GenericPage.HeaderOptions>
-              <GenericPage.ProfileButton />
-              <GenericPage.LogoutButton action={handleOpenLogoutDialog} />
+              <GenericPage.ProfileButton data-test-id="profile-button" />
+              <GenericPage.LogoutButton
+                action={handleOpenLogoutDialog}
+                data-test-id="logout-button"
+              />
             </GenericPage.HeaderOptions>
           </GenericPage.Header>
-          <Breadcrumb items={BREADCRUMBS} />
+          <Breadcrumb items={BREADCRUMBS} data-test-id="breadcrumb" />
         </S.WrapperHeaderAndBreadcrumb>
 
-        <GenericPage.Divider />
+        <GenericPage.Divider data-test-id="divider" />
 
-        <S.MainContent>
-          <S.Section>
-            <S.SectionTitle>Informações Pessoais</S.SectionTitle>
-            <S.SectionDescription>
+        <S.MainContent data-test-id="main-content">
+          <S.Section data-test-id="personal-info-section">
+            <S.SectionTitle data-test-id="personal-info-title">
+              Informações Pessoais
+            </S.SectionTitle>
+            <S.SectionDescription data-test-id="personal-info-description">
               Visualize suas informações pessoais
             </S.SectionDescription>
-            <GenericPage.Divider />
+            <GenericPage.Divider data-test-id="personal-info-divider" />
 
-            <S.UserDataInputs>
-              <UserPersonalInformations />
+            <S.UserDataInputs data-test-id="user-data-inputs">
+              <UserPersonalInformations data-test-id="user-personal-info" />
             </S.UserDataInputs>
           </S.Section>
 
-          <ChangePasswordForm onOpenDialog={handleOpenPasswordDialog} />
-          <DeleteUserForm onOpenDialog={handleOpenDeleteAccountDialog} />
+          <ChangePasswordForm
+            onOpenDialog={handleOpenPasswordDialog}
+            data-test-id="change-password-form"
+          />
+          <DeleteUserForm
+            onOpenDialog={handleOpenDeleteAccountDialog}
+            data-test-id="delete-user-form"
+          />
         </S.MainContent>
 
-        <GenericPage.Divider />
+        <GenericPage.Divider data-test-id="bottom-divider" />
       </S.Container>
 
       {isDialogControlledOpen && isNotUndefined(dialogItemToRender) && (
@@ -116,6 +102,7 @@ export function EditUser() {
           dialogItemToRender={dialogItemToRender}
           onClose={handleCloseDialog}
           isLoadingRequisition={loadingPasswordData || loadingDeleteAccount}
+          data-test-id="dialog-controlled"
         />
       )}
     </>
