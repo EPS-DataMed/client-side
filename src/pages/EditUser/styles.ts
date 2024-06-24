@@ -1,4 +1,12 @@
 import { styled } from 'styled-components'
+import { GenericPage } from '../../components/GenericPage'
+
+export const Container = styled(GenericPage.Root)`
+  @media (min-width: 1604px) {
+    overflow: hidden;
+    height: 100vh;
+  }
+`
 
 export const Header = styled.header`
   display: flex;
@@ -26,11 +34,11 @@ export const WrapperHeaderAndBreadcrumb = styled.div`
 
 export const MainContent = styled.div`
   display: flex;
+  flex: 1;
   flex-direction: column;
   padding-top: ${({ theme }) => theme.space[4]};
   padding-bottom: ${({ theme }) => theme.space[8]};
   gap: ${({ theme }) => theme.space[4]};
-  height: 100%;
 `
 
 export const Section = styled.div`

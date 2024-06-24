@@ -6,7 +6,6 @@ import {
 import { isArrayNotEmpty, isNotUndefined } from '../../interfaces/typeGuards'
 import { useDialogItemToRender } from './hooks/useDialogItemToRender'
 import * as S from './styles'
-import { ErrorToast, SuccessToast } from '../../components/Toast'
 import { TableSkeleton } from './components/TableSkeleton'
 import { TitleUpdater } from '../../components/TitleUpdater'
 import { Empty } from '../../components/Empty'
@@ -21,22 +20,21 @@ import { useLogout } from '../../hooks/useLogout'
 import { useUserContext } from '../../contexts/UserContext'
 import { listDependentsRepository } from './repositories/listDependentsRepository'
 import { calculateAge } from '../../utils/calculateAge'
-import { deleteUserDependent } from './services'
-import { getUserId } from '../../utils/getUserId'
-import { getCookie } from '../../utils/cookies'
 
 export type ManagerUsersDialog = 'delete' | 'logout' | 'add_dependent' | ''
 
 export function ManagerUsers() {
   const [dialogManagerUsersStep, setDialogManagerUsersStep] =
     useState<ManagerUsersDialog>('')
-  const [isDeleting, setIsDeleting] = useState(false)
-  const [dependentToDelete, setDependentToDelete] = useState<Dependent | null>(
-    null,
-  )
 
-  const { dependents, isListDependentsLoading, setDependents } =
-    listDependentsRepository()
+  const {
+    dependents,
+    isListDependentsLoading,
+    deleteDependentDialog,
+    dependentToDelete,
+    setDependentToDelete,
+    isDeleting,
+  } = listDependentsRepository()
   const navigateTo = useNavigation()
   const { isUserExists, isDoctor } = useUserContext()
 
@@ -44,40 +42,6 @@ export function ManagerUsers() {
     handleUpdateDialogControlled(true)
     setDialogManagerUsersStep('add_dependent')
   }
-
-  const deleteDependentDialog = useCallback(async () => {
-    const { userId } = getUserId()
-    const token = getCookie('access_token')
-
-    if (!dependentToDelete) return
-
-    setIsDeleting(true)
-    try {
-      const updatedDependents = dependents.filter(
-        (dependent) =>
-          dependent.dependent_id !== dependentToDelete.dependent_id,
-      )
-      setDependents(updatedDependents)
-
-      await deleteUserDependent({
-        userId: userId as number,
-        token: token as string,
-        dependentId: dependentToDelete.dependent_id,
-      })
-
-      SuccessToast(
-        isDoctor
-          ? 'Paciente excluído com sucesso!'
-          : 'Dependente excluído com sucesso!',
-      )
-    } catch (e) {
-      ErrorToast(
-        'Não foi possível realizar a ação, tente novamente mais tarde.',
-      )
-    } finally {
-      setIsDeleting(false)
-    }
-  }, [dependentToDelete, dependents, isDoctor, setDependents])
 
   const { handleUpdateDialogControlled, isDialogControlledOpen } =
     useDialogControlled()
@@ -101,7 +65,7 @@ export function ManagerUsers() {
       setDialogManagerUsersStep('delete')
       setDependentToDelete(dependent)
     },
-    [handleUpdateDialogControlled],
+    [handleUpdateDialogControlled, setDependentToDelete],
   )
 
   const STATUS_ACTION_OPTIONS = [
@@ -122,6 +86,7 @@ export function ManagerUsers() {
     [FormStatus.Filled]: 'Preenchido',
     [FormStatus.InProgress]: 'Em andamento',
     [FormStatus.NotStarted]: 'Não iniciado',
+    [FormStatus.Empty]: 'Não iniciado',
   }
 
   const isDependentsListLoading = !isUserExists || isListDependentsLoading
@@ -129,11 +94,14 @@ export function ManagerUsers() {
 
   const renderHeaderOptions = () => {
     if (isDependentsListLoading) {
-      return <S.SkeletonButton />
+      return <S.SkeletonButton data-testid="skeleton-button" />
     }
 
     return (
-      <PrimaryButton onClick={handleOpenAddDependentDialog}>
+      <PrimaryButton
+        onClick={handleOpenAddDependentDialog}
+        data-testid="add-dependent-button"
+      >
         <Pen />
         <p>{isDoctor ? 'Paciente' : 'Dependente'}</p>
       </PrimaryButton>
@@ -142,7 +110,7 @@ export function ManagerUsers() {
 
   const renderBreadcrumbs = () => {
     if (isDependentsListLoading) {
-      return <S.SkeletonBreadcrumbs />
+      return <S.SkeletonBreadcrumbs data-testid="skeleton-breadcrumbs" />
     }
 
     return <Breadcrumb items={BREADCRUMBS} />
@@ -150,7 +118,7 @@ export function ManagerUsers() {
 
   const renderPageTitle = () => {
     if (isDependentsListLoading) {
-      return <S.SkeletonTitle />
+      return <S.SkeletonTitle data-testid="skeleton-title" />
     }
 
     return (
@@ -162,7 +130,7 @@ export function ManagerUsers() {
 
   const renderPageDescription = () => {
     if (isDependentsListLoading) {
-      return <S.SkeletonDescription />
+      return <S.SkeletonDescription data-testid="skeleton-description" />
     }
 
     return (
@@ -176,30 +144,41 @@ export function ManagerUsers() {
 
   const renderTableContent = () => {
     if (isDependentsListLoading) {
-      return <TableSkeleton />
+      return <TableSkeleton data-testid="table-skeleton" />
     }
 
     return (
-      <S.TableContentContainer>
+      <S.TableContentContainer data-testid="table-content-container">
         {dependents.map((item) => (
           <React.Fragment key={item.dependent_id}>
-            <S.TableTitleCell title={item.user_full_name}>
+            <S.TableTitleCell
+              title={item.user_full_name}
+              data-testid={`dependent-name-${item.dependent_id}`}
+            >
               {item.user_full_name}
             </S.TableTitleCell>
-            <S.TableCell>{calculateAge(item.user_birth_date)} anos</S.TableCell>
-            <S.TableCell>
+            <S.TableCell data-testid={`dependent-age-${item.dependent_id}`}>
+              {calculateAge(item.user_birth_date)} anos
+            </S.TableCell>
+            <S.TableCell data-testid={`dependent-status-${item.dependent_id}`}>
               <S.WrapperStatusIndicator>
                 <S.StatusIndicator status={item.form_status} />
                 {STATUS_OPTIONS[item.form_status]}
               </S.WrapperStatusIndicator>
             </S.TableCell>
-            <S.TableCell hasGap>
+            <S.TableCell
+              hasGap
+              data-testid={`dependent-actions-${item.dependent_id}`}
+            >
               <S.WrapperButton>
                 {STATUS_ACTION_OPTIONS.map((action) => (
                   <S.ButtonStyled
                     onClick={() => action.action(item)}
                     label={action.label}
                     key={action.label}
+                    data-testid={`action-button-${action.label.toLowerCase()}-${
+                      item.dependent_id
+                    }`}
                   >
                     {action.label}
                   </S.ButtonStyled>
@@ -219,6 +198,7 @@ export function ManagerUsers() {
           text={`Ainda não há ${
             isDoctor ? 'pacientes' : 'dependentes'
           } cadastrados.`}
+          data-testid="empty-state"
         />
       )
     }
@@ -239,7 +219,10 @@ export function ManagerUsers() {
             <GenericPage.HeaderOptions>
               <GenericPage.ProfileButton />
               {renderHeaderOptions()}
-              <GenericPage.LogoutButton action={handleOpenLogoutDialog} />
+              <GenericPage.LogoutButton
+                action={handleOpenLogoutDialog}
+                dataTestId="logout-button"
+              />
             </GenericPage.HeaderOptions>
           </GenericPage.Header>
           {renderBreadcrumbs()}
@@ -253,9 +236,15 @@ export function ManagerUsers() {
                 {renderPageDescription()}
               </S.WrapperPageInformation>
               <S.TableContainer>
-                <S.TableHeader>Nome</S.TableHeader>
-                <S.TableHeader>Idade</S.TableHeader>
-                <S.TableHeader>Formulário</S.TableHeader>
+                <S.TableHeader data-testid="table-header-name">
+                  Nome
+                </S.TableHeader>
+                <S.TableHeader data-testid="table-header-age">
+                  Idade
+                </S.TableHeader>
+                <S.TableHeader data-testid="table-header-form">
+                  Formulário
+                </S.TableHeader>
                 <S.TableHeader />
               </S.TableContainer>
               {renderTableContent()}

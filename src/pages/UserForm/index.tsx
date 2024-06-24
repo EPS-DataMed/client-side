@@ -1,7 +1,4 @@
-import { useForm, SubmitHandler, useWatch } from 'react-hook-form'
 import { useReactToPrint } from 'react-to-print'
-import { zodResolver } from '@hookform/resolvers/zod'
-import * as z from 'zod'
 import AdditionalInfo from './components/AdditionalInfo'
 import PersonalInfo from './components/PersonalInfo'
 import HealthData from './components/HealthData'
@@ -11,85 +8,38 @@ import { useBreadcrumbs } from './hooks/useBreadcrumbs'
 import * as S from './styles'
 import { PrimaryButton } from '../../components/PrimaryButton'
 import { ArrowLeft } from '../../assets/icons'
-import {
-  DialogControlled,
-  useDialogControlled,
-} from '../../components/DialogControlled'
+import { DialogControlled } from '../../components/DialogControlled'
 import { hasObjectValidKeys, isNotUndefined } from '../../interfaces/typeGuards'
 import { useDialogItemToRender } from './hooks/useDialogItemToRender'
 import { DialogStep, User } from './interfaces'
-import { useRef, useState, useEffect, useCallback } from 'react'
-import useNavigation from '../../hooks/useNavigation'
+import { useRef } from 'react'
 import { PAGE_PRINT_STYLE } from './constants'
 import DatamedCard from './DatamedCard'
 import useRemoveSpecificSvg from './hooks/useRemoveSpecificSvg'
-import { schema } from './schema'
 import { useLogout } from '../../hooks/useLogout'
-import { useSubmissionTestContext } from '../../contexts/SubmissionTestContext'
 import { listFormRepository } from './repositories/listFormRepository'
-import { updateForm } from './services'
-import { convertUserToForm } from './utils'
-import { ErrorToast } from '../../components/Toast'
-import { getUserId } from '../../utils/getUserId'
-import { getCookie } from '../../utils/cookies'
-import { Spinner } from '../../components/Spinner'
-import { getDependents } from '../Submission/services'
-import { useParams } from 'react-router-dom'
 
-type FormData = z.infer<typeof schema>
+import { Spinner } from '../../components/Spinner'
+
+import { useSubmitForm } from './hooks/useSubmitForm'
 
 export function UserForm() {
-  const [dialogSubmissionStep, setDialogSubmissionStep] =
-    useState<DialogStep>('')
-  const [userInfoFilled, setUserInfoFilled] = useState({} as User)
-  const [isLoadingSubmission, setIsLoadingSubmission] = useState(false)
-
-  const { formData } = useSubmissionTestContext()
-
-  const initializeDefaultValues = useCallback(
-    (data: Partial<User>) => ({
-      weight: data.weight || '',
-      height: data.height || '',
-      bmi: data.bmi || '',
-      bloodType: data.bloodType || '',
-      abdominalCircumference: data.abdominalCircumference || '',
-      hemoglobin: data.hemoglobin || '',
-      redBloodCell: data.redBloodCell || '',
-      ast: data.ast || '',
-      alt: data.alt || '',
-      urea: data.urea || '',
-      creatinine: data.creatinine || '',
-      hematocrit: data.hematocrit || '',
-      glycatedHemoglobin: data.glycatedHemoglobin || '',
-      allergies: data.allergies || '',
-      diseases: data.diseases || '',
-      medications: data.medications || '',
-      familyHistory: data.familyHistory || '',
-      importantNotes: data.importantNotes || '',
-      imageReports: data.imageReports || '',
-    }),
-    [],
-  )
-
-  const { handleSubmit, control, setValue, reset } = useForm<FormData>({
-    resolver: zodResolver(schema),
-    defaultValues: initializeDefaultValues({}),
-  })
-
-  useEffect(() => {
-    if (formData) {
-      reset(initializeDefaultValues(formData))
-    }
-  }, [formData, reset, initializeDefaultValues])
-
-  const { handleUpdateDialogControlled, isDialogControlledOpen } =
-    useDialogControlled()
   const healthDataRef = useRef<HTMLDivElement | null>(null)
-  const navigateTo = useNavigation()
 
-  const handleNavigationToSubmission = useCallback(() => {
-    navigateTo('/submission', { replace: true })
-  }, [navigateTo])
+  const {
+    setUserInfoFilled,
+    handleUpdateDialogControlled,
+    setDialogSubmissionStep,
+    dialogSubmissionStep,
+    handleNavigationToSubmission,
+    handleSubmit,
+    onSubmit,
+    isLoadingSubmission,
+    handleCloseDialog,
+    isDialogControlledOpen,
+    userInfoFilled,
+    control,
+  } = useSubmitForm()
 
   const handleHealthDataPrint = useReactToPrint({
     content: () => healthDataRef.current,
@@ -112,84 +62,6 @@ export function UserForm() {
     logoutConfig,
   })
 
-  const handleCloseDialog = useCallback(() => {
-    setDialogSubmissionStep('')
-  }, [])
-
-  const weight = useWatch({
-    control,
-    name: 'weight',
-  })
-
-  const height = useWatch({
-    control,
-    name: 'height',
-  })
-
-  useEffect(() => {
-    if (weight && height) {
-      const weightNum = parseFloat(weight)
-      const heightNum = parseFloat(height) / 100
-      if (!isNaN(weightNum) && !isNaN(heightNum) && heightNum > 0) {
-        const bmi = (weightNum / (heightNum * heightNum)).toFixed(2)
-        setValue('bmi', bmi)
-      }
-    }
-  }, [weight, height, setValue])
-
-  const { userId } = getUserId()
-  const token = getCookie('access_token')
-  const { dependentId } = useParams<{ dependentId: string }>()
-
-  const onSubmit: SubmitHandler<FormData> = useCallback(
-    async (data) => {
-      try {
-        setIsLoadingSubmission(true)
-
-        const dataFormated = { ...data, formStatus: 'Filled' } as User
-
-        if (dependentId !== 'null') {
-          const dependentResponse = await getDependents({
-            token: token as string,
-            userId: userId as number,
-            dependentId: dependentId as string,
-          })
-
-          if (dependentResponse.confirmed) {
-            await updateForm({
-              userId: Number(dependentId),
-              token: token as string,
-              formData: convertUserToForm(dataFormated),
-            })
-          } else {
-            navigateTo('/', { replace: true })
-          }
-        } else {
-          await updateForm({
-            userId: userId as number,
-            token: token as string,
-            formData: convertUserToForm(dataFormated),
-          })
-        }
-
-        handleUpdateDialogControlled(true)
-        const USER_TO_PUT_IN_GRAPH: User = {
-          ...data,
-          name: formData?.name as string,
-          age: formData?.age as number,
-        }
-
-        setDialogSubmissionStep('save_form')
-        setUserInfoFilled({ ...USER_TO_PUT_IN_GRAPH })
-      } catch {
-        ErrorToast('Erro ao salvar formulário. Tente novamente mais tarde.')
-      } finally {
-        setIsLoadingSubmission(false)
-      }
-    },
-    [userId, token, formData, handleUpdateDialogControlled],
-  )
-
   useRemoveSpecificSvg()
   listFormRepository()
 
@@ -207,7 +79,10 @@ export function UserForm() {
 
             <GenericPage.HeaderOptions>
               <GenericPage.ProfileButton />
-              <GenericPage.LogoutButton action={handleOpenLogoutDialog} />
+              <GenericPage.LogoutButton
+                action={handleOpenLogoutDialog}
+                dataTestId="logout-button"
+              />
             </GenericPage.HeaderOptions>
           </GenericPage.Header>
           <Breadcrumb items={BREADCRUMBS} />
@@ -230,7 +105,7 @@ export function UserForm() {
             </GenericPage.Description>
           </S.WrapperPageInformation>
 
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(onSubmit)} data-testid="user-form">
             <PersonalInfo control={control} />
             <HealthData control={control} />
             <AdditionalInfo control={control} />
@@ -240,13 +115,14 @@ export function UserForm() {
                 type="button"
                 variant="secondary"
                 onClick={handleNavigationToSubmission}
+                data-testid="back-button"
               >
                 <ArrowLeft /> Voltar
               </PrimaryButton>
-              <S.ButtonStyled type="submit">
+              <S.ButtonStyled type="submit" data-testid="submit-button">
                 {isLoadingSubmission ? (
                   <>
-                    Carregando <Spinner />
+                    Carregando <Spinner data-testid="spinner" />
                   </>
                 ) : (
                   'Finalizar'

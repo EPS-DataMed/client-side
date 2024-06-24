@@ -6,32 +6,35 @@ import * as S from './styles'
 import useNavigation from '../../../../hooks/useNavigation'
 import InputField from '../../../../components/Input/InputField'
 import { useUserContext } from '../../../../contexts/UserContext'
+import { Spinner } from '../../../../components/Spinner'
+import { useSubmitDependent } from './hooks/useSubmitDependent'
 
 const schema = z.object({
   email: z.string().email('Email inválido').nonempty('Email é obrigatório'),
 })
 
-type FormData = z.infer<typeof schema>
+export type FormAddDependentData = z.infer<typeof schema>
 
 export function AddDependentDialog({
   onCloseDialog,
 }: {
   onCloseDialog: () => void
 }) {
-  const { control, handleSubmit } = useForm<FormData>({
+  const { control, handleSubmit } = useForm<FormAddDependentData>({
     resolver: zodResolver(schema),
   })
 
   const { isDoctor } = useUserContext()
 
-  const onSubmit = (data: FormData) => {
-    console.log(data)
-  }
+  const { loading, onSubmit } = useSubmitDependent()
 
   const navigateTo = useNavigation()
 
   return (
-    <S.Container onSubmit={handleSubmit(onSubmit)}>
+    <S.Container
+      data-testid="add-dependent-form"
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <InputField
         label="E-mail"
         name="email"
@@ -41,7 +44,7 @@ export function AddDependentDialog({
         required
       />
 
-      <S.MessageArea>
+      <S.MessageArea data-testid="message-area">
         <S.MessagePhrase>
           Um e-mail será enviado para o endereço acima. Seu{' '}
           {isDoctor ? 'paciente' : 'dependente'} <b>deve estar cadastrado</b> na
@@ -50,6 +53,7 @@ export function AddDependentDialog({
             onClick={() => {
               navigateTo('/signup')
             }}
+            data-testid="signup-link"
           >
             aqui
           </S.Link>
@@ -60,10 +64,19 @@ export function AddDependentDialog({
           onClick={onCloseDialog}
           variant="secondary"
           type="button"
+          data-testid="back-button"
         >
           Voltar
         </PrimaryButton>
-        <PrimaryButton type="submit">Adicionar</PrimaryButton>
+        <PrimaryButton type="submit" data-testid="submit-button">
+          {loading ? (
+            <>
+              Carregando <Spinner data-testid="spinner" />
+            </>
+          ) : (
+            'Adicionar'
+          )}
+        </PrimaryButton>
       </S.WrapperButtons>
     </S.Container>
   )

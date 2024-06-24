@@ -91,16 +91,19 @@ export function Submission() {
   const { isUserExists } = useUserContext()
   const isLoadingRequests = isLoadingSubmissionTest || !isUserExists
 
-  const renderBreadcrumbs = () =>
-    isLoadingRequests ? (
-      <S.SkeletonBreadcrumbs />
-    ) : (
-      <Breadcrumb items={BREADCRUMBS} />
-    )
+  const renderBreadcrumbs = () => {
+    if (!isUserExists) {
+      return <S.SkeletonBreadcrumbs />
+    }
+
+    if (!isLoadingRequests) {
+      return <Breadcrumb items={BREADCRUMBS} />
+    }
+
+    return null
+  }
 
   const { isListExamsLoading } = listExamsRepository()
-
-  console.log('isListExamsLoading: ', isListExamsLoading)
 
   async function handleSubmissionTest() {
     setIsLoadingSubmissionTest(true)

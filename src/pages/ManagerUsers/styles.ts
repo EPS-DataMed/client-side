@@ -80,6 +80,9 @@ const STATUS_STYLES = {
   [FormStatus.InProgress]: css`
     background-color: ${({ theme }) => theme.colors.yellow500};
   `,
+  [FormStatus.Empty]: css`
+    background-color: ${({ theme }) => theme.colors.neutral400};
+  `,
 }
 
 export const StatusIndicator = styled.div<StatusIndicatorProps>`

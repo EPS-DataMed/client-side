@@ -34,7 +34,7 @@ export const TextFieldArea: React.FC<TextAreaComponentProps> = ({
 
   return (
     <S.FormGroup>
-      <Input.Label>
+      <Input.Label data-test-id={`label-${name}`}>
         {label}
         {required && (
           <Input.RequiredText variant={error ? 'error' : ''}>
@@ -43,22 +43,24 @@ export const TextFieldArea: React.FC<TextAreaComponentProps> = ({
         )}
       </Input.Label>
 
-      <Input.Description>{description}</Input.Description>
+      <Input.Description data-test-id={`description-${name}`}>
+        {description}
+      </Input.Description>
 
       {isLoading ? (
-        <S.SkeletonTextArea />
+        <S.SkeletonTextArea data-testid="skeleton-text-area" />
       ) : (
         <S.TextArea
           id={name}
           {...field}
           placeholder={placeholder}
           hasError={!!error}
-          data-testid={`text-field-${name}`}
+          data-test-id={`text-field-${name}`}
         />
       )}
 
       {error && (
-        <Input.ErrorMessageRoot>
+        <Input.ErrorMessageRoot data-test-id={`error-${name}`}>
           <Input.ErrorMessage>{error.message}</Input.ErrorMessage>
         </Input.ErrorMessageRoot>
       )}

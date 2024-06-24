@@ -73,23 +73,30 @@ const InputField: React.FC<InputFieldProps> = ({
   if (isLoading) {
     return (
       <Container data-testid="input-loading">
-        <SkeletonLabel width={width} />
-        <SkeletonInput width={width} />
+        <SkeletonLabel width={width} data-testid="skeleton-label" />
+        <SkeletonInput width={width} data-testid="skeleton-input" />
       </Container>
     )
   }
 
   return (
     <Input.Root style={style} data-testid={`input-${name}`}>
-      <Input.Label htmlFor={name}>
+      <Input.Label htmlFor={name} data-testid={`label-${name}`}>
         {label}
         {required && (
-          <Input.RequiredText variant={error ? 'error' : ''}>
+          <Input.RequiredText
+            variant={error ? 'error' : ''}
+            data-testid={`required-${name}`}
+          >
             *
           </Input.RequiredText>
         )}
       </Input.Label>
-      {description && <Input.Description>{description}</Input.Description>}
+      {description && (
+        <Input.Description data-testid={`description-${name}`}>
+          {description}
+        </Input.Description>
+      )}
       {mask ? (
         <InputMask
           {...field}
@@ -105,6 +112,7 @@ const InputField: React.FC<InputFieldProps> = ({
               type={type}
               hasError={Boolean(error)}
               disabled={disabled}
+              data-testid={`input-field-${name}`}
             />
           )}
         </InputMask>
@@ -116,11 +124,14 @@ const InputField: React.FC<InputFieldProps> = ({
           placeholder={placeholder}
           hasError={Boolean(error)}
           disabled={disabled}
+          data-testid={`input-field-${name}`}
         />
       )}
       {error && (
-        <Input.ErrorMessageRoot>
-          <Input.ErrorMessage>{error.message}</Input.ErrorMessage>
+        <Input.ErrorMessageRoot data-testid={`error-root-${name}`}>
+          <Input.ErrorMessage data-testid={`error-message-${name}`}>
+            {error.message}
+          </Input.ErrorMessage>
         </Input.ErrorMessageRoot>
       )}
     </Input.Root>

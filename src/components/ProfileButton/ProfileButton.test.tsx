@@ -5,7 +5,6 @@ import useNavigation from '../../hooks/useNavigation'
 import { listUserInfoRepository } from './repositories/listUserInfoRepository'
 import AppProviders from '../AppProviders'
 
-// Mocking dependencies
 jest.mock('../../contexts/UserContext')
 jest.mock('../../hooks/useNavigation')
 jest.mock('./repositories/listUserInfoRepository')

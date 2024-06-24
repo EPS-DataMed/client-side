@@ -71,7 +71,7 @@ export function EditUser() {
 
   return (
     <>
-      <GenericPage.Root>
+      <S.Container>
         <S.WrapperHeaderAndBreadcrumb>
           <GenericPage.Header>
             <S.WrapperLogoAndLogoTitle>
@@ -107,7 +107,7 @@ export function EditUser() {
         </S.MainContent>
 
         <GenericPage.Divider />
-      </GenericPage.Root>
+      </S.Container>
 
       {isDialogControlledOpen && isNotUndefined(dialogItemToRender) && (
         <DialogControlled

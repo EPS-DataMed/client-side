@@ -6,16 +6,15 @@ import { PrimaryButton } from '../../components/PrimaryButton'
 import TypingEffect from '../../components/TypingEffect'
 import { ArrowRight } from '../../assets/icons'
 import InputField from '../../components/Input/InputField'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Skeleton } from '../../components/Skeleton'
 import { ChangePasswordFormData, ChangePasswordSchema } from './schema'
-import { ErrorToast, SuccessToast } from '../../components/Toast'
 import { useNavigate } from 'react-router-dom'
 import { Spinner } from '../../components/Spinner'
+import { useChangePassword } from './hooks/useChangePassword'
 
 export function ChangePassword() {
-  const [loading, setLoading] = useState(false)
   const [imageLoaded, setImageLoaded] = useState(false)
 
   const { control, handleSubmit } = useForm<ChangePasswordFormData>({
@@ -28,19 +27,7 @@ export function ChangePassword() {
 
   const navigate = useNavigate()
 
-  const onSubmit: SubmitHandler<ChangePasswordFormData> = async (data) => {
-    setLoading(true)
-    try {
-      console.log(data)
-      SuccessToast('Senha alterada com sucesso!')
-    } catch (error) {
-      ErrorToast(
-        'Verifique suas informações novamente! Ou tente novamente mais tarde.',
-      )
-    } finally {
-      setLoading(false)
-    }
-  }
+  const { loading, onSubmit } = useChangePassword()
 
   return (
     <Page.Background>

@@ -45,8 +45,12 @@ export function App() {
                 <Route path="/" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/recover" element={<RecoverPassword />} />
-                <Route path="/change" element={<ChangePassword />} />
-                <Route path="/confirm" element={<DependentConfirm />} />
+                <Route path="/change/:" element={<ChangePassword />} />
+                <Route
+                  path="/auth/dependents/confirm/:user_id/:dependent_id/:token/:crm?"
+                  element={<DependentConfirm />}
+                />
+
                 <Route
                   path="/home"
                   element={

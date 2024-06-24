@@ -1,10 +1,9 @@
 import { useCallback } from 'react'
-import { ManagerUsersDialog } from '..'
 import { DialogConfig } from '../../../components/DialogControlled/interfaces'
 import { useUserContext } from '../../../contexts/UserContext'
 import { defaultTheme } from '../../../styles/themes/default'
 import { AddDependentDialog } from '../components/AddDependentDialog'
-import { Dependent } from '../interfaces'
+import { Dependent, ManagerUsersDialog } from '../interfaces'
 
 interface DialogItemToRenderProps {
   handleUpdateDialogControlled: (open: boolean) => void

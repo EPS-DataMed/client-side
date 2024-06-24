@@ -13,6 +13,7 @@ export enum FormStatus {
   Filled = 'Filled',
   InProgress = 'In progress',
   NotStarted = 'Not started',
+  Empty = 'null',
 }
 
 export interface Dependent {
@@ -24,3 +25,11 @@ export interface Dependent {
   user_email: string
   form_status: FormStatus
 }
+
+export interface RequestConfirmDependent {
+  userId: number
+  email: string
+  token: string
+}
+
+export type ManagerUsersDialog = 'delete' | 'logout' | 'add_dependent' | ''

@@ -34,7 +34,6 @@ export function listFormRepository() {
           navigateTo('/', { replace: true })
         }
       } else {
-        console.log('teste')
         const response = await getFormAndLatestTests({
           token: token as string,
           userId: userId as number,
@@ -47,5 +46,7 @@ export function listFormRepository() {
     }
   }
 
-  useQuery([`fetchForm`], fetchForm)
+  useQuery([`fetchForm`], fetchForm, {
+    refetchOnWindowFocus: false,
+  })
 }

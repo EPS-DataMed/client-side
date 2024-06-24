@@ -93,7 +93,7 @@ describe('DialogControlled', () => {
         id: 'custom',
         label: 'Custom',
         type: 'button',
-        variant: 'primary', // Ensure variant is correct type
+        variant: 'primary',
         color: 'white',
         backgroundColor: 'blue',
         borderColor: 'red',
@@ -148,7 +148,7 @@ describe('DialogControlled', () => {
         id: 'custom',
         label: 'Custom',
         type: 'button',
-        variant: 'primary', // Ensure variant is correct type
+        variant: 'primary',
         action: mockButtonAction,
       },
     ]

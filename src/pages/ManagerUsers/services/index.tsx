@@ -3,6 +3,7 @@ import {
   Dependent,
   RequestListDependents,
   RequestDeleteDependent,
+  RequestConfirmDependent,
 } from '../interfaces'
 
 interface ResponseListDependents {
@@ -23,7 +24,7 @@ export const listUserDependents = async ({
       },
     },
   )
-  return response.data.content
+  return response.data.content || []
 }
 
 export const deleteUserDependent = async ({
@@ -38,4 +39,22 @@ export const deleteUserDependent = async ({
       Authorization: `Bearer ${token}`,
     },
   })
+}
+
+export const confirmUserDependent = async ({
+  userId,
+  email,
+  token,
+}: RequestConfirmDependent): Promise<void> => {
+  await api.post(
+    `/user/dependents/confirm/${userId}`,
+    { email },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        accept: 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  )
 }

@@ -12,8 +12,9 @@ export const Container = styled.div`
 `
 
 export const WrapperLottie = styled.div`
-  height: 480px;
-  width: 480px;
+  height: 360px;
+  width: 360px;
+  margin-top: 4%;
 `
 
 interface MessageLoadingProps {

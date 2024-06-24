@@ -37,7 +37,7 @@ export function Login() {
       saveCookie('access_token', response.content.access_token, 30)
       navigate(`/home`)
     } catch (error) {
-      ErrorToast('Verifique suas credenciais! Ou tente novamente mais tarde.')
+      ErrorToast('Verifique suas credenciais!')
     } finally {
       setLoading(false)
     }

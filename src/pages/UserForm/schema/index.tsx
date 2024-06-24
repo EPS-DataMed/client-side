@@ -27,3 +27,5 @@ export const schema = z.object({
   importantNotes: z.string().optional(),
   imageReports: z.string().optional(),
 })
+
+export type FormUserData = z.infer<typeof schema>

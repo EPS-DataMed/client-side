@@ -80,9 +80,7 @@ describe('Login Component', () => {
     fireEvent.click(screen.getByTestId('submit-button'))
 
     await waitFor(() => {
-      expect(ErrorToast).toHaveBeenCalledWith(
-        'Verifique suas credenciais! Ou tente novamente mais tarde.',
-      )
+      expect(ErrorToast).toHaveBeenCalledWith('Verifique suas credenciais!')
     })
   })
 

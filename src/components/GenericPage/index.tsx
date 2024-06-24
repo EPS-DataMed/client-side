@@ -17,6 +17,7 @@ export const Root = styled.div<RootProps>`
   display: flex;
   flex-direction: column;
   flex: 1;
+
   padding: ${({ theme }) => theme.space[19]} ${({ theme }) => theme.space[27]};
   ${({ hasNoScrollbar }) => hasNoScrollbar && hasNoScrollbarStyle}
 `

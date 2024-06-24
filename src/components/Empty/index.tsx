@@ -34,7 +34,7 @@ export function Empty({
 
   return (
     <>
-      <S.Container>
+      <S.Container data-testid="empty-state">
         <S.Animation
           ref={container}
           hasFullHeight={hasFullHeight}

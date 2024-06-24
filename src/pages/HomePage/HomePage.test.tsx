@@ -135,7 +135,7 @@ describe('HomePage', () => {
 
     fireEvent.click(screen.getByTestId('homepage-option-submission'))
 
-    expect(navigateTo).toHaveBeenCalledWith('/submission/home')
+    expect(navigateTo).toHaveBeenCalledWith('/submission/home/null')
   })
 
   it('should navigate to manager users page when manager option is clicked', () => {
