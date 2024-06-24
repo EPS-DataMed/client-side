@@ -209,7 +209,9 @@ export function ManagerUsers() {
   return (
     <>
       <TitleUpdater title="Gerenciar dependentes" />
-      <GenericPage.Root>
+      <GenericPage.Root
+        hasNoScrollbar={!hasDependents && !isDependentsListLoading}
+      >
         <S.WrapperHeaderAndBreadcrumb>
           <GenericPage.Header>
             <S.WrapperLogoAndLogoTitle>

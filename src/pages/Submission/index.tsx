@@ -1,99 +1,67 @@
-import { useEffect, useMemo, useState } from 'react'
 import { Breadcrumb } from '../../components/Breadcrumb'
 import { GenericPage } from '../../components/GenericPage'
-import { useSubmissionTestContext } from '../../contexts/SubmissionTestContext'
-import {
-  isArrayEmpty,
-  isArrayNotEmpty,
-  isNotUndefined,
-} from '../../interfaces/typeGuards'
 import { FileUploader } from './components/FileUploader'
-import { useFileUpload } from './components/FileUploader/hooks/useFileUpload'
 import { StepBox } from './components/StepBox'
 import { GhostIcon } from './components/StepBox/icons/GhostIcon'
 import * as S from './styles'
 import { SearchbarConfiguration } from '../../components/Searchbar'
 import { ArrowRight } from '../../assets/icons'
-import { OptionProps } from '../../components/Searchbar/hooks/useSearchbarQuery'
-import { useDialogItemToRender } from './hooks/useDialogItemToRender'
-import {
-  DialogControlled,
-  useDialogControlled,
-} from '../../components/DialogControlled'
-import { DialogStep } from './interfaces'
-import { SUBMIT_EXAM_OPTIONS } from './constants'
-import { useBreadcrumbs } from './hooks/useBreadcrumbs'
+import { DialogControlled } from '../../components/DialogControlled'
 import { ProcessDataLoading } from './components/ProcessDataLoading'
-import { useParams } from 'react-router-dom'
-import { useLogout } from '../../hooks/useLogout'
-import { listExamsRepository } from './repositories/listExamsRepository'
 import { SkeletonContainer } from './components/StepBox/styles'
-import { getUserId } from '../../utils/getUserId'
-import useNavigation from '../../hooks/useNavigation'
+
+import { useBreadcrumbsHook } from './hooks/useBreadcrumbsHook'
+import { useFileHandlingHook } from './hooks/useFileHandlingHook'
+import { useDialogHook } from './hooks/useDialogHook'
+import { useLogoutHook } from './hooks/useLogoutHook'
+import { useSubmissionTestHook } from './hooks/useSubmissionTestHook'
 import { useUserContext } from '../../contexts/UserContext'
-import { getDependents, processExams } from './services'
-import { getCookie } from '../../utils/cookies'
-import { ErrorToast } from '../../components/Toast'
+import { isNotUndefined } from '../../interfaces/typeGuards'
+import { listExamsRepository } from './repositories/listExamsRepository'
+import { useDialogItemToRender } from './hooks/useDialogItemToRender'
 
 export function Submission() {
-  const [isLoadingSubmissionTest, setIsLoadingSubmissionTest] = useState(false)
-  const { getInputProps, getRootProps, loadingFiles } = useFileUpload()
-  const { filesUploaded, setOptionToDelete, queryHook } =
-    useSubmissionTestContext()
-  const { handleUpdateDialogControlled, isDialogControlledOpen } =
-    useDialogControlled()
-  const [dialogSubmissionStep, setDialogSubmissionStep] =
-    useState<DialogStep>('')
-  const { path, dependentId } = useParams()
-  const { userId } = getUserId()
-  const token = getCookie('access_token')
-  const navigateTo = useNavigation()
+  const BREADCRUMBS = useBreadcrumbsHook()
+  const { isListExamsLoading } = listExamsRepository()
+  const {
+    getInputProps,
+    getRootProps,
+    loadingFiles,
+    filesUploaded,
+    queryHook,
+    hasFiles,
+    hasNoFiles,
+    formattedFiles,
+    selectedOptionEnabledFormatted,
+  } = useFileHandlingHook()
 
-  const BREADCRUMBS = useBreadcrumbs({ path: path as string })
-  const hasFiles = isArrayNotEmpty(filesUploaded)
-  const hasNoFiles = isArrayEmpty(filesUploaded)
-
-  const statusSubmitting = useMemo(() => {
-    if (loadingFiles) return 'PENDING'
-    if (hasNoFiles && !loadingFiles) return 'NO_FILE'
-    return 'SUCCESS'
-  }, [hasNoFiles, loadingFiles])
-
-  const formattedFiles = filesUploaded.map((file) => ({
-    name: file.test_name,
-    id: file.id,
-  }))
-
-  const selectedOptionEnabledFormatted = SUBMIT_EXAM_OPTIONS[statusSubmitting]
-
-  function handleOpenDialog(option: OptionProps) {
-    handleUpdateDialogControlled(true)
-    setDialogSubmissionStep('delete_mark')
-    setOptionToDelete(option)
-  }
-
-  function handleCloseDialog() {
-    setDialogSubmissionStep('')
-    setOptionToDelete({} as OptionProps)
-  }
-
-  const { handleOpenLogoutDialog, logoutConfig } = useLogout({
-    handleOpenDialog: (value) => handleUpdateDialogControlled(value),
-    handleStep: (value: DialogStep) => setDialogSubmissionStep(value),
-  })
-
-  const { dialogItemToRender } = useDialogItemToRender({
+  const {
+    handleOpenDialog,
+    handleCloseDialog,
     handleUpdateDialogControlled,
+    isDialogControlledOpen,
+    setDialogSubmissionStep,
     dialogSubmissionStep,
-    logoutConfig,
-  })
+  } = useDialogHook()
 
+  const { handleOpenLogoutDialog, logoutConfig } = useLogoutHook(
+    setDialogSubmissionStep,
+    handleUpdateDialogControlled,
+  )
   const { isUserExists } = useUserContext()
+  const { handleSubmissionTest, isLoadingSubmissionTest } =
+    useSubmissionTestHook(filesUploaded)
+
   const isLoadingRequests = isLoadingSubmissionTest || !isUserExists
 
+  const { dialogItemToRender } = useDialogItemToRender({
+    dialogSubmissionStep,
+    handleUpdateDialogControlled,
+    logoutConfig,
+  })
   const renderBreadcrumbs = () => {
     if (!isUserExists) {
-      return <S.SkeletonBreadcrumbs />
+      return <S.SkeletonBreadcrumbs data-testid="skeleton-breadcrumbs" />
     }
 
     if (!isLoadingRequests) {
@@ -102,50 +70,6 @@ export function Submission() {
 
     return null
   }
-
-  const { isListExamsLoading } = listExamsRepository()
-
-  async function handleSubmissionTest() {
-    setIsLoadingSubmissionTest(true)
-
-    const examIndexes = filesUploaded.map((file) => file.id)
-    try {
-      if (dependentId !== 'null') {
-        const dependentResponse = await getDependents({
-          token: token as string,
-          userId: userId as number,
-          dependentId: dependentId as string,
-        })
-
-        if (dependentResponse.confirmed) {
-          await processExams({
-            examIndexes,
-            token: token as string,
-            userId: Number(dependentId) as number,
-          })
-          navigateTo(`/form/${dependentId}`)
-        } else {
-          navigateTo('/', { replace: true })
-        }
-      } else {
-        await processExams({
-          examIndexes,
-          token: token as string,
-          userId: userId as number,
-        })
-        navigateTo('/form/null')
-      }
-    } catch (err) {
-      ErrorToast('Falha ao processar dados, tente novamente mais tarde!')
-    } finally {
-      setIsLoadingSubmissionTest(false)
-    }
-  }
-
-  useEffect(() => {
-    if (Number(dependentId) === Number(userId))
-      navigateTo('/submission/home/null', { replace: true })
-  }, [dependentId, navigateTo, userId])
 
   return (
     <>
@@ -159,7 +83,10 @@ export function Submission() {
 
             <GenericPage.HeaderOptions>
               <GenericPage.ProfileButton />
-              <GenericPage.LogoutButton action={handleOpenLogoutDialog} />
+              <GenericPage.LogoutButton
+                action={handleOpenLogoutDialog}
+                data-testid="logout-button"
+              />
             </GenericPage.HeaderOptions>
           </GenericPage.Header>
           {renderBreadcrumbs()}
@@ -186,7 +113,7 @@ export function Submission() {
 
               <S.WrrapperBoxes>
                 {isListExamsLoading ? (
-                  <SkeletonContainer />
+                  <SkeletonContainer data-testid="skeleton" />
                 ) : (
                   <FileUploader.FileUploader
                     success={hasFiles}
