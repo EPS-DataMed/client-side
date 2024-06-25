@@ -6,6 +6,9 @@ const UPLOAD_URL = process.env.VITE_UPLOAD_URL
 const TERM_URL = process.env.VITE_TERM_URL
 export const PUBLIC_KEY = process.env.VITE_PUBLIC_KEY
 export const PRIVATE_KEY = process.env.VITE_PRIVATE_KEY
+export const PRIVACY_URL = process.env.VITE_PRIVACY_URL
+export const USER_URL = process.env.VITE_USER_URL
+export const AUTH_URL = process.env.VITE_AUTH_URL
 
 export const api = axios.create({
   baseURL: BASE_URL,
@@ -47,4 +50,16 @@ uploadApi.interceptors.response.use(
 
 export const termApi = axios.create({
   baseURL: TERM_URL,
+})
+
+export const privacyApi = axios.create({
+  baseURL: PRIVACY_URL,
+})
+
+export const userApi = axios.create({
+  baseURL: USER_URL,
+})
+
+export const authApi = axios.create({
+  baseURL: AUTH_URL,
 })

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import { useCallback, useState } from 'react'
 import {
   DialogControlled,
   useDialogControlled,
@@ -150,7 +150,7 @@ export function ManagerUsers() {
     return (
       <S.TableContentContainer data-testid="table-content-container">
         {dependents.map((item) => (
-          <React.Fragment key={item.dependent_id}>
+          <S.TableRow key={item.dependent_id}>
             <S.TableTitleCell
               title={item.user_full_name}
               data-testid={`dependent-name-${item.dependent_id}`}
@@ -185,7 +185,7 @@ export function ManagerUsers() {
                 ))}
               </S.WrapperButton>
             </S.TableCell>
-          </React.Fragment>
+          </S.TableRow>
         ))}
       </S.TableContentContainer>
     )
@@ -209,9 +209,7 @@ export function ManagerUsers() {
   return (
     <>
       <TitleUpdater title="Gerenciar dependentes" />
-      <GenericPage.Root
-        hasNoScrollbar={!hasDependents && !isDependentsListLoading}
-      >
+      <S.Container hasNoScrollbar={!hasDependents && !isDependentsListLoading}>
         <S.WrapperHeaderAndBreadcrumb>
           <GenericPage.Header>
             <S.WrapperLogoAndLogoTitle>
@@ -255,7 +253,7 @@ export function ManagerUsers() {
           {renderEmptyState()}
         </S.MainContent>
         <GenericPage.Divider />
-      </GenericPage.Root>
+      </S.Container>
       {isDialogControlledOpen && isNotUndefined(dialogItemToRender) && (
         <DialogControlled
           isDialogControlledOpen={isDialogControlledOpen}

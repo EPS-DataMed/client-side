@@ -3,11 +3,18 @@ import { lightenColor } from '../../utils/colors'
 import { PrimaryButton } from '../../components/PrimaryButton'
 import { Skeleton } from '../../components/Skeleton'
 import { FormStatus } from './interfaces'
+import { GenericPage } from '../../components/GenericPage'
 
 export const WrapperLogoAndLogoTitle = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.space[4]};
   align-items: center;
+`
+
+export const Container = styled(GenericPage.Root)`
+  @media (min-width: 1604px) {
+    height: 100vh !important;
+  }
 `
 
 export const WrapperHeaderAndBreadcrumb = styled.div`
@@ -42,14 +49,14 @@ export const Subtitle = styled.h2`
 `
 
 export const TableContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 2fr) 3fr;
+  display: flex;
+  justify-content: space-between;
   margin-top: 24px;
 `
 
 export const TableContentContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 2fr) 3fr;
+  display: flex;
+  flex-direction: column;
   overflow-y: auto;
   overflow-x: hidden;
   height: 28rem;
@@ -96,7 +103,13 @@ interface TableCellProps {
   hasGap?: boolean
 }
 
-export const TableTitleCell = styled.time<TableCellProps>`
+export const TableRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`
+
+export const TableTitleCell = styled.div<TableCellProps>`
   margin-top: 4px;
   background-color: ${({ theme }) => theme.colors.neutral};
   color: ${({ theme }) => theme.colors.neutral900};
@@ -106,15 +119,19 @@ export const TableTitleCell = styled.time<TableCellProps>`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  height: fit-content;
+  flex: 2;
 `
 
-export const TableCell = styled.tr<TableCellProps>`
+export const TableCell = styled.div<TableCellProps>`
   margin-top: 4px;
   background-color: ${({ theme }) => theme.colors.neutral};
   color: ${({ theme }) => theme.colors.neutral900};
   padding: 24px 0;
   line-height: 2.4;
+  height: fit-content;
   padding-left: ${({ hasGap }) => (hasGap ? '0px' : '120px')};
+  flex: 2;
 
   ${({ hasGap }) =>
     hasGap &&
@@ -124,12 +141,15 @@ export const TableCell = styled.tr<TableCellProps>`
     `}
 `
 
-export const TableHeader = styled.thead<TableCellProps>`
+export const TableHeader = styled.div<TableCellProps>`
   font-weight: bold;
   background-color: ${({ theme }) => theme.colors.blue500};
   padding: 24px 0;
   color: ${({ theme }) => theme.colors.neutral};
   padding-left: 120px;
+  flex: 2;
+  display: flex;
+  align-items: center;
 
   &:first-child {
     border-top-left-radius: 8px;
@@ -178,6 +198,7 @@ export const ButtonStyled = styled(PrimaryButton)<ButtonStyledProps>`
 export const WrapperButton = styled.div`
   display: flex;
   margin-left: auto;
+  height: fit-content;
   gap: 8px;
   margin-right: 24px;
 `

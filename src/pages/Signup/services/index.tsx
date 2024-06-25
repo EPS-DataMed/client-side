@@ -1,4 +1,4 @@
-import { api, termApi } from '../../../lib/axios'
+import { api, privacyApi, termApi } from '../../../lib/axios'
 
 interface CreateUserPayload {
   full_name: string
@@ -61,7 +61,7 @@ export const generatePrivacy = async ({
   contactEmail,
   projectName,
 }: GenerateTermsPayload) => {
-  const response = await api.post(
+  const response = await privacyApi.post(
     '/privacy/generate',
     new URLSearchParams({
       project_name: projectName,

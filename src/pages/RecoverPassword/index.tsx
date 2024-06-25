@@ -10,12 +10,11 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Skeleton } from '../../components/Skeleton'
 import { RecoverFormData, RecoverSchema } from './schema'
-import { ErrorToast, SuccessToast } from '../../components/Toast'
-import { useNavigate } from 'react-router-dom'
 import { Spinner } from '../../components/Spinner'
+import { useForgotPassword } from './hooks/useForgotPassword'
+import useNavigation from '../../hooks/useNavigation'
 
 export function RecoverPassword() {
-  const [loading, setLoading] = useState(false)
   const [imageLoaded, setImageLoaded] = useState(false)
 
   const { control, handleSubmit } = useForm<RecoverFormData>({
@@ -25,59 +24,59 @@ export function RecoverPassword() {
     },
   })
 
-  const navigate = useNavigate()
+  const navigateTo = useNavigation()
+  const { submitForgotPassword, loading } = useForgotPassword()
 
   const onSubmit: SubmitHandler<RecoverFormData> = async (data) => {
-    setLoading(true)
-    try {
-      console.log(data)
-      SuccessToast(
-        'E-mail enviado com sucesso! Confira sua caixa de mensagens! Pode demorar um pouco, aguerde!',
-      )
-    } catch (error) {
-      ErrorToast(
-        'Verifique suas informações novamente! Ou tente novamente mais tarde.',
-      )
-    } finally {
-      setLoading(false)
-    }
+    await submitForgotPassword(data)
   }
 
   return (
-    <Page.Background>
-      {!imageLoaded && <Skeleton style={{ width: '50vw', height: '100%' }} />}
+    <Page.Background data-testid="recover-password-background">
+      {!imageLoaded && (
+        <Skeleton
+          style={{ width: '50vw', height: '100%' }}
+          data-testid="skeleton"
+        />
+      )}
       <Page.Image
         alt="Doctor"
         src="https://github.com/EPS-DataMed/client-side/blob/r1/src/pages/HomePage/assets/login.png?raw=true"
         onLoad={() => setImageLoaded(true)}
         style={{ display: imageLoaded ? 'block' : 'none' }}
+        data-testid="page-image"
       />
-      <Page.Content>
-        <Page.WrapperLogoAndText>
-          <LargeLogo />
-          <Page.LogoTitle>
+      <Page.Content data-testid="recover-password-content">
+        <Page.WrapperLogoAndText data-testid="wrapper-logo-and-text">
+          <LargeLogo data-testid="large-logo" />
+          <Page.LogoTitle data-testid="logo-title">
             <TypingEffect text="Datamed" />
           </Page.LogoTitle>
-          <S.Slogan>
+          <S.Slogan data-testid="page-slogan">
             Esqueceu sua senha? Nos informe o seu e-mail
             <br /> para que você possa recuperar.
           </S.Slogan>
         </Page.WrapperLogoAndText>
 
-        <S.Form onSubmit={handleSubmit(onSubmit)}>
+        <S.Form onSubmit={handleSubmit(onSubmit)} data-testid="form">
           <InputField
             label="E-mail"
             name="email"
             control={control}
             description="Informe o seu e-mail pessoal."
             required
+            data-testid="input-email"
           />
 
-          <S.WrapperButtonAndLink>
-            <PrimaryButton type="submit" disabled={loading}>
+          <S.WrapperButtonAndLink data-testid="wrapper-button-and-link">
+            <PrimaryButton
+              type="submit"
+              disabled={loading}
+              data-testid="submit-button"
+            >
               {loading ? (
                 <>
-                  Carregando <Spinner />
+                  Carregando <Spinner data-testid="spinner" />
                 </>
               ) : (
                 <>
@@ -88,13 +87,14 @@ export function RecoverPassword() {
           </S.WrapperButtonAndLink>
         </S.Form>
 
-        <S.RegisterArea>
+        <S.RegisterArea data-testid="register-area">
           <S.RegisterPhrase>
             Já possui uma conta?{' '}
             <S.Link
               onClick={() => {
-                navigate('/')
+                navigateTo('/')
               }}
+              data-testid="login-link"
             >
               Ir para o login
             </S.Link>

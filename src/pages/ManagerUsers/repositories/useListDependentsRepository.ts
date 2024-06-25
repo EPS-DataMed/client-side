@@ -19,11 +19,19 @@ export function useListDependentsRepository() {
   const { isDoctor } = useUserContext()
 
   async function fetchListDependents(): Promise<Dependent[]> {
-    const response = await listUserDependents({
-      userId: userId as number,
-      token: token as string,
-    })
-    return response
+    try {
+      const response = await listUserDependents({
+        userId: userId as number,
+        token: token as string,
+      })
+      return response
+    } catch (error: any) {
+      if (error.response && error.response.status === 404) {
+        return []
+      } else {
+        throw error
+      }
+    }
   }
 
   const { isFetching: isListDependentsLoading } = useQuery(
