@@ -1,7 +1,10 @@
 
 # Client-side
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=EPS-DataMed_client-side&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=EPS-DataMed_client-side) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=EPS-DataMed_client-side&metric=coverage)](https://sonarcloud.io/summary/new_code?id=EPS-DataMed_client-side) [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=EPS-DataMed_client-side&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=EPS-DataMed_client-side)
+
 Repositório responsável pelo client-side do projeto Datamed.
+
 
 ## Tabela de Conteúdos
 
@@ -9,8 +12,7 @@ Repositório responsável pelo client-side do projeto Datamed.
 2. [Instalação](#instalação)
 3. [Uso](#uso)
 4. [Testes](#testes)
-5. [Contribuição](#contribuição)
-6. [Licença](#licença)
+5. [Licença](#licença)
 
 ## Estrutura do Projeto
 
@@ -105,18 +107,6 @@ Instruções sobre como usar rodar o coverage do projeto.
 # a cobertura total dos testes.
 npm run test:coverage
 ```
-
-## Contribuição
-
-Para contribuir com este projeto open source, siga as etapas abaixo:
-
-1. Faça um fork do repositório.
-2. Crie um branch para sua feature (`git checkout -b feature/AmazingFeature`).
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`).
-4. Faça um push para o branch (`git push origin feature/AmazingFeature`).
-5. Abra um Pull Request.
-
-Todos são bem-vindos para contribuir, seja através do desenvolvimento de novas funcionalidades, correção de bugs, ou melhoria da documentação. Agradecemos antecipadamente pela sua colaboração!
 
 ## Licença
 
