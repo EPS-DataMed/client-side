@@ -10,13 +10,16 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Skeleton } from '../../components/Skeleton'
 import { ChangePasswordFormData, ChangePasswordSchema } from './schema'
-import { useNavigate } from 'react-router-dom'
 import { Spinner } from '../../components/Spinner'
 import { useChangePassword } from './hooks/useChangePassword'
+import useNavigation from '../../hooks/useNavigation'
+import { useParams } from 'react-router-dom'
+import { useValidateEmailToken } from './hooks/useValidateEmailToken'
 
 export function ChangePassword() {
   const [imageLoaded, setImageLoaded] = useState(false)
-
+  const navigateTo = useNavigation()
+  const { token } = useParams()
   const { control, handleSubmit } = useForm<ChangePasswordFormData>({
     resolver: zodResolver(ChangePasswordSchema),
     defaultValues: {
@@ -25,9 +28,11 @@ export function ChangePassword() {
     },
   })
 
-  const navigate = useNavigate()
-
   const { loading, onSubmit } = useChangePassword()
+  const { data, isLoading } = useValidateEmailToken(String(token))
+
+  const isTokenValid = data?.is_valid ?? false
+  const isDisabled = !isTokenValid || loading || isLoading
 
   return (
     <Page.Background>
@@ -55,6 +60,7 @@ export function ChangePassword() {
             control={control}
             description="Informe a sua nova senha."
             required
+            disabled={isDisabled}
           />
           <InputField
             label="Confirme a Nova Senha"
@@ -63,10 +69,11 @@ export function ChangePassword() {
             control={control}
             description="Confirme a sua nova senha."
             required
+            disabled={isDisabled}
           />
 
           <S.WrapperButtonAndLink>
-            <PrimaryButton type="submit" disabled={loading}>
+            <PrimaryButton type="submit" disabled={isDisabled}>
               {loading ? (
                 <>
                   Carregando <Spinner />
@@ -82,13 +89,7 @@ export function ChangePassword() {
         <S.RegisterArea>
           <S.RegisterPhrase>
             Se desejar volte para o{' '}
-            <S.Link
-              onClick={() => {
-                navigate('/')
-              }}
-            >
-              login
-            </S.Link>
+            <S.Link onClick={() => navigateTo('/')}>login</S.Link>
           </S.RegisterPhrase>
         </S.RegisterArea>
       </Page.Content>
