@@ -11,7 +11,7 @@ export const useForgotPassword = () => {
     try {
       await forgotPassword({ email: data.email })
       SuccessToast(
-        'E-mail enviado com sucesso! Confira sua caixa de mensagens! Pode demorar um pouco, aguerde!',
+        'E-mail enviado com sucesso! Confira sua caixa de mensagens! Pode demorar um pouco, aguarde!',
       )
     } catch (error) {
       ErrorToast(
