@@ -1,0 +1,20 @@
+# Ignore node_modules
+node_modules
+node_modules/*
+# Ignore log files
+*.log
+# Ignore temporary files
+*.tmp
+# Ignore environment variable files
+.env
+# Ignore Docker files
+Dockerfile
+docker-compose.yml
+# Ignore build output
+dist
+build
+# Ignore any other files you don't need in the container
+.git
+.gitignore
+.DS_Store
+.vscode

@@ -84,7 +84,7 @@ git clone https://github.com/seu-usuario/seu-repositorio.git
 cd seu-repositorio
 
 # Instale as dependências
-npm install
+npm install --legacy-peer-deps
 ```
 
 É recomendado usar o node na versão nvm use 18.16.0.
