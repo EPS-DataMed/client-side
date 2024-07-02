@@ -108,6 +108,34 @@ Instruções sobre como usar rodar o coverage do projeto.
 npm run test:coverage
 ```
 
+## Configure as variáveis de ambiente:
+- Crie um arquivo `.env` na raiz do projeto baseado no arquivo `.env.example`:
+```plaintext
+# Base URL for the gateway service
+VITE_BASE_URL=https://example-gateway.onrender.com
+
+# URL for the file upload service
+VITE_UPLOAD_URL=https://example-file-manager.onrender.com
+
+# URL for the terms of service
+VITE_TERM_URL=https://example-terms.onrender.com/
+
+# Public key (example)
+VITE_PUBLIC_KEY=2d2d2d2d2d424547494e205055424c4943204b45592d2d2d2
+
+# Private key (example)
+VITE_PRIVATE_KEY=2d2d2d2d2d424547494e2050524956415445204b45592d2d2d
+
+# URL for the privacy policy
+VITE_PRIVACY_URL=https://example-privacy-terms.onrender.com
+
+# URL for the user service
+VITE_USER_URL=https://example-user-service.onrender.com/
+
+# URL for the authentication service
+VITE_AUTH_URL=https://example-authentication.onrender.com/
+```
+
 ## Licença
 
 Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICENSE) para mais detalhes.

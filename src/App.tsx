@@ -87,7 +87,14 @@ export function App() {
                   }
                 />
                 <Route path="*" element={<Login />} />
-                <Route path="/editUser" element={<EditUser />} />
+                <Route
+                  path="/editUser"
+                  element={
+                    <ProtectedRoute>
+                      <EditUser />
+                    </ProtectedRoute>
+                  }
+                />
               </Routes>
             </SubmissionTestProvider>
           </UserProvider>
